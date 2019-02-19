@@ -1,0 +1,23 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 8
+  },
+  "globals": {
+    "document": false,
+    "window": false
+  },
+  "plugins": [
+  ],
+  "extends": "google",
+  "rules": {
+    "no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }]
+  }
+}
