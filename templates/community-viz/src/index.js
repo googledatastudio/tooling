@@ -9,10 +9,11 @@ const LOCAL = false;
 
 if (LOCAL) {
   setTimeout(() => {
-    window.parent.postMessage(local.message, '*');
+    window.postMessage(local.message, '*');
   }, 1000);
 }
 
+// Write Viz Code here
 const drawViz = (data) => {
   // append a div to the DOM
   if (document.querySelector('div')) {
@@ -23,12 +24,18 @@ const drawViz = (data) => {
   // append the data to a div
   let div = document.createElement('div');
   var msgText = JSON.stringify(data, null, 2);
-  div.innerHTML = `<pre>export const message = {${msgText}};</pre>`;
+  div.innerHTML = `<pre>export const message = ${msgText};</pre>`;
   document.body.appendChild(div);
-
-  // log the returned data
-  console.log(data);
 };
 
-// uses the objectTransform by default
-dscc.subscribeToData(drawViz, {transform: dscc.objectTransform});
+// logic to handle local vs. Data Studio deployment
+if (LOCAL) {
+  const handleMessage = (message) => {
+    if (!message.data.type) {
+      drawViz(message);
+    }
+  };
+  window.addEventListener('message', handleMessage);
+} else {
+  dscc.subscribeToData(drawViz, {transform: dscc.objectTransform});
+}
