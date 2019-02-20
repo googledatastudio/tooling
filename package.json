@@ -36,6 +36,7 @@
     "prettier-watch": "onchange \"{src,templates,test}/**/*.{ts,js}\" -- yarn prettier",
     "build-watch": "tsc --watch",
     "build": "tsc",
+    "lint": "tslint -c tslint.json src/**/*.ts",
     "prettier": "prettier --write \"{src,templates,test}/**/*.{ts,js}\"",
     "test": "jest"
   },
