@@ -35,7 +35,8 @@ export const hasBucketPermissions = async (
   gcsPath: string
 ): Promise<boolean | string> => {
   try {
-    await util.exec(`gsutil acl get ${gcsPath}`, {}, false);
+    const gcsRootBucket = gcsPath.match(/(gs:\/\/.*)\/|(gs:\/\/.*)/)[0];
+    await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
   } catch (e) {
     console.error(`\n${e.message}`);
     process.exit(1);
