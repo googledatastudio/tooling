@@ -16,7 +16,7 @@
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
-    "@google/dscc": "^0.2.2",
+    "@google/dscc": "^0.2.3",
     "autoprefixer": "^9.4.5",
     "bluebird": "^3.5.3",
     "commander": "^2.19.0",
