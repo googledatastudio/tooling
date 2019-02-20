@@ -14,18 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Spinner} from 'cli-spinner';
 import * as files from '../files';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
-import * as validation from './validation';
 
 export const createFromTemplate = async (answers: Answers): Promise<void> => {
   const {
     projectName,
-    basePath,
-    projectChoice,
     projectPath,
     templatePath,
     devBucket,
@@ -43,7 +39,18 @@ export const createFromTemplate = async (answers: Answers): Promise<void> => {
     async () => await util.npmInstall(projectPath)
   );
 
+  await util.spinnify('Building & pushing dev deployment...', async () => {
+    await util.exec('npm run build:dev', {cwd: projectPath}, false);
+    await util.exec('npm run push:dev', {cwd: projectPath}, false);
+  });
+
   console.log(
-    `Project created. \`cd ${projectName}\` to start working on your viz!`
+    `\
+cd ${projectName} to start working on your viz!\n\
+\n\
+Your viz has been deployed to: ${devBucket}\n\
+\n\
+For next steps, see ${projectName}/README.md\
+`
   );
 };

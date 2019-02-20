@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-import {Spinner} from 'cli-spinner';
 import * as path from 'path';
-import * as util from './util';
 import {Template} from './main';
+import * as util from './util';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -97,26 +96,29 @@ export const getPackageJson = async (packageDir: string) => {
   return parsed;
 };
 
-export const createAndCopyFiles = async (
+const createAndCopyFilesImpl = async (
   projectPath: string,
   templatePath: string,
   projectName: string
 ) => {
-  const spinner = new Spinner(
-    'Creating directories and copying template files...\n'
-  );
-  spinner.start();
   try {
     await util.makeDir(projectPath);
   } catch (e) {
-    spinner.stop();
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
   try {
     await createDirectoryContents(templatePath, projectName);
-    spinner.stop();
   } catch (e) {
-    spinner.stop();
     throw new Error(`Couldn't copy over the template files to: ${projectPath}`);
   }
 };
+
+export const createAndCopyFiles = async (
+  projectPath: string,
+  templatePath: string,
+  projectName: string
+) =>
+  await util.spinnify(
+    'Creating directories and copying template files...',
+    () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
+  );

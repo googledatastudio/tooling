@@ -116,6 +116,6 @@ export const spinnify = async <T>(
   try {
     return await fn();
   } finally {
-    spinner.stop();
+    spinner.stop(true);
   }
 };
