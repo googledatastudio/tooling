@@ -31,11 +31,15 @@ export const checkGsutilInstalled = async (): Promise<boolean> => {
   return true;
 };
 
+export const parseBucketName = (bucketPath: string): string | undefined => {
+  return bucketPath.match(/(gs:\/\/[^/\s]+)/)[0];
+};
+
 export const hasBucketPermissions = async (
   gcsPath: string
 ): Promise<boolean | string> => {
   try {
-    const gcsRootBucket = gcsPath.match(/(gs:\/\/.*)\/|(gs:\/\/.*)/)[0];
+    const gcsRootBucket = parseBucketName(gcsPath);
     await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
   } catch (e) {
     console.error(`\n${e.message}`);
