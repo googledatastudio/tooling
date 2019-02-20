@@ -38,8 +38,8 @@ let webpackOptions = {
   },
   plugins: [
     new CopyWebpackPlugin([
-        {from: path.join('src', JSON_FILE), to: '.'},
-        {from: path.join('src', CSS_FILE), to: '.'}
+      {from: path.join('src', JSON_FILE), to: '.'},
+      {from: path.join('src', CSS_FILE), to: '.'},
     ]),
   ],
 };
@@ -54,12 +54,14 @@ if (DEVMODE === true) {
   const prodOptions = {
     mode: 'production',
     optimization: {
-      minimizer: [new UglifyJsPlugin({
-        sourceMap: false,
-        uglifyOptions: {
-          comments: false
-        }
-      })],
+      minimizer: [
+        new UglifyJsPlugin({
+          sourceMap: false,
+          uglifyOptions: {
+            comments: false,
+          },
+        }),
+      ],
     },
   };
   webpackOptions = Object.assign(webpackOptions, prodOptions);
@@ -70,14 +72,15 @@ const compiler = webpack(webpackOptions);
 // put everything together except the manifest
 compiler.run((err, stats) => {
   // once datastudio is created...
-  fs.readFileAsync(path.join('src', MANIFEST_FILE), encoding).then(value => {
+  fs.readFileAsync(path.join('src', MANIFEST_FILE), encoding).then((value) => {
     const newManifest = value
       .replace(/YOUR_GCS_BUCKET/g, GCS_BUCKET)
       .replace(/"DEVMODE_BOOL"/, DEVMODE);
-    fs.writeFileAsync(path.join('./datastudio', MANIFEST_FILE), newManifest).catch(
-      err => {
-        console.log('Unable to write manifest: ', err);
-      }
-    );
+    fs.writeFileAsync(
+      path.join('./datastudio', MANIFEST_FILE),
+      newManifest
+    ).catch((err) => {
+      console.log('Unable to write manifest: ', err);
+    });
   });
 });

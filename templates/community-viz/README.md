@@ -6,9 +6,10 @@ JavaScript visualizations for [Google Data Studio][datastudio].
 ## About this template
 
 This template provides
+
 1. An opinionated template for developing community visualizations
-2. A local development and feedback workflow
-3. Build and deployment scripts
+1. A local development and feedback workflow
+1. Build and deployment scripts
 
 ### Files included
 
@@ -27,7 +28,7 @@ directory.
 To create a new community visualization using this template, run the command
 
 ```bash
-npx @google/dscc-gen
+npx @google/dscc-gen --project_choice community-viz
 ```
 
 At the end of the setup flow, you will have a minimal working visualization and
