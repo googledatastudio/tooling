@@ -15,15 +15,14 @@
  * limitations under the License.
  */
 
-import {Spinner} from 'cli-spinner';
 import * as argparse from 'argparse';
-import * as path from 'path';
-import * as files from './files';
-import * as util from './util';
 import * as inquirer from 'inquirer';
+import * as files from './files';
 import * as vizValidation from './viz/validation';
 
-export type Answers = {[key: string]: string};
+export interface Answers {
+  [key: string]: string;
+}
 
 type QuestionGraphEntry = {
   name: string;
