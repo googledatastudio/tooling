@@ -22,11 +22,6 @@ export enum Action {
 }
 
 export const trackEvent = (category: Category, action: Action) => {
-  console.log({
-    category,
-    action,
-    label: executionId,
-  });
   insight.trackEvent({
     category,
     action,
