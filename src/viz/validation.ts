@@ -19,6 +19,8 @@ import * as files from '../files';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
+import * as analytics from '../analytics';
+import {Action, Category} from '../analytics';
 
 export const checkGsutilInstalled = async (): Promise<boolean> => {
   try {
@@ -26,28 +28,28 @@ export const checkGsutilInstalled = async (): Promise<boolean> => {
   } catch (e) {
     console.error(
       '\nWARNING: gsutil is not installed, but is needed for the viz template. \
-      Please follow installation instructions at \
-      https://cloud.google.com/storage/docs/gsutil_install\nExiting template \
-      creation, no files have been created.'
+Please follow installation instructions at \
+https://cloud.google.com/storage/docs/gsutil_install\nExiting template \
+creation, no files have been created.'
     );
-    return false;
+    analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
+    process.exit(1);
   }
   return true;
 };
 
 export const parseBucketName = (bucketPath: string): string | undefined => {
-  return bucketPath.match(/(gs:\/\/[^/\s]+)/)[0];
+  const matches = bucketPath.match(/(gs:\/\/[^/\s]+)/);
+  return matches && matches[0];
 };
 
 export const hasBucketPermissions = async (
   gcsPath: string
 ): Promise<boolean | string> => {
-  try {
-    const gcsRootBucket = parseBucketName(gcsPath);
-    await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
-  } catch (e) {
-    console.error(`\n${e.message}`);
-    process.exit(1);
+  const gcsRootBucket = parseBucketName(gcsPath);
+  if (!gcsRootBucket) {
+    return `${gcsPath} is an invalid gcs bucket name.`;
   }
+  await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
   return true;
 };

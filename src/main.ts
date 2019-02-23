@@ -15,36 +15,30 @@
  * limitations under the License.
  */
 
-import {Spinner} from 'cli-spinner';
 import * as path from 'path';
+import * as connector from './connector/index';
 import * as questions from './questions';
 import * as viz from './viz/index';
-import * as connector from './connector/index';
 
 export interface Template {
   match: RegExp;
   replace: string;
 }
 
-export const main = async (basePath: string): Promise<void> => {
-  try {
-    const pwd = process.cwd();
-    let answers = await questions.getAllAnswers(basePath);
-    const {projectName, projectChoice} = answers;
-    const templatePath = path.join(basePath, 'templates', projectChoice);
-    const projectPath = path.join(pwd, projectName);
-    Object.assign(answers, {basePath, projectPath, templatePath, pwd});
+export const main = async (basePath: string): Promise<number> => {
+  const pwd = process.cwd();
+  const answers = await questions.getAllAnswers(basePath);
+  const {projectName, projectChoice} = answers;
+  const templatePath = path.join(basePath, 'templates', projectChoice);
+  const projectPath = path.join(pwd, projectName);
+  Object.assign(answers, {basePath, projectPath, templatePath, pwd});
 
-    switch (answers['projectChoice']) {
-      case 'community-viz':
-        return viz.createFromTemplate(answers);
-      case 'community-connector':
-        return connector.createFromTemplate(answers);
-      default:
-        throw new Error("This path shouldn't be reachable");
-    }
-  } catch (e) {
-    console.log(e);
-    throw new Error('Something went wrong');
+  switch (answers.projectChoice) {
+    case 'community-viz':
+      return viz.createFromTemplate(answers);
+    case 'community-connector':
+      return connector.createFromTemplate(answers);
+    default:
+      throw new Error('This path should not be reachable');
   }
 };

@@ -9,6 +9,7 @@
     "interface-name": [true, "never-prefix"],
     "quotemark": [true, "single"],
     "object-literal-sort-keys": false,
+    "ordered-imports": true,
     "trailing-comma": [true, {
       "multiline": {
         "objects": "always",

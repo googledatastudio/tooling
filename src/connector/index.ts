@@ -125,6 +125,7 @@ export const getDeploymentIdByName = async (
   }
 };
 
-export const createFromTemplate = async (answers: Answers): Promise<void> => {
+export const createFromTemplate = async (answers: Answers): Promise<number> => {
   console.error('Connectors are not currently supported.');
+  return 1;
 };

@@ -19,7 +19,7 @@ import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 
-export const createFromTemplate = async (answers: Answers): Promise<void> => {
+export const createFromTemplate = async (answers: Answers): Promise<number> => {
   const {
     projectName,
     projectPath,
@@ -53,4 +53,5 @@ Your viz has been deployed to: ${devBucket}\n\
 For next steps, see ${projectName}/README.md\
 `
   );
+  return 0;
 };

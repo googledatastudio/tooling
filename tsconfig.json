@@ -6,9 +6,12 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "lib": ["es6"],
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "types": ["node", "jest"]
   },
   "include": [
     "./src/**/*"
-  ]
+  ],
+  "esModuleInterop": true,
+  "allowSyntheticDefaultImports": true
 }

@@ -44,7 +44,9 @@
     "argparse": "^1.0.10",
     "bluebird": "^3.5.1",
     "cli-spinner": "^0.2.8",
-    "inquirer": "^6.2.1"
+    "inquirer": "^6.2.1",
+    "insight": "^0.10.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@google/clasp": "^2.0.1",
@@ -52,8 +54,10 @@
     "@types/bluebird": "^3.5.20",
     "@types/cli-spinner": "^0.2.0",
     "@types/inquirer": "^0.0.43",
-    "@types/jest": "^23.3.13",
-    "@types/node": "^10.12.18",
+    "@types/insight": "^0.8.0",
+    "@types/jest": "^24.0.6",
+    "@types/node": "^11.9.4",
+    "@types/uuid": "^3.4.4",
     "jest": "^23.6.0",
     "onchange": "^5.2.0",
     "prettier": "^1.11.1",
