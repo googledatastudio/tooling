@@ -74,6 +74,15 @@ export const writeFile = (filePath: string, data: string, encoding: string) => {
 
 export const statSync = bb.promisify(fs.stat);
 
+export const fileExists = (filePath: string): Promise<boolean> => {
+  return new Promise((resolve, _) => {
+    // The callback version (fs.exists) is deprecated so using synchronous
+    // version (that isn't).
+    const exists = fs.existsSync(filePath);
+    resolve(exists);
+  });
+};
+
 export interface Std {
   out: string;
   err: string;

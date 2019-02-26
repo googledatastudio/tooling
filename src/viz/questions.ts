@@ -1,5 +1,8 @@
 import * as inquirer from 'inquirer';
+import * as path from 'path';
+import {PWD} from '../index';
 import {Answers, Args, CommonAnswers} from '../questions';
+import * as util from '../util';
 import * as validation from './validation';
 
 export interface VizAnswers {
@@ -10,12 +13,15 @@ export interface VizAnswers {
 
 const projectNameRegEx = /^([-_A-Za-z\d])+$/;
 
-const projectNameValidator = (input: string) => {
-  if (projectNameRegEx.test(input)) {
-    return true;
-  } else {
+const projectNameValidator = async (input: string) => {
+  if (!projectNameRegEx.test(input)) {
     return 'Name may only include letters, numbers, dashes, and underscores.';
   }
+  const projectPath = path.join(PWD, input);
+  if (await util.fileExists(projectPath)) {
+    return `The directory ${input} already exists.`;
+  }
+  return true;
 };
 
 export const getAnswers = async (

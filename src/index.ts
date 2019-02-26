@@ -21,6 +21,8 @@ import * as analytics from './analytics';
 import {Action, Category} from './analytics';
 import {main} from './main';
 
+export const PWD = process.cwd();
+
 (async (): Promise<number> => {
   await analytics.checkForOptOut();
   analytics.trackEvent(Category.EXECUTION, Action.START);

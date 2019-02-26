@@ -16,15 +16,15 @@
  */
 import * as path from 'path';
 import * as files from '../files';
+import {PWD} from '../index';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
-  const pwd = process.cwd();
   const {devBucket, prodBucket, projectName, basePath} = answers;
   const templatePath = path.join(basePath, 'templates', answers.projectChoice);
-  const projectPath = path.join(pwd, projectName);
+  const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   const templates: Template[] = [
     {match: /{{DEV_BUCKET}}/g, replace: devBucket},
