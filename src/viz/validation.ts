@@ -48,6 +48,10 @@ export const hasBucketPermissions = async (
   if (!gcsRootBucket) {
     return `${gcsPath} is an invalid gcs bucket name.`;
   }
-  await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
-  return true;
+  try {
+    await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
+    return true;
+  } catch (e) {
+    return e.message;
+  }
 };
