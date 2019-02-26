@@ -32,14 +32,22 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   ];
   await files.fixTemplates(projectPath, templates);
 
-  await util.spinnify(
-    'Installing project dependencies...',
-    async () => await util.npmInstall(projectPath)
-  );
+  await util.spinnify('Installing project dependencies...', async () => {
+    if (answers.yarn) {
+      await util.exec('yarn install', {cwd: projectPath}, false);
+    } else {
+      await util.exec('npm install', {cwd: projectPath}, false);
+    }
+  });
 
   await util.spinnify('Building & pushing dev deployment...', async () => {
-    await util.exec('npm run build:dev', {cwd: projectPath}, false);
-    await util.exec('npm run push:dev', {cwd: projectPath}, false);
+    if (answers.yarn) {
+      await util.exec('yarn run build:dev', {cwd: projectPath}, false);
+      await util.exec('yarn run push:dev', {cwd: projectPath}, false);
+    } else {
+      await util.exec('npm run build:dev', {cwd: projectPath}, false);
+      await util.exec('npm run push:dev', {cwd: projectPath}, false);
+    }
   });
 
   console.log(
