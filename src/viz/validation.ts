@@ -15,25 +15,23 @@
  * limitations under the License.
  */
 
-import * as files from '../files';
-import {Template} from '../main';
-import {Answers} from '../questions';
-import * as util from '../util';
 import * as analytics from '../analytics';
 import {Action, Category} from '../analytics';
+import * as util from '../util';
+
+export const addBucketPrefix = (bucket: string) => `gs://${bucket}`;
 
 export const checkGsutilInstalled = async (): Promise<boolean> => {
   try {
     await util.exec('which gsutil', {}, false);
   } catch (e) {
-    console.error(
-      '\nWARNING: gsutil is not installed, but is needed for the viz template. \
-Please follow installation instructions at \
+    analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
+    throw new Error(
+      '\nERROR: gsutil is not installed, but is needed for the viz template. \
+Please follow installation instructions at\n\
 https://cloud.google.com/storage/docs/gsutil_install\nExiting template \
 creation, no files have been created.'
     );
-    analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
-    process.exit(1);
   }
   return true;
 };

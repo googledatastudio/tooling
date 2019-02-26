@@ -29,7 +29,7 @@ import {main} from './main';
     result = await main(path.join(__dirname, '..'));
   } catch (e) {
     analytics.trackEvent(Category.EXECUTION, Action.ERROR_STOP);
-    console.log(e);
+    console.log(e.message);
     return 1;
   }
   analytics.trackEvent(Category.EXECUTION, Action.STOP);

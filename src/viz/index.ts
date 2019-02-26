@@ -14,19 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as path from 'path';
 import * as files from '../files';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
-  const {
-    projectName,
-    projectPath,
-    templatePath,
-    devBucket,
-    prodBucket,
-  } = answers;
+  const pwd = process.cwd();
+  const {devBucket, prodBucket, projectName, basePath} = answers;
+  const templatePath = path.join(basePath, 'templates', answers.projectChoice);
+  const projectPath = path.join(pwd, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   const templates: Template[] = [
     {match: /{{DEV_BUCKET}}/g, replace: devBucket},

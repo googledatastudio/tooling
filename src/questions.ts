@@ -15,66 +15,53 @@
  * limitations under the License.
  */
 
-import * as argparse from 'argparse';
 import * as inquirer from 'inquirer';
 import * as files from './files';
-import * as vizValidation from './viz/validation';
+import * as argparse from 'argparse';
+import * as vizQuestions from './viz/questions';
+import {VizAnswers} from './viz/questions';
 
-export interface Answers {
-  [key: string]: string;
+export interface State {
+  projectPath: string;
+  templatePath: string;
 }
 
-type QuestionGraphEntry = {
-  name: string;
-  needed: Array<(answers: Answers) => boolean>;
-  type: string;
-  message: string;
-  validate?: (answer: string) => boolean | string | Promise<boolean | string>;
-  choices?: string[];
-  argumentName?: string;
-  argumentHelp?: string;
-  canBeArgument: boolean;
-};
+export type Answers = VizAnswers & CommonAnswers & Args;
 
-const projectNameRegEx = /^([-_A-Za-z\d])+$/;
+export interface Args {
+  yarn: boolean;
+  npm: boolean;
+}
 
-const projectNameValidator = (input: string) => {
-  if (projectNameRegEx.test(input)) {
-    return true;
-  } else {
-    return 'Name may only include letters, numbers, dashes, and underscores.';
-  }
-};
+export interface CommonAnswers {
+  projectChoice: ProjectChoice;
+  basePath: string;
+}
 
-const isCommunityViz = (answers: Answers): boolean =>
-  answers['projectChoice'] === 'community-viz';
+export enum ProjectChoice {
+  VIZ = 'community-viz',
+}
 
-const isCommunityConnector = (answers: Answers): boolean =>
-  answers['projectChoice'] === 'community-connector';
+const templateOptions: ProjectChoice[] = [ProjectChoice.VIZ];
 
-export const wrapInQuotes = (a: string) => '"' + a + '"';
+export const questions = [
+  {
+    name: 'projectChoice',
+    type: 'list',
+    message: 'What project template would you like to use?',
+    choices: templateOptions,
+  },
+];
 
-const templateOptions = ['community-connector', 'community-viz'];
-
-export const getArgsParser = async (
-  baseDir: string,
-  questionGraph: QuestionGraphEntry[]
-) => {
+const getArgsParser = async (
+  baseDir: string
+): Promise<argparse.ArgumentParser> => {
   const parser = new argparse.ArgumentParser({
     version: (await files.getPackageJson(baseDir)).version,
     addHelp: true,
     description:
-      'Template-based project generator for Data Studio developer features.',
+      'Template-based project generator for Data Studio developer features',
   });
-
-  questionGraph
-    .filter(({canBeArgument}) => canBeArgument)
-    .forEach(({argumentName, argumentHelp, name}) => {
-      parser.addArgument([argumentName], {
-        help: argumentHelp,
-        dest: name,
-      });
-    });
 
   parser.addArgument(['--yarn'], {
     dest: 'yarn',
@@ -90,129 +77,15 @@ export const getArgsParser = async (
   return parser;
 };
 
-export const initialQuestionGraph: QuestionGraphEntry[] = [
-  // Common Questions
-  {
-    name: 'projectChoice',
-    needed: [],
-    type: 'list',
-    message: 'What project template would you like to use?',
-    choices: [
-      // 'community-connector',
-      'community-viz',
-    ],
-    argumentName: '--project_choice',
-    argumentHelp: `The name of your project. Choice are: [${templateOptions.map(
-      wrapInQuotes
-    )}]`,
-    canBeArgument: true,
-  },
-  {
-    name: 'projectName',
-    type: 'input',
-    message: 'Project name',
-    validate: projectNameValidator,
-    needed: [],
-    argumentName: '--project_name',
-    argumentHelp: 'The name of your project',
-    canBeArgument: true,
-  },
-  // Viz Questions
-  {
-    needed: [isCommunityViz],
-    name: 'devBucket',
-    type: 'input',
-    message: 'What is your dev bucket?',
-    argumentName: '--dev_bucket',
-    argumentHelp: 'Viz only: The developement bucket name',
-    canBeArgument: true,
-    validate: async (a) =>
-      (await vizValidation.checkGsutilInstalled()) &&
-      (await vizValidation.hasBucketPermissions(a)),
-  },
-  {
-    needed: [isCommunityViz],
-    name: 'prodBucket',
-    type: 'input',
-    message: 'What is your prod bucket?',
-    argumentName: '--prod_bucket',
-    argumentHelp: 'Viz only: The production bucket name',
-    canBeArgument: true,
-    validate: async (a) =>
-      (await vizValidation.checkGsutilInstalled()) &&
-      (await vizValidation.hasBucketPermissions(a)),
-  },
-  // Connector Questions
-  {
-    name: 'projectCreator',
-    type: 'input',
-    message: 'Project creator',
-    needed: [isCommunityConnector],
-    argumentName: '--project_creator',
-    argumentHelp: 'Connector only: The person creating the connector',
-    canBeArgument: true,
-  },
-];
-
-const questionGraphToInquirer = (questions: QuestionGraphEntry[]) => {
-  return questions.map(({name, type, message, choices, validate}) => ({
-    name,
-    type,
-    message,
-    choices,
-    validate,
-  }));
-};
-
-export const getAllAnswersHelper = async (
-  questionGraph: any,
-  answers: Answers
-): Promise<Answers> => {
-  let answerableQuestions: QuestionGraphEntry[] = questionGraph
-    .filter(
-      (graphEntry: QuestionGraphEntry) => answers[graphEntry.name] === undefined
-    )
-    .filter((graphEntry: QuestionGraphEntry) =>
-      graphEntry.needed.every((p) => p(answers))
-    );
-  if (answerableQuestions.length > 0) {
-    let moreAnswers = await inquirer.prompt(
-      questionGraphToInquirer(answerableQuestions)
-    );
-    return await getAllAnswersHelper(
-      questionGraph,
-      Object.assign({}, answers, moreAnswers)
-    );
-  } else {
-    return answers;
+export const getAnswers = async (baseDir: string): Promise<Answers> => {
+  const args: Args = (await getArgsParser(baseDir)).parseArgs();
+  // TODO(me) - Check that the args are valid
+  // TODO(me) - If an arg should be used instead of a question, don't ask that question.
+  const commonAnswers: CommonAnswers = await inquirer.prompt(questions);
+  switch (commonAnswers.projectChoice) {
+    case ProjectChoice.VIZ:
+      return vizQuestions.getAnswers(args, commonAnswers);
+    default:
+      throw new Error(`${commonAnswers.projectChoice} is not supported.`);
   }
-};
-
-const validateArgs = async (args: any): Promise<boolean[]> => {
-  const validations = Object.keys(args).map(async (key) => {
-    const graphNode = initialQuestionGraph.find(
-      (graphEntry) => graphEntry.name === key
-    );
-    if (graphNode && graphNode.validate) {
-      const validation = await graphNode.validate(args[key]);
-      if (validation !== true) {
-        console.error(`Invalid value for ${key}. ${validation}`);
-        process.exit(1);
-      }
-    } else {
-      return true;
-    }
-  });
-  return await Promise.all(validations);
-};
-
-export const getAllAnswers = async (basePath: string): Promise<Answers> => {
-  const args = (await getArgsParser(
-    basePath,
-    initialQuestionGraph
-  )).parseArgs();
-  // Get rid of `null` values so `Object.assign` works correctly.
-  Object.keys(args).forEach((key) => args[key] == null && delete args[key]);
-  await validateArgs(args);
-  return await getAllAnswersHelper(initialQuestionGraph, args);
 };

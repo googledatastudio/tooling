@@ -16,8 +16,6 @@
  */
 
 import {Spinner} from 'cli-spinner';
-import * as files from '../files';
-import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 import * as appsscript from './appsscript';

@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 
-import * as path from 'path';
-import * as connector from './connector/index';
 import * as questions from './questions';
+import {ProjectChoice} from './questions';
 import * as viz from './viz/index';
 
 export interface Template {
@@ -26,19 +25,13 @@ export interface Template {
 }
 
 export const main = async (basePath: string): Promise<number> => {
-  const pwd = process.cwd();
-  const answers = await questions.getAllAnswers(basePath);
-  const {projectName, projectChoice} = answers;
-  const templatePath = path.join(basePath, 'templates', projectChoice);
-  const projectPath = path.join(pwd, projectName);
-  Object.assign(answers, {basePath, projectPath, templatePath, pwd});
+  const answers = await questions.getAnswers(basePath);
+  Object.assign(answers, {basePath});
 
   switch (answers.projectChoice) {
-    case 'community-viz':
+    case ProjectChoice.VIZ:
       return viz.createFromTemplate(answers);
-    case 'community-connector':
-      return connector.createFromTemplate(answers);
     default:
-      throw new Error('This path should not be reachable');
+      throw new Error(`${answers.projectChoice} is not supported.`);
   }
 };
