@@ -20,6 +20,7 @@ import * as path from 'path';
 import * as analytics from './analytics';
 import {Action, Category} from './analytics';
 import {main} from './main';
+import * as util from './util';
 
 export const PWD = process.cwd();
 
@@ -37,10 +38,6 @@ export const PWD = process.cwd();
   analytics.trackEvent(Category.EXECUTION, Action.STOP);
   return result;
 })().then(async (code) => {
-  await new Promise((resolve, reject) => {
-    setInterval(() => {
-      resolve('done');
-    }, 200);
-  });
+  await util.pause(200);
   process.exit(code);
 });

@@ -20,6 +20,8 @@ import * as files from './files';
 import * as argparse from 'argparse';
 import * as vizQuestions from './viz/questions';
 import {VizAnswers} from './viz/questions';
+import {setTimeout} from 'timers';
+import {prompt} from './prompt';
 
 export interface State {
   projectPath: string;
@@ -81,7 +83,7 @@ export const getAnswers = async (baseDir: string): Promise<Answers> => {
   const args: Args = (await getArgsParser(baseDir)).parseArgs();
   // TODO(me) - Check that the args are valid
   // TODO(me) - If an arg should be used instead of a question, don't ask that question.
-  const commonAnswers: CommonAnswers = await inquirer.prompt(questions);
+  const commonAnswers: CommonAnswers = await prompt(questions);
   switch (commonAnswers.projectChoice) {
     case ProjectChoice.VIZ:
       return vizQuestions.getAnswers(args, commonAnswers);

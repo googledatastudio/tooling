@@ -1,6 +1,6 @@
-import * as inquirer from 'inquirer';
 import * as path from 'path';
 import {PWD} from '../index';
+import {prompt} from '../prompt';
 import {Answers, Args, CommonAnswers} from '../questions';
 import * as util from '../util';
 import * as validation from './validation';
@@ -29,7 +29,7 @@ export const getAnswers = async (
   commonAnswers: CommonAnswers
 ): Promise<Answers> => {
   await validation.checkGsutilInstalled();
-  const vizAnswers: VizAnswers = await inquirer.prompt([
+  const vizAnswers: VizAnswers = await prompt([
     {
       name: 'projectName',
       type: 'input',

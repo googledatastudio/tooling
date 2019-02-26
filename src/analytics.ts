@@ -19,6 +19,7 @@ export enum Action {
   STOP = 'stop',
   ERROR_STOP = 'error_stop',
   GSUTIL_NOT_INSTALLED = 'gsutil_not_installed',
+  SIGINT_STOP = 'sigint_stop',
 }
 
 export const trackEvent = (category: Category, action: Action) => {

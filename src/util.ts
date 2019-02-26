@@ -116,6 +116,14 @@ export const npmInstall = async (projectPath: string): Promise<Std> => {
   return await exec('npm install', {cwd: projectPath}, false);
 };
 
+export const pause = async (millis: number): Promise<void> => {
+  return new Promise((resolve, _) => {
+    setInterval(() => {
+      resolve();
+    }, millis);
+  });
+};
+
 export const spinnify = async <T>(
   spinnerText: string,
   fn: () => Promise<T>
