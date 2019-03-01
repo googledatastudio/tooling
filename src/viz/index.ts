@@ -40,21 +40,9 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     }
   });
 
-  await util.spinnify('Building & pushing dev deployment...', async () => {
-    if (answers.yarn) {
-      await util.exec('yarn run build:dev', {cwd: projectPath}, false);
-      await util.exec('yarn run push:dev', {cwd: projectPath}, false);
-    } else {
-      await util.exec('npm run build:dev', {cwd: projectPath}, false);
-      await util.exec('npm run push:dev', {cwd: projectPath}, false);
-    }
-  });
-
   console.log(
     `\
-cd ${projectName} to start working on your viz!\n\
-\n\
-Your viz has been deployed to: ${devBucket}\n\
+cd ${projectName} and npm run start to start working on your viz!\n\
 \n\
 For next steps, see ${projectName}/README.md\
 `

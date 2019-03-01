@@ -1,7 +1,5 @@
 const dscc = require('@google/dscc');
 
-
-
 // import the local data
 import * as local from './localData.js';
 
@@ -28,7 +26,7 @@ To change the data:
 
 </p>
 
-`
+`;
 
 if (LOCAL) {
   setTimeout(() => {
@@ -82,24 +80,23 @@ const drawViz = (data) => {
 
   // obtain the maximum bar metric value for scaling purposes
   var metricMax = 0;
-  rowData.forEach(function(row){
+  rowData.forEach(function(row) {
     metricMax = Math.max(metricMax, row['metricID'][0]);
-  })
+  });
 
   // draw bars
   // add dimension labels below bars
   // 'barDimension' and 'barMetric' come from the id defined in myViz.json
   rowData.forEach(function(row, i) {
-
     // calculates the height of the bar using the row value, maximum bar
     // height, and the maximum metric value calculated earlier
     var barHeight = Math.round(
-        -1 * ((row['metricID'][0] * maxBarHeight) / metricMax)
+      -1 * ((row['metricID'][0] * maxBarHeight) / metricMax)
     );
 
     // calculates the x coordinate of the bar based on the width of the convas
     // and the width of the bar
-    var barX = (ctx.canvas.width /rowData.length) * i + barWidth / 2;
+    var barX = (ctx.canvas.width / rowData.length) * i + barWidth / 2;
 
     ctx.fillRect(barX, maxBarHeight, barWidth, barHeight);
 
@@ -109,7 +106,6 @@ const drawViz = (data) => {
 
     ctx.fillText(barText, textX, textY);
   });
-
 };
 
 // logic to handle local vs. Data Studio deployment

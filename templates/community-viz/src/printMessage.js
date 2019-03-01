@@ -12,7 +12,6 @@ const printMessage = (data) => {
   var msgText = JSON.stringify(data, null, 2);
   div.innerHTML = `<pre>export const message = ${msgText};</pre>`;
   document.body.appendChild(div);
-
-}
+};
 
 dscc.subscribeToData(printMessage, {transform: dscc.objectTransform});
