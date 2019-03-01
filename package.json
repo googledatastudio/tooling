@@ -43,6 +43,7 @@
   "dependencies": {
     "argparse": "^1.0.10",
     "bluebird": "^3.5.1",
+    "chalk": "^2.4.2",
     "cli-spinner": "^0.2.8",
     "inquirer": "^6.2.1",
     "insight": "^0.10.1",

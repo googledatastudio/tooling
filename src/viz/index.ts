@@ -14,6 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const chalk = require('chalk')
+
 import * as path from 'path';
 import * as files from '../files';
 import {PWD} from '../index';
@@ -41,10 +43,10 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   });
 
   console.log(
-    `\
-cd ${projectName} and npm run start to start working on your viz!\n\
+    `
+Created new community viz: ${projectName}
 \n\
-For next steps, see ${projectName}/README.md\
+${chalk.black.bgCyan.bold('cd ' + projectName)} and ${chalk.black.bgCyan.bold('npm run start')} to begin working on your viz!\n\
 `
   );
   return 0;
