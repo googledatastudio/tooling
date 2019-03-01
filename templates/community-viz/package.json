@@ -1,10 +1,11 @@
 {
   "config": {
-    "gcsDevBucket": "{{DEV_BUCKET}}",
+    "gcsDevBucket": "gs://yulanlin-cv-dev/template",
     "gcsProdBucket": "{{PROD_BUCKET}}",
     "jsFile": "index.js",
     "jsonFile": "index.json",
     "cssFile": "index.css",
+    "print": "printMessage.js",
     "manifestFile": "manifest.json"
   },
   "scripts": {
@@ -12,6 +13,7 @@
     "build:prod": "node scripts/build.js --prod true",
     "push:dev": "node scripts/push.js --prod false",
     "push:prod": "node scripts/push.js --prod true",
+    "message": "node scripts/message.js --prod false",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open"
   },
@@ -31,6 +33,5 @@
     "webpack-merge": "^4.2.1",
     "webpack-plugin-replace": "^1.1.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
