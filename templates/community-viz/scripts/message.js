@@ -2,26 +2,18 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const program = require('commander');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
 
 // constants
 const DEV_BUCKET = process.env.npm_package_config_gcsDevBucket;
-const PROD_BUCKET = process.env.npm_package_config_gcsProdBucket;
 const MANIFEST_FILE = process.env.npm_package_config_manifestFile;
 const CSS_FILE = process.env.npm_package_config_cssFile;
 const JSON_FILE = process.env.npm_package_config_jsonFile;
 
-// configure command-line arguments
-program
-  .option('-p, --prod', 'Build for prod?', /^(true|false)$/i, true)
-  .parse(process.argv);
-
 // default to dev if it's not prod
-const DEVMODE = program.args[0] === 'true' ? false : true;
-const GCS_BUCKET = DEVMODE ? DEV_BUCKET : PROD_BUCKET;
+const DEVMODE = true;
+const GCS_BUCKET = DEV_BUCKET;
 
 const encoding = 'utf-8';
 
@@ -29,7 +21,7 @@ const encoding = 'utf-8';
 let webpackOptions = {
   entry: {
     // this is the viz source code
-    main: path.resolve(__dirname, '..', 'src', 'printMessage.js'),
+    main: path.resolve(__dirname, '..', 'scripts', 'printMessage.js'),
   },
   output: {
     filename: 'index.js',

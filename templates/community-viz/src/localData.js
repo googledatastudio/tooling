@@ -1,9 +1,8 @@
 /**
- * @fileoverview Description of this file.
- */
-
-/* SETUP: Copy and paste the message printed
- * to the div in the initial visualization
+ * This file provides the mock "data" received
+ * by your visualization code when you develop
+ * locally.
+ *
  */
 export const message = {
   tables: {

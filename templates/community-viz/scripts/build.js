@@ -2,7 +2,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const program = require('commander');
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs'));
@@ -22,6 +21,7 @@ program
 
 // default to dev if it's not prod
 const DEVMODE = program.args[0] === 'true' ? false : true;
+
 const GCS_BUCKET = DEVMODE ? DEV_BUCKET : PROD_BUCKET;
 
 const encoding = 'utf-8';
@@ -34,7 +34,7 @@ let webpackOptions = {
   },
   output: {
     filename: JS_FILE,
-    path: path.resolve(__dirname, '..', 'datastudio'),
+    path: path.resolve(__dirname, '..', 'build'),
   },
   plugins: [
     new CopyWebpackPlugin([
@@ -47,22 +47,11 @@ let webpackOptions = {
 if (DEVMODE === true) {
   const devOptions = {
     mode: 'development',
-    devtool: 'inline-source-map',
   };
   webpackOptions = Object.assign(webpackOptions, devOptions);
 } else {
   const prodOptions = {
     mode: 'production',
-    optimization: {
-      minimizer: [
-        new UglifyJsPlugin({
-          sourceMap: false,
-          uglifyOptions: {
-            comments: false,
-          },
-        }),
-      ],
-    },
   };
   webpackOptions = Object.assign(webpackOptions, prodOptions);
 }
@@ -71,16 +60,15 @@ const compiler = webpack(webpackOptions);
 
 // put everything together except the manifest
 compiler.run((err, stats) => {
-  // once datastudio is created...
+  // once build directory is created...
   fs.readFileAsync(path.join('src', MANIFEST_FILE), encoding).then((value) => {
     const newManifest = value
       .replace(/YOUR_GCS_BUCKET/g, GCS_BUCKET)
       .replace(/"DEVMODE_BOOL"/, DEVMODE);
-    fs.writeFileAsync(
-      path.join('./datastudio', MANIFEST_FILE),
-      newManifest
-    ).catch((err) => {
-      console.log('Unable to write manifest: ', err);
-    });
+    fs.writeFileAsync(path.join('./build', MANIFEST_FILE), newManifest).catch(
+      (err) => {
+        console.log('Unable to write manifest: ', err);
+      }
+    );
   });
 });

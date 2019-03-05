@@ -15,3 +15,4 @@ const GCS_BUCKET = program.args[0] === 'true' ? PROD_BUCKET : DEV_BUCKET;
 
 shell.cd('datastudio');
 shell.exec('gsutil cp -a public-read * ' + GCS_BUCKET);
+console.log(`Viz deployed to: ${GCS_BUCKET}`);
