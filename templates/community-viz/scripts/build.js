@@ -48,12 +48,12 @@ if (DEVMODE === true) {
   const devOptions = {
     mode: 'development',
   };
-  webpackOptions = Object.assign(webpackOptions, devOptions);
+  Object.assign(webpackOptions, devOptions);
 } else {
   const prodOptions = {
     mode: 'production',
   };
-  webpackOptions = Object.assign(webpackOptions, prodOptions);
+  Object.assign(webpackOptions, prodOptions);
 }
 
 const compiler = webpack(webpackOptions);

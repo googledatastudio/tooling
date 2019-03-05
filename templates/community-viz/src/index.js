@@ -13,5 +13,5 @@ const drawViz = (data) => {
   viz.firstViz(data);
 };
 
-// logic to handle local vs. Data Studio deployment
+// handles viz rendering logic with dscc
 utils.renderViz(LOCAL, drawViz);
