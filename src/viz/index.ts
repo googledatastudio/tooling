@@ -42,14 +42,15 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     }
   });
 
+  const colorCd = chalk.black.bgCyan.bold('cd ' + projectName);
+  const colorNpm = chalk.black.bgCyan.bold('npm run start');
+
   console.log(
     `
 Created new community viz: ${projectName}
 \n\
-${chalk.black.bgCyan.bold('cd ' + projectName)} and ${chalk.black.bgCyan.bold(
-      'npm run start'
-    )} to begin working on your viz!\n\
-`
+${colorCd} and ${colorNpm} to begin working on your viz!\n\
+    `
   );
   return 0;
 };
