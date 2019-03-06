@@ -25,8 +25,14 @@ import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 import * as appsscript from './appsscript';
+import * as validation from './validation';
 
-// TODO - validate that clasp has been authenticated. If not fail, and tell user to auth with clasp.
+const clear = require('clear');
+
+const green = chalk.rgb(15, 157, 88);
+const blue = chalk.rgb(66, 133, 244);
+const yellow = chalk.rgb(244, 160, 0);
+const red = chalk.rgb(219, 68, 55);
 
 const getTemplates = (answers: Answers): Template[] => {
   return [
@@ -60,6 +66,16 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     util.npmInstall(projectPath, answers)
   );
 
+  if (!(await validation.claspAuthenticated())) {
+    const infoText = yellow(
+      'Clasp must be globally authenticated for dscc-gen.'
+    );
+    const claspLogin = green('npx @google/clasp login');
+    console.log(`${infoText}\nrunning ${claspLogin} ...\n`);
+    await util.exec('npx @google/clasp login', execOptions, true);
+    clear();
+  }
+
   await util.spinnify('Creating Apps Script project...', async () => {
     await appsscript.create(projectPath, projectName);
     // Since clasp creating a new project overwrites the manifest, we want to
@@ -82,11 +98,6 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     ]);
   });
 
-  const green = chalk.rgb(15, 157, 88);
-  const blue = chalk.rgb(66, 133, 244);
-  const yellow = chalk.rgb(244, 160, 0);
-  const red = chalk.rgb(219, 68, 55);
-
   const connectorOverview = blue(
     terminalLink(
       'connector overview',
@@ -102,6 +113,7 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   const tryProduction = red(`${runCmd} tryProduction`);
   const updateProduction = yellow(`${runCmd} updateProduction`);
 
+  clear();
   console.log(
     `\
 Created a new community connector: ${styledProjectName}\n\
