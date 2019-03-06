@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
+import chalk from 'chalk';
 import {Spinner} from 'cli-spinner';
 import * as path from 'path';
+import terminalLink from 'terminal-link';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 import * as appsscript from './appsscript';
-import terminalLink from 'terminal-link';
-import chalk from 'chalk';
 
 // TODO - validate that clasp has been authenticated. If not fail, and tell user to auth with clasp.
 
@@ -82,21 +82,25 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     ]);
   });
 
-  const connectorOverview = chalk.rgb(66, 133, 244)(
+  const green = chalk.rgb(15, 157, 88);
+  const blue = chalk.rgb(66, 133, 244);
+  const yellow = chalk.rgb(244, 160, 0);
+  const red = chalk.rgb(219, 68, 55);
+
+  const connectorOverview = blue(
     terminalLink(
       'connector overview',
       'https://developers.google.com/datastudio/connector/'
     )
   );
-
-  const styledProjectName = chalk.rgb(15, 157, 88)(projectName);
-  const cdDirection = chalk.rgb(15, 157, 88)(`cd ${projectName}`);
-
+  const styledProjectName = green(projectName);
+  const cdDirection = green(`cd ${projectName}`);
   const runCmd = answers.yarn ? 'yarn' : 'npm run';
-  const open = chalk.rgb(244, 160, 0)(`${runCmd} open`);
-  const watch = chalk.rgb(15, 157, 88)(`${runCmd} watch`);
-  const prettier = chalk.rgb(66, 133, 244)(`${runCmd} prettier`);
-  const tryProduction = chalk.rgb(219, 68, 55)(`${runCmd} tryProduction`);
+  const open = yellow(`${runCmd} open`);
+  const watch = green(`${runCmd} watch`);
+  const prettier = blue(`${runCmd} prettier`);
+  const tryProduction = red(`${runCmd} tryProduction`);
+  const updateProduction = yellow(`${runCmd} updateProduction`);
 
   console.log(
     `\
@@ -112,6 +116,7 @@ ${open} - open your project in Apps Script.\n\
 ${watch} - watches for local changes & pushes them to Apps Script.\n\
 ${prettier} - formats your code using community standards.\n\
 ${tryProduction} - opens your production deployment.\n\
+${updateProduction} - updates your production deployment to use the latest code.\n\
 `
   );
   return 0;
