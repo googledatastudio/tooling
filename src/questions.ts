@@ -128,14 +128,14 @@ const getArgsParser = async (
     help: 'Skip questions with sensible defaults.',
   });
 
-  parser.addArgument([PROJECT_NAME.cmdName], {
-    dest: PROJECT_NAME.inquirerName,
+  parser.addArgument([PROJECT_CHOICE.cmdName], {
+    dest: PROJECT_CHOICE.inquirerName,
     choices: templateOptions,
     help: 'Which template to use.',
   });
 
-  parser.addArgument([PROJECT_CHOICE.cmdName], {
-    dest: PROJECT_CHOICE.inquirerName,
+  parser.addArgument([PROJECT_NAME.cmdName], {
+    dest: PROJECT_NAME.inquirerName,
     help: 'The name of your project',
   });
 
