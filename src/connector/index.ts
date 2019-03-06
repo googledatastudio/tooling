@@ -16,13 +16,13 @@
  */
 
 import {Spinner} from 'cli-spinner';
-import {Answers} from '../questions';
-import {PWD} from '../index';
-import {Template} from '../main';
-import * as util from '../util';
-import * as appsscript from './appsscript';
 import * as path from 'path';
 import * as files from '../files';
+import {PWD} from '../index';
+import {Template} from '../main';
+import {Answers} from '../questions';
+import * as util from '../util';
+import * as appsscript from './appsscript';
 
 // TODO - validate that clasp has been authenticated. If not fail, and tell user to auth with clasp.
 

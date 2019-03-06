@@ -1,9 +1,9 @@
+import {Inquirer, Questions} from 'inquirer';
 import * as path from 'path';
 import {PWD} from '../index';
 import {prompt} from '../prompt';
 import {Answers, Args, CommonAnswers} from '../questions';
 import * as util from '../util';
-import {Inquirer, Questions} from 'inquirer';
 
 export interface ConnectorAnswers {
   projectName?: string;
