@@ -24,7 +24,7 @@ export const create = async (appsscriptPath: string, projectName: string) => {
     cwd: appsscriptPath,
   };
   await util.exec(
-    `npx @google/clasp create --title ${projectName} --type standalone`,
+    `npx @google/clasp create --title ${projectName} --type standalone --rootDir src`,
     options,
     false
   );

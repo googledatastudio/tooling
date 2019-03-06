@@ -1,0 +1,9 @@
+{
+  "name": "community-connector",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^2.0.1"
+  }
+}

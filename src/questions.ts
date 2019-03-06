@@ -19,7 +19,9 @@ import * as inquirer from 'inquirer';
 import * as files from './files';
 import * as argparse from 'argparse';
 import * as vizQuestions from './viz/questions';
+import * as connectorQuestions from './connector/questions';
 import {VizAnswers} from './viz/questions';
+import {ConnectorAnswers} from './connector/questions';
 import {setTimeout} from 'timers';
 import {prompt} from './prompt';
 
@@ -28,7 +30,7 @@ export interface State {
   templatePath: string;
 }
 
-export type Answers = VizAnswers & CommonAnswers & Args;
+export type Answers = ConnectorAnswers & VizAnswers & CommonAnswers & Args;
 
 export interface Args {
   yarn: boolean;
@@ -42,9 +44,13 @@ export interface CommonAnswers {
 
 export enum ProjectChoice {
   VIZ = 'community-viz',
+  CONNECTOR = 'community-connector',
 }
 
-const templateOptions: ProjectChoice[] = [ProjectChoice.VIZ];
+const templateOptions: ProjectChoice[] = [
+  ProjectChoice.VIZ,
+  ProjectChoice.CONNECTOR,
+];
 
 export const questions = [
   {
@@ -87,6 +93,8 @@ export const getAnswers = async (baseDir: string): Promise<Answers> => {
   switch (commonAnswers.projectChoice) {
     case ProjectChoice.VIZ:
       return vizQuestions.getAnswers(args, commonAnswers);
+    case ProjectChoice.CONNECTOR:
+      return connectorQuestions.getAnswers(args, commonAnswers);
     default:
       throw new Error(`${commonAnswers.projectChoice} is not supported.`);
   }

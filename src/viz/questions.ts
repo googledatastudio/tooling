@@ -6,9 +6,9 @@ import * as util from '../util';
 import * as validation from './validation';
 
 export interface VizAnswers {
-  devBucket: string;
-  prodBucket: string;
-  projectName: string;
+  devBucket?: string;
+  prodBucket?: string;
+  projectName?: string;
 }
 
 const projectNameRegEx = /^([-_A-Za-z\d])+$/;

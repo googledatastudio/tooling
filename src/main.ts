@@ -18,6 +18,7 @@
 import * as questions from './questions';
 import {ProjectChoice} from './questions';
 import * as viz from './viz/index';
+import * as connector from './connector/index';
 
 export interface Template {
   match: RegExp;
@@ -31,6 +32,8 @@ export const main = async (basePath: string): Promise<number> => {
   switch (answers.projectChoice) {
     case ProjectChoice.VIZ:
       return viz.createFromTemplate(answers);
+    case ProjectChoice.CONNECTOR:
+      return connector.createFromTemplate(answers);
     default:
       throw new Error(`${answers.projectChoice} is not supported.`);
   }
