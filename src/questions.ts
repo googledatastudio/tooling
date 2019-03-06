@@ -38,7 +38,6 @@ export type Answers = ConnectorAnswers & VizAnswers & CommonAnswers & Args;
 export interface Args {
   yarn: boolean;
   npm: boolean;
-  useDefaults: boolean;
 }
 
 export interface CommonAnswers {
@@ -118,12 +117,6 @@ const getArgs = async (baseDir: string): Promise<Args> => {
     dest: 'npm',
     action: 'storeTrue',
     help: 'Use npm as the build tool.',
-  });
-
-  parser.addArgument(['--use_defaults'], {
-    dest: 'useDefaults',
-    action: 'storeTrue',
-    help: 'Skip questions with sensible defaults.',
   });
 
   parser.addArgument([PROJECT_CHOICE.cmdName], {
