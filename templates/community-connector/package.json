@@ -1,9 +1,14 @@
 {
-  "name": "community-connector",
+  "name": "{{MANIFEST_NAME}}",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@google/clasp": "^2.0.1"
+    "@google/clasp": "^2.0.1",
+    "prettier": "^1.16.4"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "watch": "clasp push --watch"
   }
 }

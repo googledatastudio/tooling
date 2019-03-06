@@ -3,6 +3,7 @@ import {PWD} from '../index';
 import {prompt} from '../prompt';
 import {Answers, Args, CommonAnswers} from '../questions';
 import * as util from '../util';
+import {Inquirer, Questions} from 'inquirer';
 
 export interface ConnectorAnswers {
   projectName?: string;
@@ -15,82 +16,67 @@ export interface ConnectorAnswers {
   manifestSources?: string;
 }
 
-const projectNameRegEx = /^([-_A-Za-z\d])+$/;
-
-const projectNameValidator = async (input: string) => {
-  if (!projectNameRegEx.test(input)) {
-    return 'Name may only include letters, numbers, dashes, and underscores.';
-  }
-  const projectPath = path.join(PWD, input);
-  if (await util.fileExists(projectPath)) {
-    return `The directory ${input} already exists.`;
-  }
-  return true;
-};
-
 const sourcesValidator = (input: string) => {
   if (input === '') {
     return true;
   }
-  if (input.match(/^[A-Z_]+$/)) {
+  if (input.match(/^[0-9A-Z_]+$/)) {
     return true;
   }
-  if (input.match(/^[A-Z_]+(,[A-Z_]+)+$/)) {
+  if (input.match(/^[0-9A-Z_]+(,[0-9A-Z_]+)+$/)) {
     return true;
   }
   return 'Sources must be in the format of SOURCE,SOURCE2,SOURCE3';
 };
 
+const questions: Questions<ConnectorAnswers> = [
+  {
+    name: 'manifestCompany',
+    type: 'input',
+    message: 'Organization or developer',
+  },
+  {
+    name: 'manifestCompanyUrl',
+    type: 'input',
+    message: `Organization or developer's website`,
+  },
+  {
+    name: 'manifestLogoUrl',
+    type: 'input',
+    message: 'Icon URL (Dimensions should be 40x40 px)',
+  },
+  {
+    name: 'manifestAddonUrl',
+    type: 'input',
+    message: 'Link to page that explains your connector to users',
+  },
+  {
+    name: 'manifestSupportUrl',
+    type: 'input',
+    message: 'Support page URL',
+  },
+  {
+    name: 'manifestDescription',
+    type: 'input',
+    message: 'Connector description',
+  },
+  {
+    name: 'manifestSources',
+    type: 'input',
+    message: 'Sources your connector connects to',
+    validate: sourcesValidator,
+  },
+];
+
 export const getAnswers = async (
   args: Args,
   commonAnswers: CommonAnswers
 ): Promise<Answers> => {
-  const connectorAnswers: ConnectorAnswers = await prompt([
-    {
-      name: 'projectName',
-      type: 'input',
-      message: 'Project name',
-      validate: projectNameValidator,
-    },
-    {
-      name: 'manifestLogoUrl',
-      type: 'input',
-      message: 'Logo Url',
-    },
-    {
-      name: 'manifestCompany',
-      type: 'input',
-      message: 'Company',
-    },
-    {
-      name: 'manifestCompanyUrl',
-      type: 'input',
-      message: 'Company Url',
-    },
-    {
-      name: 'manifestAddonUrl',
-      type: 'input',
-      message: 'Addon Url',
-    },
-    {
-      name: 'manifestSupportUrl',
-      type: 'input',
-      message: 'Support Url',
-    },
-    {
-      name: 'manifestDescription',
-      type: 'input',
-      message: 'Description',
-    },
-    {
-      name: 'manifestSources',
-      type: 'input',
-      message: 'Sources',
-      validate: sourcesValidator,
-    },
-  ]);
+  const connectorAnswers: ConnectorAnswers = args.useDefaults
+    ? {}
+    : await prompt(questions);
+  // If the answer is empty string, delete and use the default value.
   Object.keys(connectorAnswers).forEach((key) => {
-    // If they left the answer blank, then delete and use the default value.
     if ((connectorAnswers as any)[key] === '') {
       delete (connectorAnswers as any)[key];
     }

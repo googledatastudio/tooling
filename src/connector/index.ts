@@ -49,7 +49,13 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     {match: /{{MANIFEST_ADDON_URL}}/, replace: manifestAddonUrl},
     {match: /{{MANIFEST_SUPPORT_URL}}/, replace: manifestSupportUrl},
     {match: /{{MANIFEST_DESCRIPTION}}/, replace: manifestDescription},
-    {match: /{{MANIFEST_SOURCES}}/, replace: `[${manifestSources}]`},
+    {
+      match: /{{MANIFEST_SOURCES}}/,
+      replace: `[${manifestSources
+        .split(',')
+        .map((a) => `"${a}"`)
+        .join(',')}]`,
+    },
   ];
   await files.fixTemplates(projectPath, templates);
 

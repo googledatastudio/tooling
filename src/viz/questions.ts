@@ -8,21 +8,7 @@ import * as validation from './validation';
 export interface VizAnswers {
   devBucket?: string;
   prodBucket?: string;
-  projectName?: string;
 }
-
-const projectNameRegEx = /^([-_A-Za-z\d])+$/;
-
-const projectNameValidator = async (input: string) => {
-  if (!projectNameRegEx.test(input)) {
-    return 'Name may only include letters, numbers, dashes, and underscores.';
-  }
-  const projectPath = path.join(PWD, input);
-  if (await util.fileExists(projectPath)) {
-    return `The directory ${input} already exists.`;
-  }
-  return true;
-};
 
 export const getAnswers = async (
   args: Args,
@@ -30,12 +16,6 @@ export const getAnswers = async (
 ): Promise<Answers> => {
   await validation.checkGsutilInstalled();
   const vizAnswers: VizAnswers = await prompt([
-    {
-      name: 'projectName',
-      type: 'input',
-      message: 'Project name',
-      validate: projectNameValidator,
-    },
     {
       name: 'devBucket',
       type: 'input',

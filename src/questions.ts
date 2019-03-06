@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+import * as path from 'path';
+import {PWD} from './index';
+import * as util from './util';
 import * as inquirer from 'inquirer';
 import * as files from './files';
 import * as argparse from 'argparse';
@@ -35,10 +38,12 @@ export type Answers = ConnectorAnswers & VizAnswers & CommonAnswers & Args;
 export interface Args {
   yarn: boolean;
   npm: boolean;
+  useDefaults: boolean;
 }
 
 export interface CommonAnswers {
   projectChoice: ProjectChoice;
+  projectName: string;
   basePath: string;
 }
 
@@ -52,12 +57,31 @@ const templateOptions: ProjectChoice[] = [
   ProjectChoice.CONNECTOR,
 ];
 
+const projectNameRegEx = /^([-_A-Za-z\d])+$/;
+
+const projectNameValidator = async (input: string) => {
+  if (!projectNameRegEx.test(input)) {
+    return 'Name may only include letters, numbers, dashes, and underscores.';
+  }
+  const projectPath = path.join(PWD, input);
+  if (await util.fileExists(projectPath)) {
+    return `The directory ${input} already exists.`;
+  }
+  return true;
+};
+
 export const questions = [
   {
     name: 'projectChoice',
     type: 'list',
     message: 'What project template would you like to use?',
     choices: templateOptions,
+  },
+  {
+    name: 'projectName',
+    type: 'input',
+    message: 'Project name',
+    validate: projectNameValidator,
   },
 ];
 
@@ -82,6 +106,13 @@ const getArgsParser = async (
     action: 'storeTrue',
     help: 'Use npm as the build tool.',
   });
+
+  parser.addArgument(['--use_defaults'], {
+    dest: 'useDefaults',
+    action: 'storeTrue',
+    help: 'Skip questions with sensible defaults.',
+  });
+
   return parser;
 };
 
