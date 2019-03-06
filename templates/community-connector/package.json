@@ -9,6 +9,10 @@
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.js\"",
-    "watch": "clasp push --watch"
+    "watch": "clasp push --watch",
+    "open": "clasp open"
+  },
+  "deployments": {
+    "production": "{{PRODUCTION_DEPLOYMENT_ID}}"
   }
 }

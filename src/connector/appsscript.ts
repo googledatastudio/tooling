@@ -51,16 +51,15 @@ export const getScriptId = async (appsscriptPath: string) => {
 
 export const deploy = async (
   appsscriptPath: string,
-  versionNumber: string,
   deploymentName: string
 ) => {
   const options = {cwd: appsscriptPath};
   const {out} = await util.exec(
-    `npx @google/clasp deploy --versionNumber ${versionNumber} --description "${deploymentName}"`,
+    `npx @google/clasp deploy --description "${deploymentName}"`,
     options,
     false
   );
-  const [_, deploymentId] = out.match(/- ([-_A-Za-z\d]*) @1./);
+  const [_, deploymentId] = out.match(/- ([-_A-Za-z\d]*) @[0-9]+\./);
   return deploymentId;
 };
 

@@ -20,6 +20,7 @@ import * as cp from 'child_process';
 import {ExecOptions} from 'child_process';
 import * as fs from 'fs';
 import {Spinner} from 'cli-spinner';
+import {Answers} from 'inquirer';
 
 export const readDir = (path: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
@@ -112,8 +113,16 @@ export const exec = (
   });
 };
 
-export const npmInstall = async (projectPath: string): Promise<Std> => {
-  return await exec('npm install', {cwd: projectPath}, false);
+export const npmInstall = async (
+  projectPath: string,
+  answers: Answers
+): Promise<Std> => {
+  const execOptions = {cwd: projectPath};
+  if (answers.yarn) {
+    return exec('yarn install', execOptions, false);
+  } else {
+    return exec('npm install', execOptions, false);
+  }
 };
 
 export const pause = async (millis: number): Promise<void> => {
