@@ -19,13 +19,13 @@ import * as path from 'path';
 import {PWD} from './index';
 import * as util from './util';
 import * as inquirer from 'inquirer';
+import {Question} from 'inquirer';
 import * as files from './files';
 import * as argparse from 'argparse';
 import * as vizQuestions from './viz/questions';
 import * as connectorQuestions from './connector/questions';
 import {VizAnswers} from './viz/questions';
 import {ConnectorAnswers} from './connector/questions';
-import {setTimeout} from 'timers';
 import {prompt} from './prompt';
 
 export interface State {
@@ -70,7 +70,7 @@ const projectNameValidator = async (input: string) => {
   return true;
 };
 
-export const questions = [
+export const COMMON_QUESTIONS: Array<Question<CommonAnswers>> = [
   {
     name: 'projectChoice',
     type: 'list',
@@ -113,14 +113,47 @@ const getArgsParser = async (
     help: 'Skip questions with sensible defaults.',
   });
 
+  parser.addArgument(['--project_choice'], {
+    dest: 'projectChoice',
+    choices: templateOptions,
+    help: 'Which template to use.',
+  });
+
+  parser.addArgument(['--project_name'], {
+    dest: 'projectName',
+    help: 'The name of your project',
+  });
+
   return parser;
+};
+
+const questionsWithArgs = async <T>(
+  args: Args,
+  questions: Array<Question<T>>
+): Promise<Array<Question<T>>> => {
+  await Promise.all(
+    questions.map(async (question) => {
+      const argValue = (args as any)[question.name];
+      if (argValue && question.validate) {
+        const isValid = await question.validate(argValue);
+        if (isValid !== true) {
+          throw new Error(
+            `Invalid response for ${question.name}: "${argValue}". ${isValid}`
+          );
+        }
+      }
+    })
+  );
+  return questions.filter((question) => {
+    return (args as any)[question.name] === undefined;
+  });
 };
 
 export const getAnswers = async (baseDir: string): Promise<Answers> => {
   const args: Args = (await getArgsParser(baseDir)).parseArgs();
-  // TODO(me) - Check that the args are valid
-  // TODO(me) - If an arg should be used instead of a question, don't ask that question.
-  const commonAnswers: CommonAnswers = await prompt(questions);
+  const questions = await questionsWithArgs(args, COMMON_QUESTIONS);
+  const promptAnswers: CommonAnswers = await prompt(questions);
+  const commonAnswers = Object.assign({}, promptAnswers, args);
   switch (commonAnswers.projectChoice) {
     case ProjectChoice.VIZ:
       return vizQuestions.getAnswers(args, commonAnswers);
