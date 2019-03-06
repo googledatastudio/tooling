@@ -57,6 +57,21 @@ const templateOptions: ProjectChoice[] = [
   ProjectChoice.CONNECTOR,
 ];
 
+interface QuestionName {
+  cmdName: string;
+  inquirerName: string;
+}
+
+const PROJECT_CHOICE: QuestionName = {
+  cmdName: '--project_choice',
+  inquirerName: 'projectChoice',
+};
+
+const PROJECT_NAME: QuestionName = {
+  cmdName: '--project_name',
+  inquirerName: 'projectName',
+};
+
 const projectNameRegEx = /^([-_A-Za-z\d])+$/;
 
 const projectNameValidator = async (input: string) => {
@@ -72,13 +87,13 @@ const projectNameValidator = async (input: string) => {
 
 export const COMMON_QUESTIONS: Array<Question<CommonAnswers>> = [
   {
-    name: 'projectChoice',
+    name: PROJECT_CHOICE.inquirerName,
     type: 'list',
     message: 'What project template would you like to use?',
     choices: templateOptions,
   },
   {
-    name: 'projectName',
+    name: PROJECT_NAME.inquirerName,
     type: 'input',
     message: 'Project name',
     validate: projectNameValidator,
@@ -113,14 +128,14 @@ const getArgsParser = async (
     help: 'Skip questions with sensible defaults.',
   });
 
-  parser.addArgument(['--project_choice'], {
-    dest: 'projectChoice',
+  parser.addArgument([PROJECT_NAME.cmdName], {
+    dest: PROJECT_NAME.inquirerName,
     choices: templateOptions,
     help: 'Which template to use.',
   });
 
-  parser.addArgument(['--project_name'], {
-    dest: 'projectName',
+  parser.addArgument([PROJECT_CHOICE.cmdName], {
+    dest: PROJECT_CHOICE.inquirerName,
     help: 'The name of your project',
   });
 
