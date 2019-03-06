@@ -100,9 +100,7 @@ export const COMMON_QUESTIONS: Array<Question<CommonAnswers>> = [
   },
 ];
 
-const getArgsParser = async (
-  baseDir: string
-): Promise<argparse.ArgumentParser> => {
+const getArgs = async (baseDir: string): Promise<Args> => {
   const parser = new argparse.ArgumentParser({
     version: (await files.getPackageJson(baseDir)).version,
     addHelp: true,
@@ -139,7 +137,13 @@ const getArgsParser = async (
     help: 'The name of your project',
   });
 
-  return parser;
+  const args = parser.parseArgs();
+  Object.keys(args).forEach((key) => {
+    if (args[key] === null) {
+      delete args[key];
+    }
+  });
+  return args;
 };
 
 const questionsWithArgs = async <T>(
@@ -165,7 +169,7 @@ const questionsWithArgs = async <T>(
 };
 
 export const getAnswers = async (baseDir: string): Promise<Answers> => {
-  const args: Args = (await getArgsParser(baseDir)).parseArgs();
+  const args: Args = await getArgs(baseDir);
   const questions = await questionsWithArgs(args, COMMON_QUESTIONS);
   const promptAnswers: CommonAnswers = await prompt(questions);
   const commonAnswers = Object.assign({}, promptAnswers, args);
