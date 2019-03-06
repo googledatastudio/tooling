@@ -23,6 +23,8 @@ import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 import * as appsscript from './appsscript';
+import terminalLink from 'terminal-link';
+import chalk from 'chalk';
 
 // TODO - validate that clasp has been authenticated. If not fail, and tell user to auth with clasp.
 
@@ -80,9 +82,36 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     ]);
   });
 
+  const connectorOverview = chalk.rgb(66, 133, 244)(
+    terminalLink(
+      'connector overview',
+      'https://developers.google.com/datastudio/connector/'
+    )
+  );
+
+  const styledProjectName = chalk.rgb(15, 157, 88)(projectName);
+  const cdDirection = chalk.rgb(15, 157, 88)(`cd ${projectName}`);
+
+  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+  const open = chalk.rgb(244, 160, 0)(`${runCmd} open`);
+  const watch = chalk.rgb(15, 157, 88)(`${runCmd} watch`);
+  const prettier = chalk.rgb(66, 133, 244)(`${runCmd} prettier`);
+  const tryProduction = chalk.rgb(219, 68, 55)(`${runCmd} tryProduction`);
+
   console.log(
     `\
-cd ${projectName} to start working on your connector!\
+Created a new community connector: ${styledProjectName}\n\
+\n\
+If this is your first connector, see ${connectorOverview}\n\
+\n\
+${cdDirection} to start working on your connector\n\
+\n\
+Scripts are provided to simplify development:\n\
+\n\
+${open} - open your project in Apps Script.\n\
+${watch} - watches for local changes & pushes them to Apps Script.\n\
+${prettier} - formats your code using community standards.\n\
+${tryProduction} - opens your production deployment.\n\
 `
   );
   return 0;

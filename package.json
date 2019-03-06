@@ -57,10 +57,13 @@
     "@types/insight": "^0.8.0",
     "@types/jest": "^24.0.8",
     "@types/node": "^11.9.5",
+    "@types/terminal-link": "^1.1.0",
     "@types/uuid": "^3.4.4",
+    "chalk": "^2.4.2",
     "jest": "^24.1.0",
     "onchange": "^5.2.0",
     "prettier": "^1.11.1",
+    "terminal-link": "^1.2.0",
     "ts-jest": "^24.0.0",
     "tslint": "^5.13.1"
   }

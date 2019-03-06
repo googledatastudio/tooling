@@ -16,57 +16,7 @@ export interface ConnectorAnswers {
   manifestSources?: string;
 }
 
-const sourcesValidator = (input: string) => {
-  if (input === '') {
-    return true;
-  }
-  if (input.match(/^[0-9A-Z_]+$/)) {
-    return true;
-  }
-  if (input.match(/^[0-9A-Z_]+(,[0-9A-Z_]+)+$/)) {
-    return true;
-  }
-  return 'Sources must be in the format of SOURCE,SOURCE2,SOURCE3';
-};
-
-const questions: Questions<ConnectorAnswers> = [
-  {
-    name: 'manifestCompany',
-    type: 'input',
-    message: 'Organization or developer',
-  },
-  {
-    name: 'manifestCompanyUrl',
-    type: 'input',
-    message: `Organization or developer's website`,
-  },
-  {
-    name: 'manifestLogoUrl',
-    type: 'input',
-    message: 'Icon URL (Dimensions should be 40x40 px)',
-  },
-  {
-    name: 'manifestAddonUrl',
-    type: 'input',
-    message: 'Link to page that explains your connector to users',
-  },
-  {
-    name: 'manifestSupportUrl',
-    type: 'input',
-    message: 'Support page URL',
-  },
-  {
-    name: 'manifestDescription',
-    type: 'input',
-    message: 'Connector description',
-  },
-  {
-    name: 'manifestSources',
-    type: 'input',
-    message: 'Sources your connector connects to',
-    validate: sourcesValidator,
-  },
-];
+const questions: Questions<ConnectorAnswers> = [];
 
 export const getAnswers = async (
   args: Args,
@@ -83,12 +33,12 @@ export const getAnswers = async (
   });
   return Object.assign(
     {
-      manifestLogoUrl: 'templateLogoUrl',
-      manifestCompany: 'templateCompany',
-      manifestCompanyUrl: 'templateCompanyUrl',
-      manifestAddonUrl: 'templateAddonUrl',
-      manifestSupportUrl: 'templateSupportUrl',
-      manifestDescription: 'templateDescription',
+      manifestLogoUrl: 'logoUrl',
+      manifestCompany: 'manifestCompany',
+      manifestCompanyUrl: 'companyUrl',
+      manifestAddonUrl: 'addonUrl',
+      manifestSupportUrl: 'supportUrl',
+      manifestDescription: 'description',
       manifestSources: '',
     },
     connectorAnswers,
