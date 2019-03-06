@@ -1,9 +1,11 @@
 var cc = DataStudioApp.createCommunityConnector();
 
+// https://devsite.googleplex.com/datastudio/connector/reference#isadminuser
 function isAdminUser() {
-  return true;
+  return false;
 }
 
+// https://devsite.googleplex.com/datastudio/connector/reference#getauthtype
 function getAuthType() {
   var AuthTypes = cc.AuthType;
   return cc
@@ -12,6 +14,7 @@ function getAuthType() {
     .build();
 }
 
+// https://devsite.googleplex.com/datastudio/connector/reference#getconfig
 function getConfig(request) {
   var config = cc.getConfig();
 
@@ -65,10 +68,12 @@ function getFields() {
   return fields;
 }
 
+// https://devsite.googleplex.com/datastudio/connector/reference#getschema
 function getSchema(request) {
   return {schema: getFields().build()};
 }
 
+// https://devsite.googleplex.com/datastudio/connector/reference#getdata
 function getData(request) {
   // Calling `UrlFetchApp.fetch()` makes this connector require authentication.
   UrlFetchApp.fetch('https://google.com');
