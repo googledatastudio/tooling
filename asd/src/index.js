@@ -1,9 +1,8 @@
 const dscc = require('@google/dscc');
 
-
 // import the local data
-import * as utils from '../scripts/vizUtils.js';
-import * as viz from '../scripts/initialViz.js';
+import * as utils from '../bin/viz/vizUtils.js';
+import * as viz from '../bin/viz/initialViz.js';
 
 // change this to 'true' for local development
 // change this to 'false' before deploying
@@ -11,6 +10,7 @@ export const LOCAL = true;
 
 // write viz code here
 const drawViz = (data) => {
+  console.log("HELLO");
   viz.firstViz(data);
 };
 
