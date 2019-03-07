@@ -1,0 +1,12 @@
+{
+  "dataStudio": {
+    "name": "{{MANIFEST_NAME}}",
+    "logoUrl": "{{MANIFEST_LOGO_URL}}",
+    "company": "{{MANIFEST_COMPANY}}",
+    "companyUrl": "{{MANIFEST_COMPANY_URL}}",
+    "addonUrl": "{{MANIFEST_ADDON_URL}}",
+    "supportUrl": "{{MANIFEST_SUPPORT_URL}}",
+    "description": "{{MANIFEST_DESCRIPTION}}",
+    "sources": {{MANIFEST_SOURCES}}
+  }
+}

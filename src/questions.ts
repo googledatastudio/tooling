@@ -15,12 +15,17 @@
  * limitations under the License.
  */
 
+import * as path from 'path';
+import {PWD} from './index';
+import * as util from './util';
 import * as inquirer from 'inquirer';
+import {Question} from 'inquirer';
 import * as files from './files';
 import * as argparse from 'argparse';
 import * as vizQuestions from './viz/questions';
+import * as connectorQuestions from './connector/questions';
 import {VizAnswers} from './viz/questions';
-import {setTimeout} from 'timers';
+import {ConnectorAnswers} from './connector/questions';
 import {prompt} from './prompt';
 
 export interface State {
@@ -28,7 +33,7 @@ export interface State {
   templatePath: string;
 }
 
-export type Answers = VizAnswers & CommonAnswers & Args;
+export type Answers = ConnectorAnswers & VizAnswers & CommonAnswers & Args;
 
 export interface Args {
   yarn: boolean;
@@ -37,27 +42,64 @@ export interface Args {
 
 export interface CommonAnswers {
   projectChoice: ProjectChoice;
+  projectName: string;
   basePath: string;
 }
 
 export enum ProjectChoice {
   VIZ = 'community-viz',
+  CONNECTOR = 'community-connector',
 }
 
-const templateOptions: ProjectChoice[] = [ProjectChoice.VIZ];
+const templateOptions: ProjectChoice[] = [
+  ProjectChoice.VIZ,
+  ProjectChoice.CONNECTOR,
+];
 
-export const questions = [
+interface QuestionName {
+  cmdName: string;
+  inquirerName: string;
+}
+
+const PROJECT_CHOICE: QuestionName = {
+  cmdName: '--project_choice',
+  inquirerName: 'projectChoice',
+};
+
+const PROJECT_NAME: QuestionName = {
+  cmdName: '--project_name',
+  inquirerName: 'projectName',
+};
+
+const projectNameRegEx = /^([-_A-Za-z\d])+$/;
+
+const projectNameValidator = async (input: string) => {
+  if (!projectNameRegEx.test(input)) {
+    return 'Name may only include letters, numbers, dashes, and underscores.';
+  }
+  const projectPath = path.join(PWD, input);
+  if (await util.fileExists(projectPath)) {
+    return `The directory ${input} already exists.`;
+  }
+  return true;
+};
+
+export const COMMON_QUESTIONS: Array<Question<CommonAnswers>> = [
   {
-    name: 'projectChoice',
+    name: PROJECT_CHOICE.inquirerName,
     type: 'list',
     message: 'What project template would you like to use?',
     choices: templateOptions,
   },
+  {
+    name: PROJECT_NAME.inquirerName,
+    type: 'input',
+    message: 'Project name',
+    validate: projectNameValidator,
+  },
 ];
 
-const getArgsParser = async (
-  baseDir: string
-): Promise<argparse.ArgumentParser> => {
+const getArgs = async (baseDir: string): Promise<Args> => {
   const parser = new argparse.ArgumentParser({
     version: (await files.getPackageJson(baseDir)).version,
     addHelp: true,
@@ -76,17 +118,59 @@ const getArgsParser = async (
     action: 'storeTrue',
     help: 'Use npm as the build tool.',
   });
-  return parser;
+
+  parser.addArgument([PROJECT_CHOICE.cmdName], {
+    dest: PROJECT_CHOICE.inquirerName,
+    choices: templateOptions,
+    help: 'Which template to use.',
+  });
+
+  parser.addArgument([PROJECT_NAME.cmdName], {
+    dest: PROJECT_NAME.inquirerName,
+    help: 'The name of your project',
+  });
+
+  const args = parser.parseArgs();
+  Object.keys(args).forEach((key) => {
+    if (args[key] === null) {
+      delete args[key];
+    }
+  });
+  return args;
+};
+
+const questionsWithArgs = async <T>(
+  args: Args,
+  questions: Array<Question<T>>
+): Promise<Array<Question<T>>> => {
+  await Promise.all(
+    questions.map(async (question) => {
+      const argValue = (args as any)[question.name];
+      if (argValue && question.validate) {
+        const isValid = await question.validate(argValue);
+        if (isValid !== true) {
+          throw new Error(
+            `Invalid response for ${question.name}: "${argValue}". ${isValid}`
+          );
+        }
+      }
+    })
+  );
+  return questions.filter((question) => {
+    return (args as any)[question.name] === undefined;
+  });
 };
 
 export const getAnswers = async (baseDir: string): Promise<Answers> => {
-  const args: Args = (await getArgsParser(baseDir)).parseArgs();
-  // TODO(me) - Check that the args are valid
-  // TODO(me) - If an arg should be used instead of a question, don't ask that question.
-  const commonAnswers: CommonAnswers = await prompt(questions);
+  const args: Args = await getArgs(baseDir);
+  const questions = await questionsWithArgs(args, COMMON_QUESTIONS);
+  const promptAnswers: CommonAnswers = await prompt(questions);
+  const commonAnswers = Object.assign({}, promptAnswers, args);
   switch (commonAnswers.projectChoice) {
     case ProjectChoice.VIZ:
       return vizQuestions.getAnswers(args, commonAnswers);
+    case ProjectChoice.CONNECTOR:
+      return connectorQuestions.getAnswers(args, commonAnswers);
     default:
       throw new Error(`${commonAnswers.projectChoice} is not supported.`);
   }
