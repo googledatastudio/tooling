@@ -15,115 +15,121 @@
  * limitations under the License.
  */
 
+import chalk from 'chalk';
 import {Spinner} from 'cli-spinner';
+import * as path from 'path';
+import terminalLink from 'terminal-link';
+import * as files from '../files';
+import {PWD} from '../index';
+import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 import * as appsscript from './appsscript';
+import * as validation from './validation';
 
-const createAppsScriptProject = async (
-  appsScriptPath: string,
-  projectName: string
-) => {
-  let couldAuth = true;
-  try {
-    const isAuth = await appsscript.isAuthenticated();
-    if (!isAuth) {
-      couldAuth = await appsscript.authenticate();
-    }
-  } catch (e) {
-    throw new Error('Could not check if the user was authenticated.');
-  }
-  if (!couldAuth) {
-    throw new Error('Could not be authenticated.');
-  }
-  // TODO(mjhamrick) - see if there is a way to check if a user is already
-  // logged in with clasp.
-  const spinner = new Spinner('Creating Apps Script Project...');
-  spinner.start();
-  try {
-    await appsscript.create(appsScriptPath, projectName);
-  } catch (e) {
-    spinner.stop(true);
-    throw new Error('The appsscript project could not be created.');
-  }
-  try {
-    const scriptId = await appsscript.getScriptId(appsScriptPath);
-    spinner.stop();
-    return scriptId;
-  } catch (e) {
-    spinner.stop(true);
-    throw new Error('The scriptId could not be obtained.');
-  }
-};
+const clear = require('clear');
 
-const push = async (appsScriptPath: string) => {
-  const spinner = new Spinner(
-    `Pushing files and creating an initial version...`
-  );
-  spinner.start();
-  try {
-    await appsscript.push(appsScriptPath);
-  } catch (e) {
-    spinner.stop(true);
-    throw new Error('The files could not be synced with Apps Script.');
-  }
-  try {
-    await appsscript.version(appsScriptPath);
-    spinner.stop();
-  } catch (e) {
-    spinner.stop(true);
-    throw new Error('Could not create a new version.');
-  }
-};
+const green = chalk.rgb(15, 157, 88);
+const blue = chalk.rgb(66, 133, 244);
+const yellow = chalk.rgb(244, 160, 0);
+const red = chalk.rgb(219, 68, 55);
 
-const deploy = async (appsScriptPath: string, deploymentName: string) => {
-  try {
-    const deploymentId = await appsscript.deploy(
-      appsScriptPath,
-      '1',
-      deploymentName
-    );
-    return deploymentId;
-  } catch (e) {
-    throw new Error(`Could not deploy to ${deploymentName}.`);
-  }
-};
-
-export const projectBuildThings = async (
-  projectPath: string,
-  projectAnswers: Answers
-) => {
-  const {yarn, npm} = projectAnswers;
-  try {
-    if (yarn) {
-      await util.exec(`yarn install`, {cwd: projectPath}, false);
-    } else {
-      await util.exec(`npm install`, {cwd: projectPath}, false);
-    }
-  } catch (e) {
-    if (yarn) {
-      throw new Error(`yarn install failed.`);
-    } else {
-      throw new Error(`npm install failed.`);
-    }
-  }
-};
-
-export const getDeploymentIdByName = async (
-  appsscriptPath: string,
-  deploymentName: string
-) => {
-  try {
-    return await appsscript.getDeploymentIdByName(
-      appsscriptPath,
-      deploymentName
-    );
-  } catch (e) {
-    throw new Error(`Could not get the deploymentId for ${deploymentName}.`);
-  }
+const getTemplates = (answers: Answers): Template[] => {
+  return [
+    {match: /{{MANIFEST_NAME}}/, replace: answers.projectName},
+    {match: /{{MANIFEST_LOGO_URL}}/, replace: answers.manifestLogoUrl},
+    {match: /{{MANIFEST_COMPANY}}/, replace: answers.manifestCompany},
+    {match: /{{MANIFEST_COMPANY_URL}}/, replace: answers.manifestCompanyUrl},
+    {match: /{{MANIFEST_ADDON_URL}}/, replace: answers.manifestAddonUrl},
+    {match: /{{MANIFEST_SUPPORT_URL}}/, replace: answers.manifestSupportUrl},
+    {match: /{{MANIFEST_DESCRIPTION}}/, replace: answers.manifestDescription},
+    {
+      match: /{{MANIFEST_SOURCES}}/,
+      replace: `[${answers.manifestSources
+        .split(',')
+        .map((a) => `"${a}"`)
+        .join(',')}]`,
+    },
+  ];
 };
 
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
-  console.error('Connectors are not currently supported.');
-  return 1;
+  const {projectName, basePath} = answers;
+  const templatePath = path.join(basePath, 'templates', answers.projectChoice);
+  const projectPath = path.join(PWD, projectName);
+  await files.createAndCopyFiles(projectPath, templatePath, projectName);
+  await files.fixTemplates(projectPath, getTemplates(answers));
+
+  const execOptions = {cwd: projectPath};
+
+  await util.spinnify('Installing project dependencies...', async () =>
+    util.npmInstall(projectPath, answers)
+  );
+
+  if (!(await validation.claspAuthenticated())) {
+    const infoText = yellow(
+      'Clasp must be globally authenticated for dscc-gen.'
+    );
+    const claspLogin = green('npx @google/clasp login');
+    console.log(`${infoText}\nrunning ${claspLogin} ...\n`);
+    await util.exec('npx @google/clasp login', execOptions, true);
+    clear();
+  }
+
+  await util.spinnify('Creating Apps Script project...', async () => {
+    await appsscript.create(projectPath, projectName);
+    // Since clasp creating a new project overwrites the manifest, we want to
+    // copy the template manifest over the one generated by clasp.
+    await util.exec('mv temp/appsscript.json src/appsscript.json', execOptions);
+    await util.exec('rm -r temp', execOptions);
+  });
+
+  await util.spinnify('Pushing files to Apps Script', async () => {
+    await appsscript.push(projectPath);
+  });
+
+  await util.spinnify('Creating a production deployment', async () => {
+    const productionDeploymentId = await appsscript.deploy(
+      projectPath,
+      'Production'
+    );
+    await files.fixTemplates(projectPath, [
+      {match: /{{PRODUCTION_DEPLOYMENT_ID}}/, replace: productionDeploymentId},
+    ]);
+  });
+
+  const connectorOverview = blue(
+    terminalLink(
+      'connector overview',
+      'https://developers.google.com/datastudio/connector/'
+    )
+  );
+  const styledProjectName = green(projectName);
+  const cdDirection = green(`cd ${projectName}`);
+  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+  const open = yellow(`${runCmd} open`);
+  const watch = green(`${runCmd} watch`);
+  const prettier = blue(`${runCmd} prettier`);
+  const tryProduction = red(`${runCmd} tryProduction`);
+  const updateProduction = yellow(`${runCmd} updateProduction`);
+
+  clear();
+  console.log(
+    `\
+Created a new community connector: ${styledProjectName}\n\
+\n\
+If this is your first connector, see ${connectorOverview}\n\
+\n\
+${cdDirection} to start working on your connector\n\
+\n\
+Scripts are provided to simplify development:\n\
+\n\
+${open} - open your project in Apps Script.\n\
+${watch} - watches for local changes & pushes them to Apps Script.\n\
+${prettier} - formats your code using community standards.\n\
+${tryProduction} - opens your production deployment.\n\
+${updateProduction} - updates your production deployment to use the latest code.\n\
+`
+  );
+  return 0;
 };

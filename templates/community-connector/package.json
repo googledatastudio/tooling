@@ -1,0 +1,21 @@
+{
+  "name": "{{MANIFEST_NAME}}",
+  "deployments": {
+    "production": "{{PRODUCTION_DEPLOYMENT_ID}}"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^2.0.1",
+    "opn": "^5.4.0",
+    "prettier": "^1.16.4"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.js\"",
+    "watch": "clasp push --watch",
+    "open": "clasp open",
+    "tryProduction": "node scripts/dscc-scripts.js -s try_production",
+    "updateProduction": "node scripts/dscc-scripts.js -s update_production"
+  }
+}
