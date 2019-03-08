@@ -19,7 +19,7 @@
 
 const args = process.argv.slice(2);
 const shell = require('shelljs');
-
+const chalk = require('chalk');
 const script = args[0];
 
 switch(script){
@@ -29,13 +29,29 @@ switch(script){
   case 'build':
     // TODO: THESE CAN BE FUNCTIONS ITS LITERALLY ALL JAVASCRIPT
     var DEVMODE = args[1].split(":")[1] === 'true' ? true : false;
-    shell.exec(`node bin/scripts/build.js --prod ${DEVMODE}`)
+    shell.exec(`node scripts/bin/build.js --prod ${DEVMODE}`)
     break;
   case 'push' :
     var DEVMODE = args[1].split(":")[1] === 'true' ? false : true;
-    shell.exec(`node bin/scripts/push.js --prod ${DEVMODE}`)
+    shell.exec(`node scripts/bin/push.js --prod ${DEVMODE}`)
     break;
-  case 'getMessage':
-    DEVMODE = args[1].split(":")[1] === 'true' ? false : true;
+  case 'updateMessage':
+    if (args[1] === 'table' | (args[1] === 'object')){
+      var FORMAT = args[1] === 'table' ? 'table' : 'object';
+    } else{
+      const tableCommand = chalk.green('npm run updateMessage table');
+      const objectCommand = chalk.green('npm run updateMessage object');
+      console.log(`
+        Try running: \n
+        ${tableCommand} \n
+        or \n
+        ${objectCommand} \n
+      `);
+      break;
+    }
+
+    shell.exec(`node scripts/bin/message.js --format ${FORMAT}`);
+    shell.exec(`node scripts/bin/push.js --prod true`)
     break;
+
 }

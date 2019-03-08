@@ -19,7 +19,6 @@ program
   .parse(process.argv);
 
 const TRANSFORM = program.args[0] === 'table' ? 'tableTransform' : 'objectTransform';
-console.log(TRANSFORM);
 
 // default to dev if it's not prod
 const DEVMODE = true;
