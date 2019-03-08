@@ -1,4 +1,3 @@
-import * as local from '../data/localData.js';
 
 export const renderViz = (LOCAL, draw) => {
   if (LOCAL) {
