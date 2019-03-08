@@ -22,22 +22,29 @@ const shell = require('shelljs');
 const chalk = require('chalk');
 const script = args[0];
 
+const msg =  require('./bin/message.js');
+const push = require('./bin/push.js');
+const build = require('./bin/build.js')
+
 switch(script){
   case 'start':
     shell.exec('webpack-dev-server --open');
     break;
+
   case 'build':
     // TODO: THESE CAN BE FUNCTIONS ITS LITERALLY ALL JAVASCRIPT
     var DEVMODE = args[1].split(":")[1] === 'true' ? true : false;
-    shell.exec(`node scripts/bin/build.js --prod ${DEVMODE}`)
+    build.buildViz(DEVMODE);
     break;
+
   case 'push' :
     var DEVMODE = args[1].split(":")[1] === 'true' ? false : true;
-    shell.exec(`node scripts/bin/push.js --prod ${DEVMODE}`)
+    push.deploy(DEVMODE);
     break;
+
   case 'updateMessage':
     if (args[1] === 'table' | (args[1] === 'object')){
-      var FORMAT = args[1] === 'table' ? 'table' : 'object';
+      var FORMAT = args[1] === 'table' ? 'tableTransform' : 'objectTransform';
     } else{
       const tableCommand = chalk.green('npm run updateMessage table');
       const objectCommand = chalk.green('npm run updateMessage object');
@@ -50,8 +57,8 @@ switch(script){
       break;
     }
 
-    shell.exec(`node scripts/bin/message.js --format ${FORMAT}`);
-    shell.exec(`node scripts/bin/push.js --prod true`)
+    msg.buildMessage(FORMAT)
+    push.deploy(true);
     break;
 
 }

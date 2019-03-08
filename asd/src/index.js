@@ -1,8 +1,8 @@
 const dscc = require('@google/dscc');
 
 // import the local data
-import * as utils from '../bin/viz/vizUtils.js';
-import * as viz from '../bin/viz/initialViz.js';
+import * as utils from '../scripts/viz/vizUtils.js';
+import * as viz from '../scripts/viz/initialViz.js';
 
 // change this to 'true' for local development
 // change this to 'false' before deploying
