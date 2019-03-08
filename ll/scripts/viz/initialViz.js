@@ -7,14 +7,19 @@ To edit the visualization and see the changes here, edit <code>src/index.js</cod
 To change the data:
 <ol>
 <li>Update the config in <code>src/index.json</code></li>
-<li>Run <code>npm run message</code> from the command-line </li>
+<li>
+  Run <code>npm run updateMessage object</code>  or
+  <code>npm run updateMessage table</code>
+  from the command-line
+</li>
 <li>Use your "dev bucket" as the component ID and deploy the visualization in Data Studio</li>
-<li>Copy the printed message + code into <code>src/localData.js</code></li>
+<li>Copy the printed message + code into <code>./scripts/data/localData.js</code></li>
 </ol>
 </p>
 
 <p style="margin-bottom:1cm;">
-
+To learn more, review the
+<a href="https://developers.google.com/datastudio/visualization">community visualization documentation</a>
 </p>
 
 `;

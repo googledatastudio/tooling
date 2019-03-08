@@ -1,6 +1,5 @@
 const dscc = require('@google/dscc');
 
-
 const printMessage = (data) => {
   // append a div to the DOM
   if (document.querySelector('div')) {
@@ -15,4 +14,4 @@ const printMessage = (data) => {
   document.body.appendChild(div);
 };
 
-dscc.subscribeToData(printMessage, {transform: dscc.objectTransform});
+dscc.subscribeToData(printMessage, {transform: dscc[TRANSFORM_PARAM]});
