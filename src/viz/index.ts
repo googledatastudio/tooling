@@ -23,6 +23,9 @@ import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
 
+const green = chalk.rgb(15, 157, 88);
+const blue = chalk.rgb(66, 133, 244);
+
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
   const {devBucket, prodBucket, projectName, basePath} = answers;
   const templatePath = path.join(basePath, 'templates', answers.projectChoice);
@@ -42,14 +45,16 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     }
   });
 
-  const colorCd = chalk.black.bgCyan.bold('cd ' + projectName);
-  const colorNpm = chalk.black.bgCyan.bold('npm run start');
+  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+
+  const cdDirection = blue.bold(`cd ${projectName}`);
+  const runStart = green.bold(`${runCmd} start`);
 
   console.log(
     `
 Created new community viz: ${projectName}
 \n\
-${colorCd} and ${colorNpm} to begin working on your viz!\n\
+${cdDirection} and ${runStart} to begin working on your viz!\n\
     `
   );
   return 0;

@@ -1,3 +1,5 @@
+const DEV_BUCKET = process.env.npm_package_config_gcsDevBucket;
+
 const README = `
 <h2>Community Viz Local Development</h2>
 <p>
@@ -12,8 +14,8 @@ To change the data:
   <code>npm run updateMessage table</code>
   from the command-line
 </li>
-<li>Use your "dev bucket" as the component ID and deploy the visualization in Data Studio</li>
-<li>Copy the printed message + code into <code>./scripts/data/localData.js</code></li>
+<li>Deploy the visualization using the component ID: <code>${DEV_BUCKET}</code> in Data Studio</li>
+<li>Copy the message + code into <code>./scripts/data/localData.js</code></li>
 </ol>
 </p>
 

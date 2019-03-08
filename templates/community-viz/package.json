@@ -1,7 +1,7 @@
 {
   "config": {
-    "gcsDevBucket": "gs://yulanlin-cv-dev/temp",
-    "gcsProdBucket": "gs://yulanlin-cv-dev/temp",
+    "gcsDevBucket": "{{DEV_BUCKET}}",
+    "gcsProdBucket": "{{PROD_BUCKET}}",
     "jsFile": "index.js",
     "jsonFile": "index.json",
     "cssFile": "index.css",
