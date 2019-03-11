@@ -52,19 +52,20 @@ const buildViz = (DEVMODE) => {
   // put everything together except the manifest
   compiler.run((err, stats) => {
     // once build directory is created...
-    fs.readFileAsync(path.resolve(__dirname, '../../src', MANIFEST_FILE), encoding).then(
-      (value) => {
-        const newManifest = value
-          .replace(/YOUR_GCS_BUCKET/g, DEV_BUCKET)
-          .replace(/"DEVMODE_BOOL"/, DEVMODE);
-        fs.writeFileAsync(
-          path.resolve(__dirname, '../../', 'build', MANIFEST_FILE),
-          newManifest
-        ).catch((err) => {
-          console.log('Unable to write manifest: ', err);
-        });
-      }
-    );
+    fs.readFileAsync(
+      path.resolve(__dirname, '../../src', MANIFEST_FILE),
+      encoding
+    ).then((value) => {
+      const newManifest = value
+        .replace(/YOUR_GCS_BUCKET/g, DEV_BUCKET)
+        .replace(/"DEVMODE_BOOL"/, DEVMODE);
+      fs.writeFileAsync(
+        path.resolve(__dirname, '../../', 'build', MANIFEST_FILE),
+        newManifest
+      ).catch((err) => {
+        console.log('Unable to write manifest: ', err);
+      });
+    });
   });
 };
 

@@ -9,11 +9,11 @@
     "print": "printMessage.js"
   },
   "scripts": {
-    "build:dev": "node scripts/dscc-scripts.js build prod:false",
-    "build:prod": "node scripts/dscc-scripts.js build prod:true",
-    "push:dev": "node scripts/dscc-scripts.js push prod:false",
-    "push:prod": "node scripts/dscc-scripts.js push prod:true",
-    "updateMessage": "node scripts/dscc-scripts.js updateMessage",
+    "build:dev": "node scripts/dscc-scripts.js --script=build --prod=false",
+    "build:prod": "node scripts/dscc-scripts.js --script=build --prod=true",
+    "push:dev": "node scripts/dscc-scripts.js --script=push --prod=false",
+    "push:prod": "node scripts/dscc-scripts.js --script=push --prod=true",
+    "updateMessage": "node scripts/dscc-scripts.js --script=updateMessage",
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
@@ -29,9 +29,9 @@
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.2.1",
-    "webpack-plugin-replace": "^1.1.1"
+    "webpack-plugin-replace": "^1.1.1",
+    "chalk": "^2.4.2"
   },
   "dependencies": {
-    "chalk": "^2.4.2"
   }
 }

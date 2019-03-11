@@ -17,37 +17,62 @@
  * limitations under the License.
  */
 
-const args = process.argv.slice(2);
+const argparse = require('argparse');
 const shell = require('shelljs');
 const chalk = require('chalk');
-const script = args[0];
 
 const msg = require('./bin/message.js');
 const push = require('./bin/push.js');
 const build = require('./bin/build.js');
 
-switch (script) {
+const parser = new argparse.ArgumentParser({
+  version: '1.0',
+  addHelp: true,
+  description: 'Scripts to manage viz dev and deployment',
+});
+
+parser.addArgument(['-s', '--script'], {
+  choices: ['start', 'build', 'push', 'updateMessage'],
+  dest: 'script',
+  help: 'The script to run.',
+  required: true,
+});
+
+parser.addArgument(['-p', '--prod'], {
+  choices: ['false', 'true'],
+  dest: 'prod',
+  help:
+    'Whether or not to use production options. Only required for the build and push scripts.',
+  required: false,
+});
+
+parser.addArgument(['-f', '--format'], {
+  choices: ['object', 'table'],
+  dest: 'format',
+  help: 'The format for the data. Only required for the updateMessage script.',
+  required: false,
+});
+
+const args = parser.parseArgs();
+
+switch (args.script) {
   case 'start':
     shell.exec('webpack-dev-server --open');
     break;
 
   case 'build':
-    // TODO: THESE CAN BE FUNCTIONS ITS LITERALLY ALL JAVASCRIPT
-    var DEVMODE = args[1].split(':')[1] === 'true' ? false : true;
+    var DEVMODE = args.prod === 'true' ? false : true;
     build.buildViz(DEVMODE);
     break;
 
   case 'push':
-    var DEVMODE = args[1].split(':')[1] === 'true' ? false : true;
+    var DEVMODE = args.prod === 'true' ? false : true;
     push.deploy(DEVMODE);
     break;
 
-    case 'updateMessage':
-    if ((args[1] === 'table') | (args[1] === 'object')) {
-      var FORMAT = args[1] === 'table' ? 'tableTransform' : 'objectTransform';
-      msg.buildMessage(FORMAT).then(() => push.deploy(true));
-    } else {
-      const updateMessage = chalk.blue.bold('npm run updateMessage')
+  case 'updateMessage':
+    if (args.format !== 'object' && args.format !== 'table') {
+      const updateMessage = chalk.blue.bold('npm run updateMessage');
       const tableCommand = chalk.green.bold('table');
       const objectCommand = chalk.green.bold('object');
       console.log(`
@@ -58,5 +83,7 @@ switch (script) {
       `);
       break;
     }
+    var FORMAT = args.format === 'table' ? 'tableTransform' : 'objectTransform';
+    msg.buildMessage(FORMAT).then(() => push.deploy(true));
     break;
 }

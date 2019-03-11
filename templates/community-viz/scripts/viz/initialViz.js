@@ -8,7 +8,7 @@ To update your local data:
 <ol>
 <li>Update the config in <code>src/index.json</code></li>
 <li>
-  Run  <code>npm run updateMessage object</code>
+  Run  <code>npm run updateMessage -- --format=object</code>
 </li>
 <li>Deploy the visualization using your dev bucket as your component ID in Data Studio</li>
 <li>Copy the message and code into <code>scripts/data/localData.js</code></li>

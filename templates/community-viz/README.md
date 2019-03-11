@@ -7,9 +7,9 @@ JavaScript visualizations for [Google Data Studio][datastudio].
 
 This template provides
 
-1. An opinionated template for developing community visualizations
-1. A local development and feedback workflow
-1. Build and deployment scripts
+1. An opinionated workflow for developing community visualizations
+1. A local development workflow with immediate feedback
+1. Scripts to manage building and deploying your visualization
 
 ### Files included
 
@@ -25,7 +25,7 @@ directory.
 
 ## Using this template
 
-To create a new community visualization using this template, run the command
+To create a new community visualization based on this template, run the command
 
 ```bash
 npx @google/dscc-gen --project_choice community-viz
@@ -34,19 +34,19 @@ npx @google/dscc-gen --project_choice community-viz
 At the end of the setup flow, you will have a minimal working visualization and
 have set GCS buckets for a dev and prod version.
 
-### Writing the viz
+### Update your local data
 
-1. Define the dimensions and metrics your visualization requires in
+1. Update the dimensions and metrics your visualization requires in
    `src/index.json`
-2. Run the commands `npm run build:dev and; npm run push:dev` to build and
+1. Run the commands `npm run updateMessage -- --format object` to build and
    deploy your visualization to your "dev" bucket.
-3. [Create a new report][datastudio] and connect to the dataset you want to use
+1. [Create a new report][datastudio] and connect to the dataset you want to use
    for your sample message. I'd recommend using a subset of your data, to keep
    the size of the message small.
-4. Use your "dev bucket" to add this visualization to your report. It will
+1. Use your "dev bucket" to add this visualization to your report. It will
    display div with the `data` returned by the [ds-component] helper library.
-5. Copy the `data` in the visualization and replace the empty object in
-   `src/localData.js`. This is the "local data" that you will develop with.
+1. Copy the `data` in the visualization and replace the empty object in
+   `scripts/data/localData.js`. This is the "local data" that you will develop with.
 
 
 ### Local development workflow
@@ -54,9 +54,9 @@ have set GCS buckets for a dev and prod version.
 To develop locally:
 
 1. Change `const LOCAL` to `true` in `src/index.js`.
-2. Run `npm run start` to start a local server. A browser tab should open with
+1. Run `npm run start` to start a local server. A browser tab should open with
    the visualization you just deployed in Data Studio.
-3. Make changes in `src/index.js` and `src/index.css`, save the changes, and see
+1. Make changes in `src/index.js` and `src/index.css`, save the changes, and see
    them reflected in the browser tab.
 
 ### Deployment workflow
@@ -66,6 +66,14 @@ You should have two deployments of your visualization: a "dev" version, where
 caching is enabled and you only push "finished" visualizations.
 
 Key commands:
+
+Update the message and deploy it to your dev bucket:
+
+The `format` argument must be either `object` or `table`. [Read more about formats][ds-component].
+
+```bash
+npm run updateMessage -- --format {object | table}
+```
 
 Build the "dev" (devMode is true) visualization
 
@@ -92,7 +100,7 @@ npm run push:prod
 ```
 ## Scripts
 
-The `build` and `deploy` scripts can be found in the [./scripts] directory.
+The `build` and `deploy` scripts can be found in the `./scripts/bin` directory.
 
 [community viz]: http://developers.google.com/datastudio/visualization
 [datastudio]: https://datastudio.google.com
