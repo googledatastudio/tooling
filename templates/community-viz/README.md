@@ -32,7 +32,7 @@ npx @google/dscc-gen --project_choice community-viz
 ```
 
 At the end of the setup flow, you will have a minimal working visualization and
-have set GCS buckets for a dev and prod version.
+have set GCS buckets for a dev and prod version. Edit `src/index.js` to see changes.
 
 ### Update your local data
 
@@ -65,7 +65,13 @@ You should have two deployments of your visualization: a "dev" version, where
 [caching] is disabled and where you normally develop, and a "prod" version, where
 caching is enabled and you only push "finished" visualizations.
 
-Key commands:
+To deploy:
+
+1. Change `const LOCAL` to `false` in `src/index.js`
+1. Run the appropriate build and push command (see below)
+1. Load your viz in Data Studio
+
+### Key commands:
 
 Update the message and deploy it to your dev bucket:
 
