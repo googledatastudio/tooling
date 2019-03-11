@@ -14,7 +14,6 @@ const CSS_FILE = process.env.npm_package_config_cssFile;
 const JSON_FILE = process.env.npm_package_config_jsonFile;
 
 const buildViz = (DEVMODE) => {
-
   const GCS_BUCKET = DEVMODE ? DEV_BUCKET : PROD_BUCKET;
 
   const encoding = 'utf-8';
@@ -42,8 +41,6 @@ const buildViz = (DEVMODE) => {
     };
     Object.assign(webpackOptions, devOptions);
   } else {
-    // TODO FIX THIS OPTIONS
-    console.log('hit this branch');
     const prodOptions = {
       mode: 'production',
     };
@@ -52,24 +49,23 @@ const buildViz = (DEVMODE) => {
 
   const compiler = webpack(webpackOptions);
 
-  console.log(webpackOptions);
-
   // put everything together except the manifest
   compiler.run((err, stats) => {
-    console.log(stats.toString({color: true}));
     // once build directory is created...
-    fs.readFileAsync(path.join('src', MANIFEST_FILE), encoding).then((value) => {
-      const newManifest = value
-        .replace(/YOUR_GCS_BUCKET/g, GCS_BUCKET)
-        .replace(/"DEVMODE_BOOL"/, DEVMODE);
-      fs.writeFileAsync(path.join('./build', MANIFEST_FILE), newManifest).catch(
-        (err) => {
+    fs.readFileAsync(path.resolve(__dirname, '../../src', MANIFEST_FILE), encoding).then(
+      (value) => {
+        const newManifest = value
+          .replace(/YOUR_GCS_BUCKET/g, DEV_BUCKET)
+          .replace(/"DEVMODE_BOOL"/, DEVMODE);
+        fs.writeFileAsync(
+          path.resolve(__dirname, '../../', 'build', MANIFEST_FILE),
+          newManifest
+        ).catch((err) => {
           console.log('Unable to write manifest: ', err);
-        }
-      );
-    });
+        });
+      }
+    );
   });
-
-}
+};
 
 module.exports.buildViz = buildViz;

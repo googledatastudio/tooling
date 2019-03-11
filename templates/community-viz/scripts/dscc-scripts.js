@@ -22,43 +22,41 @@ const shell = require('shelljs');
 const chalk = require('chalk');
 const script = args[0];
 
-const msg =  require('./bin/message.js');
+const msg = require('./bin/message.js');
 const push = require('./bin/push.js');
-const build = require('./bin/build.js')
+const build = require('./bin/build.js');
 
-switch(script){
+switch (script) {
   case 'start':
     shell.exec('webpack-dev-server --open');
     break;
 
   case 'build':
     // TODO: THESE CAN BE FUNCTIONS ITS LITERALLY ALL JAVASCRIPT
-    var DEVMODE = args[1].split(":")[1] === 'true' ? true : false;
+    var DEVMODE = args[1].split(':')[1] === 'true' ? false : true;
     build.buildViz(DEVMODE);
     break;
 
-  case 'push' :
-    var DEVMODE = args[1].split(":")[1] === 'true' ? false : true;
+  case 'push':
+    var DEVMODE = args[1].split(':')[1] === 'true' ? false : true;
     push.deploy(DEVMODE);
     break;
 
-  case 'updateMessage':
-    if (args[1] === 'table' | (args[1] === 'object')){
+    case 'updateMessage':
+    if ((args[1] === 'table') | (args[1] === 'object')) {
       var FORMAT = args[1] === 'table' ? 'tableTransform' : 'objectTransform';
-    } else{
-      const tableCommand = chalk.green('npm run updateMessage table');
-      const objectCommand = chalk.green('npm run updateMessage object');
+      msg.buildMessage(FORMAT).then(() => push.deploy(true));
+    } else {
+      const updateMessage = chalk.blue.bold('npm run updateMessage')
+      const tableCommand = chalk.green.bold('table');
+      const objectCommand = chalk.green.bold('object');
       console.log(`
-        Try running: \n
-        ${tableCommand} \n
+        ${updateMessage} expects an argument. Try running: \n
+        ${updateMessage} ${tableCommand} \n
         or \n
-        ${objectCommand} \n
+        ${updateMessage} ${objectCommand} \n
       `);
       break;
     }
-
-    msg.buildMessage(FORMAT)
-    push.deploy(true);
     break;
-
 }

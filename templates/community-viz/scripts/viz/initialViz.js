@@ -1,26 +1,22 @@
-const DEV_BUCKET = process.env.npm_package_config_gcsDevBucket;
-
 const README = `
 <h2>Community Viz Local Development</h2>
 <p>
-To edit the visualization and see the changes here, edit <code>src/index.js</code>.
+This visualization is live. Edit <code>src/index.js</code> to see changes.
 </p>
 <p>
-To change the data:
+To update your local data:
 <ol>
 <li>Update the config in <code>src/index.json</code></li>
 <li>
-  Run <code>npm run updateMessage object</code>  or
-  <code>npm run updateMessage table</code>
-  from the command-line
+  Run  <code>npm run updateMessage object</code>
 </li>
-<li>Deploy the visualization using the component ID: <code>${DEV_BUCKET}</code> in Data Studio</li>
-<li>Copy the message + code into <code>./scripts/data/localData.js</code></li>
+<li>Deploy the visualization using your dev bucket as your component ID in Data Studio</li>
+<li>Copy the message and code into <code>scripts/data/localData.js</code></li>
 </ol>
 </p>
 
 <p style="margin-bottom:1cm;">
-To learn more, review the
+For more information, see the
 <a href="https://developers.google.com/datastudio/visualization">community visualization documentation</a>
 </p>
 

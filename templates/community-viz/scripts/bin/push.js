@@ -11,10 +11,6 @@ const deploy = (devMode) => {
   shell.exec('gsutil cp -a public-read * ' + GCS_BUCKET);
 
   console.log(`Viz deployed to: ${GCS_BUCKET}`);
-}
+};
 
 module.exports.deploy = deploy;
-
-
-
-

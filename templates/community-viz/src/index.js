@@ -4,7 +4,6 @@ const dscc = require('@google/dscc');
 import * as viz from '../scripts/viz/initialViz.js';
 import * as local from '../scripts/data/localData.js';
 
-
 // change this to 'true' for local development
 // change this to 'false' before deploying
 export const LOCAL = true;
