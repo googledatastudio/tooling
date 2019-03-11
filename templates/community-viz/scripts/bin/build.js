@@ -8,10 +8,10 @@ const fs = Promise.promisifyAll(require('fs'));
 // constants
 const DEV_BUCKET = process.env.npm_package_config_gcsDevBucket;
 const PROD_BUCKET = process.env.npm_package_config_gcsProdBucket;
-const MANIFEST_FILE = process.env.npm_package_config_manifestFile;
 const JS_FILE = process.env.npm_package_config_jsFile;
 const CSS_FILE = process.env.npm_package_config_cssFile;
 const JSON_FILE = process.env.npm_package_config_jsonFile;
+const MANIFEST_FILE = "manifest.json";
 
 const buildViz = (DEVMODE) => {
   const GCS_BUCKET = DEVMODE ? DEV_BUCKET : PROD_BUCKET;

@@ -5,7 +5,6 @@
     "jsFile": "index.js",
     "jsonFile": "index.json",
     "cssFile": "index.css",
-    "manifestFile": "manifest.json",
     "print": "printMessage.js"
   },
   "scripts": {
