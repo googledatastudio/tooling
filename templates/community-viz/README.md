@@ -31,7 +31,7 @@ To create a new community visualization based on this template, run the command
 npx @google/dscc-gen --project_choice community-viz
 ```
 
-At the end of the setup flow, you will have a minimal working visualization and
+After running this command (and answering some prompts), you will have a minimal working visualization and
 have set GCS buckets for a dev and prod version. Edit `src/index.js` to see changes.
 
 ### Update your local data
@@ -41,8 +41,7 @@ have set GCS buckets for a dev and prod version. Edit `src/index.js` to see chan
 1. Run the commands `npm run updateMessage -- --format object` to build and
    deploy your visualization to your "dev" bucket.
 1. [Create a new report][datastudio] and connect to the dataset you want to use
-   for your sample message. I'd recommend using a subset of your data, to keep
-   the size of the message small.
+   for your sample message.
 1. Use your "dev bucket" to add this visualization to your report. It will
    display div with the `data` returned by the [ds-component] helper library.
 1. Copy the `data` in the visualization and replace the empty object in
@@ -77,8 +76,15 @@ Update the message and deploy it to your dev bucket:
 
 The `format` argument must be either `object` or `table`. [Read more about formats][ds-component].
 
+
+Update the message with the object format.
 ```bash
-npm run updateMessage -- --format {object | table}
+npm run updateMessage -- --format object
+```
+
+Update the message with the table format.
+```bash
+npm run updateMessage --format table
 ```
 
 Build the "dev" (devMode is true) visualization

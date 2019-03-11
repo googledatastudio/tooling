@@ -39,51 +39,55 @@ parser.addArgument(['-s', '--script'], {
 });
 
 parser.addArgument(['-p', '--prod'], {
-  choices: ['false', 'true'],
+  action: 'storeTrue',
   dest: 'prod',
   help:
-    'Whether or not to use production options. Only required for the build and push scripts.',
+    'Whether or not to use production options. Required for the build and push scripts.',
   required: false,
 });
 
 parser.addArgument(['-f', '--format'], {
   choices: ['object', 'table'],
   dest: 'format',
-  help: 'The format for the data. Only required for the updateMessage script.',
+  help: 'The format for the data. Required for update_message.',
   required: false,
 });
 
 const args = parser.parseArgs();
 
-switch (args.script) {
-  case 'start':
-    shell.exec('webpack-dev-server --open');
-    break;
+const main = (args) => {
+  switch (args.script) {
+    case 'start':
+      shell.exec('webpack-dev-server --open');
+      break;
 
-  case 'build':
-    var DEVMODE = args.prod === 'true' ? false : true;
-    build.buildViz(DEVMODE);
-    break;
+    case 'build':
+      var DEVMODE = args.prod ? false : true;
+      build.buildViz(DEVMODE);
+      break;
 
-  case 'push':
-    var DEVMODE = args.prod === 'true' ? false : true;
-    push.deploy(DEVMODE);
-    break;
+    case 'push':
+      var DEVMODE = args.prod ? false : true;
+      push.deploy(DEVMODE);
+      break;
 
-  case 'updateMessage':
-    if (args.format !== 'object' && args.format !== 'table') {
-      const updateMessage = chalk.blue.bold('npm run updateMessage');
-      const tableCommand = chalk.green.bold('table');
-      const objectCommand = chalk.green.bold('object');
-      console.log(`
+    case 'update_message':
+      if (args.format !== 'object' && args.format !== 'table') {
+        const updateMessage = chalk.blue.bold('npm run update_message');
+        const tableCommand = chalk.green.bold('table');
+        const objectCommand = chalk.green.bold('object');
+        console.log(`
         ${updateMessage} expects an argument. Try running: \n
         ${updateMessage} ${tableCommand} \n
         or \n
         ${updateMessage} ${objectCommand} \n
       `);
+        break;
+      }
+      var FORMAT = args.format === 'table' ? 'tableTransform' : 'objectTransform';
+      msg.buildMessage(FORMAT).then(() => push.deploy(true));
       break;
-    }
-    var FORMAT = args.format === 'table' ? 'tableTransform' : 'objectTransform';
-    msg.buildMessage(FORMAT).then(() => push.deploy(true));
-    break;
+  }
 }
+
+main(args);

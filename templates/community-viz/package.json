@@ -8,11 +8,11 @@
     "print": "printMessage.js"
   },
   "scripts": {
-    "build:dev": "node scripts/dscc-scripts.js --script=build --prod=false",
-    "build:prod": "node scripts/dscc-scripts.js --script=build --prod=true",
-    "push:dev": "node scripts/dscc-scripts.js --script=push --prod=false",
-    "push:prod": "node scripts/dscc-scripts.js --script=push --prod=true",
-    "updateMessage": "node scripts/dscc-scripts.js --script=updateMessage",
+    "build:dev": "node scripts/dscc-scripts.js --script=build",
+    "build:prod": "node scripts/dscc-scripts.js --script=build --prod",
+    "push:dev": "node scripts/dscc-scripts.js --script=push",
+    "push:prod": "node scripts/dscc-scripts.js --script=push --prod",
+    "update_message": "node scripts/dscc-scripts.js --script=update_message",
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
