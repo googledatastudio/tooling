@@ -18,10 +18,10 @@ directory.
 
 | File       | Template location   | Documentation |
 |------------|---------------------|------------------------|
-| Manifest   | [src/manifest.json] | [manifest reference]   |
-| Config     | [src/index.json]    | [config reference]     |
-| JavaScript | [src/index.js]      | [write viz code]       |
-| CSS        | [src/index.css]     | [write css code]       |
+| Manifest   | `src/manifest.json` | [manifest reference]   |
+| Config     | `src/index.json`    | [config reference]     |
+| JavaScript | `src/index.js`      | [write viz code]       |
+| CSS        | `src/index.css`     | [write css code]       |
 
 ## Using this template
 
