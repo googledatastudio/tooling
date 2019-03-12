@@ -39,7 +39,7 @@ working visualization and have set GCS buckets for a dev and prod version. Edit
 
 1.  Update the dimensions and metrics your visualization requires in
     `src/index.json`
-1.  Run the commands `npm run updateMessage -- --format object` to build and
+1.  Run the command `npm run update_message -- --format=object` to build and
     deploy your visualization to your "dev" bucket.
 1.  [Create a new report][datastudio] and connect to the dataset you want to use
     for your sample message.
@@ -78,11 +78,17 @@ Update the message and deploy it to your dev bucket:
 The `format` argument must be either `object` or `table`.
 [Read more about formats][ds-component].
 
-Update the message with the object format. `bash npm run updateMessage --
---format object`
+To update the message with the object format:
 
-Update the message with the table format. `bash npm run updateMessage --format
-table`
+```bash
+npm run update_message -- --format=object
+```
+
+To update the message with the table format:
+
+```bash
+npm run update_message -- --format=table
+```
 
 Build the "dev" (devMode is true) visualization
 

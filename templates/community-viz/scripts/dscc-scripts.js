@@ -32,7 +32,7 @@ const parser = new argparse.ArgumentParser({
 });
 
 parser.addArgument(['-s', '--script'], {
-  choices: ['start', 'build', 'push', 'updateMessage'],
+  choices: ['start', 'build', 'push', 'update_message'],
   dest: 'script',
   help: 'The script to run.',
   required: true,
@@ -73,9 +73,9 @@ const main = (args) => {
 
     case 'update_message':
       if (args.format !== 'object' && args.format !== 'table') {
-        const updateMessage = chalk.blue.bold('npm run update_message');
-        const tableCommand = chalk.green.bold('table');
-        const objectCommand = chalk.green.bold('object');
+        const updateMessage = chalk.blue.bold('npm run update_message --');
+        const tableCommand = chalk.green.bold('--format=table');
+        const objectCommand = chalk.green.bold('--format=object');
         console.log(`
         ${updateMessage} expects an argument. Try running: \n
         ${updateMessage} ${tableCommand} \n
