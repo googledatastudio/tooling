@@ -14,12 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const chalk = require('chalk');
+
 import * as path from 'path';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
+
+const green = chalk.rgb(15, 157, 88);
+const blue = chalk.rgb(66, 133, 244);
 
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
   const {devBucket, prodBucket, projectName, basePath} = answers;
@@ -40,24 +45,17 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     }
   });
 
-  await util.spinnify('Building & pushing dev deployment...', async () => {
-    if (answers.yarn) {
-      await util.exec('yarn run build:dev', {cwd: projectPath}, false);
-      await util.exec('yarn run push:dev', {cwd: projectPath}, false);
-    } else {
-      await util.exec('npm run build:dev', {cwd: projectPath}, false);
-      await util.exec('npm run push:dev', {cwd: projectPath}, false);
-    }
-  });
+  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+
+  const cdDirection = blue.bold(`cd ${projectName}`);
+  const runStart = green.bold(`${runCmd} start`);
 
   console.log(
-    `\
-cd ${projectName} to start working on your viz!\n\
+    `
+Created new community viz: ${projectName}
 \n\
-Your viz has been deployed to: ${devBucket}\n\
-\n\
-For next steps, see ${projectName}/README.md\
-`
+${cdDirection} and ${runStart} to begin working on your viz!\n\
+    `
   );
   return 0;
 };
