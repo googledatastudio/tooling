@@ -1,23 +1,24 @@
 const README = `
 <h2>Community Viz Local Development</h2>
 <p>
-This visualization is live. Edit <code>src/index.js</code> to see changes.
+This visualization is live. Edit <code>./src/index.js</code> to see changes.
 </p>
 <p>
 To update your local data:
 <ol>
-<li>Update the config in <code>src/index.json</code></li>
+<li>Update the config in <code>./src/index.json</code></li>
 <li>
-  Run  <code>npm run update_message -- --format=object</code>
+  Run: <br/>
+  <code>npm run update_message -- --format=object</code>
 </li>
 <li>Deploy the visualization using your dev bucket as your component ID in Data Studio</li>
-<li>Copy the message and code into <code>scripts/data/localData.js</code></li>
+<li>Replace the contents of <code>./scripts/localData.js</code> with the displayed code.</li>
 </ol>
 </p>
 
 <p style="margin-bottom:1cm;">
 For more information, see the
-<a href="https://developers.google.com/datastudio/visualization">community visualization documentation</a>
+<a target="_blank" href="https://developers.google.com/datastudio/visualization">community visualization documentation.</a>
 </p>
 
 `;
