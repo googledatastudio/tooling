@@ -84,10 +84,11 @@ const main = (args) => {
       `);
         break;
       }
-      var FORMAT = args.format === 'table' ? 'tableTransform' : 'objectTransform';
+      var FORMAT =
+        args.format === 'table' ? 'tableTransform' : 'objectTransform';
       msg.buildMessage(FORMAT).then(() => push.deploy(true));
       break;
   }
-}
+};
 
 main(args);

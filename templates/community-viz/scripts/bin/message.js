@@ -9,7 +9,7 @@ const fs = Promise.promisifyAll(require('fs'));
 const DEV_BUCKET = process.env.npm_package_config_gcsDevBucket;
 const CSS_FILE = process.env.npm_package_config_cssFile;
 const JSON_FILE = process.env.npm_package_config_jsonFile;
-const MANIFEST_FILE = "manifest.json";
+const MANIFEST_FILE = 'manifest.json';
 
 const buildOptions = (TRANSFORM) => {
   return {
