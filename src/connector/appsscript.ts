@@ -30,6 +30,18 @@ export const create = async (appsscriptPath: string, projectName: string) => {
   );
 };
 
+export const clone = async (
+  appscriptPath: string,
+  scriptId: string,
+  rootDir?: string
+) => {
+  const options = {
+    cwd: appscriptPath,
+  };
+  const arg = rootDir ? `--rootDir ${rootDir}` : '';
+  await util.exec(`npx @google/clasp clone ${arg} ${scriptId}`, options, false);
+};
+
 export const push = async (appsscriptPath: string) => {
   const options = {cwd: appsscriptPath};
   await util.exec(`npx @google/clasp push --force`, options, false);
@@ -59,7 +71,9 @@ export const deploy = async (
     options,
     false
   );
-  const [_, deploymentId] = out.match(/- ([-_A-Za-z\d]*) @[0-9]+\./);
+  const [_, deploymentId] = out.match(
+    /- ([-_A-Za-z\d]*) @[0-9]+\./
+  ) as string[];
   return deploymentId;
 };
 
@@ -76,23 +90,29 @@ export const authenticate = async () => {
 export const getDeploymentIdByName = async (
   appsscriptPath: string,
   name: string
-) => {
+): Promise<string | undefined> => {
   const options = {cwd: appsscriptPath};
   const {out} = await util.exec(
     `npx @google/clasp deployments`,
     options,
     false
   );
-  const deploymentString = out
+
+  const deploymentStrings = out
     .split('\n')
     .filter((s) => s.startsWith('-'))
-    .find((s) => s.includes(name));
-  if (!deploymentString) {
+    .filter((s) => s.includes(name))
+    .map((s) => s.match(/- (.*) @.*/));
+
+  if (deploymentStrings.length !== 1) {
     throw new Error(
-      `DeploymentName: ${name} was not found in the list of deployments.`
+      `There was more than one deployment with the name: "${name}"`
     );
-  } else {
-    const deploymentId = deploymentString.match(/- (.*) @.*/)[1];
-    return deploymentId;
   }
+  const deploymentString = deploymentStrings[0];
+  if (deploymentString === null) {
+    return undefined;
+  }
+  const deploymentId = deploymentString[1];
+  return deploymentId;
 };

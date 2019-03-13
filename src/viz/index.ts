@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-
+import chalk from 'chalk';
 import * as path from 'path';
 import * as files from '../files';
 import {PWD} from '../index';
@@ -32,8 +31,8 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   const templates: Template[] = [
-    {match: /{{DEV_BUCKET}}/g, replace: devBucket},
-    {match: /{{PROD_BUCKET}}/g, replace: prodBucket},
+    {match: /{{DEV_BUCKET}}/g, replace: devBucket!},
+    {match: /{{PROD_BUCKET}}/g, replace: prodBucket!},
   ];
   await files.fixTemplates(projectPath, templates);
 

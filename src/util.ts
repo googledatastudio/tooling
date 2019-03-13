@@ -136,7 +136,7 @@ export const pause = async (millis: number): Promise<void> => {
 export const spinnify = async <T>(
   spinnerText: string,
   fn: () => Promise<T>
-) => {
+): Promise<T> => {
   const spinner = new Spinner(spinnerText);
   spinner.start();
   try {

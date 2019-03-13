@@ -35,8 +35,8 @@ export const getAnswers = async (
   ]);
   // TODO(me) - if the answers come from arguments, we don't want to add a
   // prefix. But we do want to validate it?
-  vizAnswers.devBucket = validation.addBucketPrefix(vizAnswers.devBucket);
-  vizAnswers.prodBucket = validation.addBucketPrefix(vizAnswers.prodBucket);
+  vizAnswers.devBucket = validation.addBucketPrefix(vizAnswers.devBucket!);
+  vizAnswers.prodBucket = validation.addBucketPrefix(vizAnswers.prodBucket!);
 
   return Object.assign({}, vizAnswers, commonAnswers, args);
 };

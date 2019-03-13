@@ -38,7 +38,10 @@ creation, no files have been created.'
 
 export const parseBucketName = (bucketPath: string): string | undefined => {
   const matches = bucketPath.match(/(gs:\/\/[^/\s]+)/);
-  return matches && matches[0];
+  if (matches === null) {
+    return undefined;
+  }
+  return matches[0];
 };
 
 export const hasBucketPermissions = async (

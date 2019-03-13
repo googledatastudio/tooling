@@ -18,7 +18,6 @@
 import * as path from 'path';
 import {PWD} from './index';
 import * as util from './util';
-import * as inquirer from 'inquirer';
 import {Question} from 'inquirer';
 import * as files from './files';
 import * as argparse from 'argparse';
@@ -38,6 +37,7 @@ export type Answers = ConnectorAnswers & VizAnswers & CommonAnswers & Args;
 export interface Args {
   yarn: boolean;
   npm: boolean;
+  scriptId?: string;
 }
 
 export interface CommonAnswers {
@@ -130,6 +130,12 @@ const getArgs = async (baseDir: string): Promise<Args> => {
     help: 'The name of your project',
   });
 
+  parser.addArgument(['--script_id'], {
+    dest: 'scriptId',
+    help:
+      'Community Connector: Use this scriptId instead of creating a new script.',
+  });
+
   const args = parser.parseArgs();
   Object.keys(args).forEach((key) => {
     if (args[key] === null) {
@@ -145,7 +151,7 @@ const questionsWithArgs = async <T>(
 ): Promise<Array<Question<T>>> => {
   await Promise.all(
     questions.map(async (question) => {
-      const argValue = (args as any)[question.name];
+      const argValue = (args as any)[question.name!];
       if (argValue && question.validate) {
         const isValid = await question.validate(argValue);
         if (isValid !== true) {
@@ -157,7 +163,7 @@ const questionsWithArgs = async <T>(
     })
   );
   return questions.filter((question) => {
-    return (args as any)[question.name] === undefined;
+    return (args as any)[question.name!] === undefined;
   });
 };
 
