@@ -16,7 +16,6 @@
  */
 
 import chalk from 'chalk';
-import {Spinner} from 'cli-spinner';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
 import * as files from '../files';
@@ -29,10 +28,10 @@ import * as validation from './validation';
 
 const clear = require('clear');
 
-const green = chalk.rgb(15, 157, 88);
-const blue = chalk.rgb(66, 133, 244);
-const yellow = chalk.rgb(244, 160, 0);
-const red = chalk.rgb(219, 68, 55);
+const green = chalk.bold.rgb(15, 157, 88);
+const blue = chalk.bold.rgb(66, 133, 244);
+const yellow = chalk.bold.rgb(244, 160, 0);
+const red = chalk.bold.rgb(219, 68, 55);
 
 const getTemplates = (answers: Answers): Template[] => {
   return [
@@ -54,6 +53,7 @@ const getTemplates = (answers: Answers): Template[] => {
 };
 
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
+  clear();
   const {projectName, basePath} = answers;
   const templatePath = path.join(basePath, 'templates', answers.projectChoice);
   const projectPath = path.join(PWD, projectName);
@@ -73,7 +73,6 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     const claspLogin = green('npx @google/clasp login');
     console.log(`${infoText}\nrunning ${claspLogin} ...\n`);
     await util.exec('npx @google/clasp login', execOptions, true);
-    clear();
   }
 
   await util.spinnify('Creating Apps Script project...', async () => {
@@ -93,8 +92,13 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
       projectPath,
       'Production'
     );
+    const latestDeploymentId = await appsscript.getDeploymentIdByName(
+      projectPath,
+      '@HEAD'
+    );
     await files.fixTemplates(projectPath, [
       {match: /{{PRODUCTION_DEPLOYMENT_ID}}/, replace: productionDeploymentId},
+      {match: /{{LATEST_DEPLOYMENT_ID}}/, replace: latestDeploymentId},
     ]);
   });
 
@@ -105,15 +109,16 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
     )
   );
   const styledProjectName = green(projectName);
-  const cdDirection = green(`cd ${projectName}`);
+  const cdDirection = yellow(`cd ${projectName}`);
   const runCmd = answers.yarn ? 'yarn' : 'npm run';
-  const open = yellow(`${runCmd} open`);
+  const open = red(`${runCmd} open`);
+  const push = blue(`${runCmd} push`);
   const watch = green(`${runCmd} watch`);
-  const prettier = blue(`${runCmd} prettier`);
-  const tryProduction = red(`${runCmd} tryProduction`);
-  const updateProduction = yellow(`${runCmd} updateProduction`);
+  const prettier = yellow(`${runCmd} prettier`);
+  const tryLatest = red(`${runCmd} try_latest`);
+  const tryProduction = blue(`${runCmd} try_production`);
+  const updateProduction = green(`${runCmd} update_production`);
 
-  clear();
   console.log(
     `\
 Created a new community connector: ${styledProjectName}\n\
@@ -125,8 +130,10 @@ ${cdDirection} to start working on your connector\n\
 Scripts are provided to simplify development:\n\
 \n\
 ${open} - open your project in Apps Script.\n\
+${push} - push your local changes to Apps Script.\n\
 ${watch} - watches for local changes & pushes them to Apps Script.\n\
 ${prettier} - formats your code using community standards.\n\
+${tryLatest} - opens the deployment with your latest code.\n\
 ${tryProduction} - opens your production deployment.\n\
 ${updateProduction} - updates your production deployment to use the latest code.\n\
 `

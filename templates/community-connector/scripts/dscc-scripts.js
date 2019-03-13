@@ -2,6 +2,8 @@ const open = require('opn');
 const argparse = require('argparse');
 const packageJson = require('../package.json');
 const cp = require('child_process');
+const chalk = require('chalk');
+const terminalLink = require('terminal-link');
 
 const exec = (command, options) => {
   return new Promise((resolve, reject) => {
@@ -24,7 +26,7 @@ const parser = new argparse.ArgumentParser({
 });
 
 parser.addArgument(['-s', '--script'], {
-  choices: ['try_production', 'update_production'],
+  choices: ['try_production', 'update_production', 'try_latest'],
   dest: 'script',
   help: 'The script to run.',
   required: true,
@@ -32,10 +34,14 @@ parser.addArgument(['-s', '--script'], {
 
 const args = parser.parseArgs();
 
-const openDeployment = (deploymentId) => {
-  return open(
-    `https://datastudio.google.com/datasources/create?connectorId=${deploymentId}`
+const openDeployment = (deploymentId, deploymentName) => {
+  const green = chalk.rgb(15, 157, 88);
+  const deploymentUrl = `https://datastudio.google.com/datasources/create?connectorId=${deploymentId}`;
+  const formattedUrl = green(
+    terminalLink(`${deploymentName} deployment`, deploymentUrl)
   );
+  console.log(`Opening: ${formattedUrl}`);
+  return open(deploymentUrl);
 };
 
 const updateDeployment = async (deploymentId) => {
@@ -45,12 +51,17 @@ const updateDeployment = async (deploymentId) => {
 const main = async () => {
   switch (args.script) {
     case 'try_production': {
-      await openDeployment(packageJson.deployments.production);
-      break;
+      return await openDeployment(
+        packageJson.deployments.production,
+        'production'
+      );
     }
-    case 'update_production':
-      await updateDeployment(packageJson.deployments.production);
-      break;
+    case 'try_latest': {
+      return await openDeployment(packageJson.deployments.latest, 'latest');
+    }
+    case 'update_production': {
+      return await updateDeployment(packageJson.deployments.production);
+    }
     default: {
       throw new Error(`${args.script} is not supported yet.`);
     }
