@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "lib": ["es6"],
-    "noImplicitAny": true,
+    "strict": true,
     "types": ["node", "jest"]
   },
   "include": [
