@@ -13,10 +13,7 @@ const CSS_FILE = process.env.npm_package_config_cssFile;
 const JSON_FILE = process.env.npm_package_config_jsonFile;
 const MANIFEST_FILE = 'manifest.json';
 
-const buildViz = (DEVMODE) => {
-  const GCS_BUCKET = DEVMODE ? DEV_BUCKET : PROD_BUCKET;
-
-  const encoding = 'utf-8';
+const buildOptions = (DEVMODE) => {
   // common options
   let webpackOptions = {
     entry: {
@@ -47,26 +44,33 @@ const buildViz = (DEVMODE) => {
     Object.assign(webpackOptions, prodOptions);
   }
 
+  return webpackOptions;
+};
+const buildViz = async (DEVMODE) => {
+  const GCS_BUCKET = DEVMODE ? DEV_BUCKET : PROD_BUCKET;
+  const encoding = 'utf-8';
+  const webpackOptions = buildOptions(DEVMODE);
   const compiler = webpack(webpackOptions);
+  const compilerRun = Promise.promisify(compiler.run, {context: compiler});
 
-  // put everything together except the manifest
-  compiler.run((err, stats) => {
-    // once build directory is created...
-    fs.readFileAsync(
-      path.resolve(__dirname, '../../src', MANIFEST_FILE),
-      encoding
-    ).then((value) => {
-      const newManifest = value
-        .replace(/YOUR_GCS_BUCKET/g, DEV_BUCKET)
-        .replace(/"DEVMODE_BOOL"/, DEVMODE);
-      fs.writeFileAsync(
-        path.resolve(__dirname, '../../', 'build', MANIFEST_FILE),
-        newManifest
-      ).catch((err) => {
-        console.log('Unable to write manifest: ', err);
-      });
-    });
-  });
+  var stats = await compilerRun.call();
+
+  try {
+    const manifestSrc = path.resolve(__dirname, '../../', 'src', MANIFEST_FILE);
+    const manifestDest = path.resolve(
+      __dirname,
+      '../../',
+      'build',
+      MANIFEST_FILE
+    );
+    var manifestContents = await fs.readFileAsync(manifestSrc, encoding);
+    const newManifest = manifestContents
+      .replace(/YOUR_GCS_BUCKET/g, GCS_BUCKET)
+      .replace(/"DEVMODE_BOOL"/, DEVMODE);
+    return fs.writeFileAsync(manifestDest, newManifest);
+  } catch (err) {
+    console.log('Unable to write manifest: ', err);
+  }
 };
 
 module.exports.buildViz = buildViz;
