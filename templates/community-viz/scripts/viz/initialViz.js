@@ -32,7 +32,7 @@ export const firstViz = (data) => {
 
   if (document.querySelector('canvas')) {
     var oldCanv = document.querySelector('canvas');
-    oldCanv.parentNode.removeChild(oldDiv);
+    oldCanv.parentNode.removeChild(oldCanv);
   }
 
   // append the data to a div

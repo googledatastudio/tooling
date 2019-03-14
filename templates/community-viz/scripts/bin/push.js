@@ -6,7 +6,7 @@ const DEV_BUCKET = process.env.npm_package_config_gcsDevBucket;
 const PROD_BUCKET = process.env.npm_package_config_gcsProdBucket;
 
 const deploy = (devMode) => {
-  const GCS_BUCKET = devMode ? PROD_BUCKET : DEV_BUCKET;
+  const GCS_BUCKET = devMode ? DEV_BUCKET : PROD_BUCKET;
   shell.cd('build');
   shell.exec('gsutil cp -a public-read * ' + GCS_BUCKET);
 
