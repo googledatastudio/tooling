@@ -104,7 +104,10 @@ export const getDeploymentIdByName = async (
     .filter((s) => s.includes(name))
     .map((s) => s.match(/- (.*) @.*/));
 
-  if (deploymentStrings.length !== 1) {
+  if (deploymentStrings.length === 0) {
+    return undefined;
+  }
+  if (deploymentStrings.length > 1) {
     throw new Error(
       `There was more than one deployment with the name: "${name}"`
     );
