@@ -32,13 +32,14 @@
     "arrowParens": "always"
   },
   "scripts": {
-    "test-watch": "jest --watchAll --coverage",
-    "prettier-watch": "onchange \"{src,templates,test}/**/*.{ts,js}\" -- yarn prettier",
-    "build-watch": "tsc --watch",
     "build": "tsc",
+    "build:check": "tsc --noEmit",
+    "build:watch": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watchAll --coverage",
     "lint": "tslint -c tslint.json src/**/*.ts",
     "prettier": "prettier --write \"{src,templates,test}/**/*.{ts,js}\"",
-    "test": "jest"
+    "prettier:check": "prettier --check \"{src,templates,test}/**/*.{ts,js}\""
   },
   "dependencies": {
     "argparse": "^1.0.10",
@@ -64,9 +65,9 @@
     "@types/terminal-link": "^1.1.0",
     "@types/uuid": "^3.4.4",
     "jest": "^24.1.0",
-    "onchange": "^5.2.0",
     "prettier": "^1.11.1",
     "ts-jest": "^24.0.0",
-    "tslint": "^5.13.1"
+    "tslint": "^5.13.1",
+    "typescript": "^3.3.3333"
   }
 }
