@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Make sure local git is up-to-date.
-COMMIT_DIFF_NUMBER=$(git rev-list HEAD...origin/master --count)
-if [[ $COMMIT_DIFF_NUMBER != 0 ]]; then
+git fetch -a
+if [[ $(git rev-parse HEAD) != $(git rev-parse origin/master) ]]; then
   echo "Your local branch is not in sync with origin/master."
   exit 1
 fi
