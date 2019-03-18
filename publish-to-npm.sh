@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Make sure local git is up-to-date.
-git fetch -a
+git fetch --all
 if [[ $(git rev-parse HEAD) != $(git rev-parse origin/master) ]]; then
   echo "Your local branch is not in sync with origin/master."
   exit 1
