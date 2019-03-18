@@ -38,7 +38,7 @@ export const clone = async (
   const options = {
     cwd: appscriptPath,
   };
-  const arg = rootDir ? `--rootDir ${rootDir}` : '';
+  const arg = rootDir !== undefined ? `--rootDir ${rootDir}` : '';
   await util.exec(`npx @google/clasp clone ${arg} ${scriptId}`, options, false);
 };
 

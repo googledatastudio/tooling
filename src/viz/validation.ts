@@ -48,7 +48,7 @@ export const hasBucketPermissions = async (
   gcsPath: string
 ): Promise<boolean | string> => {
   const gcsRootBucket = parseBucketName(gcsPath);
-  if (!gcsRootBucket) {
+  if (gcsRootBucket === undefined) {
     return `${gcsPath} is an invalid gcs bucket name.`;
   }
   try {

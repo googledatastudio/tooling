@@ -17,6 +17,7 @@
 
 import chalk from 'chalk';
 import {ExecOptions} from 'child_process';
+import clear = require('clear');
 import * as path from 'path';
 import terminalLink from 'terminal-link';
 import * as files from '../files';
@@ -26,7 +27,6 @@ import {Answers} from '../questions';
 import * as util from '../util';
 import * as appsscript from './appsscript';
 import * as validation from './validation';
-const clear = require('clear');
 
 const green = chalk.bold.rgb(15, 157, 88);
 const blue = chalk.bold.rgb(66, 133, 244);
@@ -53,13 +53,13 @@ const getTemplates = (answers: Answers): Template[] => {
 };
 
 const ensureAuthenticated = async (execOptions: ExecOptions): Promise<void> => {
-  const authenticated = util.spinnify(
+  const authenticated = await util.spinnify(
     'Ensuring clasp is authenticated...',
     async () => {
       return validation.claspAuthenticated();
     }
   );
-  if (!authenticated) {
+  if (authenticated === false) {
     const infoText = yellow(
       'Clasp must be globally authenticated for dscc-gen.'
     );
