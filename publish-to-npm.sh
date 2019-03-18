@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Make sure local git is up-to-date.
+COMMIT_DIFF_NUMBER=$(git rev-list HEAD...origin/master --count)
+if [[ $COMMIT_DIFF_NUMBER != 0 ]]; then
+  echo "Your local branch is not in sync with origin/master."
+  exit 1
+fi
 # Install needed dependencies
 yarn install
 # Build code
