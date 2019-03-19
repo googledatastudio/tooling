@@ -8,7 +8,7 @@ if git branch | grep -qv "^\* master$"; then
 fi
 
 if test -n "$(git status --porcelain)"; then
-  echo "You have local changes that haven't been account for."
+  echo "You have local changes that haven't been accounted for."
   exit 1
 fi
 
