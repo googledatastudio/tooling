@@ -108,7 +108,7 @@ export const exec = (
       }
     );
     if (pipeStd !== undefined) {
-      if (child.stdout !== undefined && child.stderr !== undefined) {
+      if (child.stdout !== null && child.stderr !== null) {
         child.stdout.pipe(process.stdout);
         child.stderr.pipe(process.stderr);
       }
