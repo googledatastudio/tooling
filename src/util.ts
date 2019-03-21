@@ -16,16 +16,17 @@
  */
 
 import * as bb from 'bluebird';
+import chalk from 'chalk';
 import * as cp from 'child_process';
 import {ExecOptions} from 'child_process';
-import * as fs from 'fs';
 import {Spinner} from 'cli-spinner';
+import * as fs from 'fs';
 import {Answers} from 'inquirer';
 
 export const readDir = (path: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
     fs.readdir(path, (err, data) => {
-      if (err) {
+      if (err !== undefined) {
         reject(err);
       } else {
         resolve(data);
@@ -40,7 +41,7 @@ export const readFile = (
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, encoding, (err, data) => {
-      if (err) {
+      if (err !== undefined) {
         reject(err);
       } else {
         resolve(data);
@@ -52,7 +53,7 @@ export const readFile = (
 export const makeDir = (filePath: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     fs.mkdir(filePath, (err) => {
-      if (err) {
+      if (err !== undefined) {
         reject(err);
       } else {
         resolve(filePath);
@@ -64,7 +65,7 @@ export const makeDir = (filePath: string): Promise<string> => {
 export const writeFile = (filePath: string, data: string, encoding: string) => {
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, data, encoding, (err) => {
-      if (err) {
+      if (err !== undefined) {
         reject(err);
       } else {
         resolve();
@@ -99,16 +100,18 @@ export const exec = (
       command,
       options,
       (err, stdout: string, stderr: string) => {
-        if (err) {
+        if (err !== undefined) {
           reject(err);
         } else {
           resolve({out: stdout, err: stderr});
         }
       }
     );
-    if (pipeStd) {
-      child.stdout.pipe(process.stdout);
-      child.stderr.pipe(process.stderr);
+    if (pipeStd !== undefined) {
+      if (child.stdout !== undefined && child.stderr !== undefined) {
+        child.stdout.pipe(process.stdout);
+        child.stderr.pipe(process.stderr);
+      }
     }
   });
 };
@@ -144,4 +147,11 @@ export const spinnify = async <T>(
   } finally {
     spinner.stop(true);
   }
+};
+
+export const format = {
+  green: chalk.bold.rgb(15, 157, 88),
+  blue: chalk.bold.rgb(66, 133, 244),
+  yellow: chalk.bold.rgb(244, 160, 0),
+  red: chalk.bold.rgb(219, 68, 55),
 };

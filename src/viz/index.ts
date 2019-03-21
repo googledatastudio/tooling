@@ -14,16 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import chalk from 'chalk';
 import * as path from 'path';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
-
-const green = chalk.rgb(15, 157, 88);
-const blue = chalk.rgb(66, 133, 244);
+import {format} from '../util';
 
 export const createFromTemplate = async (answers: Answers): Promise<number> => {
   const {devBucket, prodBucket, projectName, basePath} = answers;
@@ -46,8 +43,8 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
 
   const runCmd = answers.yarn ? 'yarn' : 'npm run';
 
-  const cdDirection = blue.bold(`cd ${projectName}`);
-  const runStart = green.bold(`${runCmd} start`);
+  const cdDirection = format.blue(`cd ${projectName}`);
+  const runStart = format.green(`${runCmd} start`);
 
   console.log(
     `

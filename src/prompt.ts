@@ -1,6 +1,6 @@
-import * as analytics from './analytics';
 import * as inquirer from 'inquirer';
 import {setTimeout} from 'timers';
+import * as analytics from './analytics';
 import * as util from './util';
 
 export const prompt = <T>(questions: inquirer.Questions<T>): Promise<T> => {
