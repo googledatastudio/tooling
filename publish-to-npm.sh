@@ -24,6 +24,8 @@ fi
 set -x
 # Install needed dependencies
 yarn install
+# Delete old build files
+rm -rf build
 # Build code
 yarn build
 # Create a new version
