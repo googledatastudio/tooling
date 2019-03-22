@@ -90,12 +90,6 @@ export interface PackageJson {
   version: string;
 }
 
-export const getPackageJson = async (packageDir: string) => {
-  const json = await parseJsonFile(path.join(packageDir, 'package.json'));
-  const parsed: PackageJson = json;
-  return parsed;
-};
-
 const createAndCopyFilesImpl = async (
   projectPath: string,
   templatePath: string,

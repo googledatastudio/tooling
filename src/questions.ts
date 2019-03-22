@@ -99,9 +99,9 @@ export const COMMON_QUESTIONS: Array<Question<CommonAnswers>> = [
   },
 ];
 
-const getArgs = async (baseDir: string): Promise<Args> => {
+const getArgs = (): Args => {
   const parser = new argparse.ArgumentParser({
-    version: (await files.getPackageJson(baseDir)).version,
+    version: process.env.npm_package_version,
     addHelp: true,
     description:
       'Template-based project generator for Data Studio developer features',
@@ -167,8 +167,8 @@ const questionsWithArgs = async <T>(
   });
 };
 
-export const getAnswers = async (baseDir: string): Promise<Answers> => {
-  const args: Args = await getArgs(baseDir);
+export const getAnswers = async (): Promise<Answers> => {
+  const args: Args = await getArgs();
   const questions = await questionsWithArgs(args, COMMON_QUESTIONS);
   const promptAnswers: CommonAnswers = await prompt(questions);
   const commonAnswers = Object.assign({}, promptAnswers, args);

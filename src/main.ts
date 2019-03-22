@@ -26,7 +26,7 @@ export interface Template {
 }
 
 export const main = async (basePath: string): Promise<number> => {
-  const answers = await questions.getAnswers(basePath);
+  const answers = await questions.getAnswers();
   Object.assign(answers, {basePath});
 
   switch (answers.projectChoice) {
