@@ -2,7 +2,7 @@
 
 set -e
 
-if git branch | grep -qv "^\* master$"; then
+if ! git branch | grep -q "^\* master\$"; then
   echo "You must be on the master branch to run this script"
   exit 1
 fi
