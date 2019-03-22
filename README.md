@@ -26,7 +26,7 @@ To improve dscc-gen over time, we gather the following:
 +   SigInt Stop (i.e. C-c to abort running)
 
 None of this is sent if you opt-out of analytics. To opt out at any time, run
-`rm ~/.confing/insight-nodejs/insight-@google/dscc-gen.json` and you'll be
+`rm ~/.config/insight-nodejs/insight-@google/dscc-gen.json` and you'll be
 prompted again the next time you run the tool.
 
 ### How We Collect
