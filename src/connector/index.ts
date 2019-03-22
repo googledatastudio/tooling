@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-import chalk from 'chalk';
 import {ExecOptions} from 'child_process';
 import clear = require('clear');
 import * as path from 'path';
@@ -25,13 +24,9 @@ import {PWD} from '../index';
 import {Template} from '../main';
 import {Answers} from '../questions';
 import * as util from '../util';
+import {format} from '../util';
 import * as appsscript from './appsscript';
 import * as validation from './validation';
-
-const green = chalk.bold.rgb(15, 157, 88);
-const blue = chalk.bold.rgb(66, 133, 244);
-const yellow = chalk.bold.rgb(244, 160, 0);
-const red = chalk.bold.rgb(219, 68, 55);
 
 const getTemplates = (answers: Answers): Template[] => {
   return [
@@ -60,10 +55,10 @@ const ensureAuthenticated = async (execOptions: ExecOptions): Promise<void> => {
     }
   );
   if (authenticated === false) {
-    const infoText = yellow(
+    const infoText = format.yellow(
       'Clasp must be globally authenticated for dscc-gen.'
     );
-    const claspLogin = green('npx @google/clasp login');
+    const claspLogin = format.green('npx @google/clasp login');
     console.log(`${infoText}\nrunning ${claspLogin} ...\n`);
     await util.exec('npx @google/clasp login', execOptions, true);
   }
@@ -163,22 +158,22 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   // Remove temp directory.
   await util.exec('rm -rf temp', execOptions);
 
-  const connectorOverview = blue(
+  const connectorOverview = format.blue(
     terminalLink(
       'connector overview',
       'https://developers.google.com/datastudio/connector/'
     )
   );
-  const styledProjectName = green(projectName);
-  const cdDirection = yellow(`cd ${projectName}`);
+  const styledProjectName = format.green(projectName);
+  const cdDirection = format.yellow(`cd ${projectName}`);
   const runCmd = answers.yarn ? 'yarn' : 'npm run';
-  const open = red(`${runCmd} open`);
-  const push = blue(`${runCmd} push`);
-  const watch = green(`${runCmd} watch`);
-  const prettier = yellow(`${runCmd} prettier`);
-  const tryLatest = red(`${runCmd} try_latest`);
-  const tryProduction = blue(`${runCmd} try_production`);
-  const updateProduction = green(`${runCmd} update_production`);
+  const open = format.red(`${runCmd} open`);
+  const push = format.blue(`${runCmd} push`);
+  const watch = format.green(`${runCmd} watch`);
+  const prettier = format.yellow(`${runCmd} prettier`);
+  const tryLatest = format.red(`${runCmd} try_latest`);
+  const tryProduction = format.blue(`${runCmd} try_production`);
+  const updateProduction = format.green(`${runCmd} update_production`);
 
   console.log(
     `\

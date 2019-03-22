@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-import * as path from 'path';
-import {PWD} from './index';
-import * as util from './util';
-import {Question} from 'inquirer';
-import * as files from './files';
 import * as argparse from 'argparse';
-import * as vizQuestions from './viz/questions';
+import {Question} from 'inquirer';
+import * as path from 'path';
 import * as connectorQuestions from './connector/questions';
-import {VizAnswers} from './viz/questions';
 import {ConnectorAnswers} from './connector/questions';
+import * as files from './files';
+import {PWD} from './index';
 import {prompt} from './prompt';
+import * as util from './util';
+import * as vizQuestions from './viz/questions';
+import {VizAnswers} from './viz/questions';
 
 export interface State {
   projectPath: string;
@@ -152,7 +152,7 @@ const questionsWithArgs = async <T>(
   await Promise.all(
     questions.map(async (question) => {
       const argValue = (args as any)[question.name!];
-      if (argValue && question.validate) {
+      if (argValue !== undefined && question.validate !== undefined) {
         const isValid = await question.validate(argValue);
         if (isValid !== true) {
           throw new Error(

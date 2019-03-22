@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
+import * as connector from './connector/index';
 import * as questions from './questions';
 import {ProjectChoice} from './questions';
 import * as viz from './viz/index';
-import * as connector from './connector/index';
 
 export interface Template {
   match: RegExp;
