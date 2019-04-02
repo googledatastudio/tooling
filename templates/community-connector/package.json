@@ -17,11 +17,11 @@
   },
   "scripts": {
     "prettier": "prettier --write \"src/**/*.js\"",
-    "push": "clasp push",
-    "watch": "clasp push --watch",
-    "open": "clasp open",
-    "try_production": "dscc-scripts try_production",
-    "try_latest": "dscc-scripts try_latest",
-    "update_production": "dscc-scripts update_production"
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
   }
 }
