@@ -8,10 +8,10 @@
     "print": "printMessage.js"
   },
   "scripts": {
-    "build:dev": "dscc-scripts viz build",
-    "build:prod": "dscc-scripts viz build --prod",
-    "push:dev": "dscc-scripts viz push",
-    "push:prod": "dscc-scripts viz push --prod",
+    "build:dev": "dscc-scripts viz build -d dev",
+    "build:prod": "dscc-scripts viz build -d prod",
+    "push:dev": "dscc-scripts viz push -d dev",
+    "push:prod": "dscc-scripts viz push -d prod",
     "update_message": "dscc-scripts viz update_message -f object",
     "start": "dscc-scripts viz start"
   },
