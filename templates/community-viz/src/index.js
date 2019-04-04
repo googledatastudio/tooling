@@ -1,6 +1,6 @@
 const dscc = require('@google/dscc');
-const viz = require('@google/dscc-scripts/viz/initialViz.js')
-const local = require('./localMessage.js')
+const viz = require('@google/dscc-scripts/viz/initialViz.js');
+const local = require('./localMessage.js');
 
 // change this to 'true' for local development
 // change this to 'false' before deploying
