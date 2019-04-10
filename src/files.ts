@@ -16,36 +16,29 @@
  */
 
 import * as path from 'path';
+import * as listFiles from 'recursive-readdir';
 import {Template} from './main';
 import * as util from './util';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
 
+const fixFile = (templates: Template[]) => async (file: string) => {
+  const contents = await util.readFile(file, ENCODING);
+  const newContents = templates.reduce(
+    (acc, {match, replace}) => acc.replace(match, replace),
+    contents
+  );
+  return util.writeFile(file, newContents, ENCODING);
+};
+
 export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
-) => {
-  const filesToUpdate = await util.readDir(baseDirectory);
-  return Promise.all(
-    filesToUpdate.map(async (file) => {
-      const originalFilePath = path.join(baseDirectory, file);
-      const stats = await util.statSync(originalFilePath);
-      if (stats.isFile()) {
-        const contents = await util.readFile(originalFilePath, ENCODING);
-        const newContents = templates.reduce(
-          (acc, {match, replace}) => acc.replace(match, replace),
-          contents
-        );
-        await util.writeFile(originalFilePath, newContents, ENCODING);
-      } else if (stats.isDirectory()) {
-        const newBaseDirectory = path.join(baseDirectory, file);
-        await fixTemplates(newBaseDirectory, templates);
-      } else {
-        throw new Error(`${originalFilePath} is not a file or directory.`);
-      }
-    })
-  );
+): Promise<boolean> => {
+  const filesToUpdate = await listFiles(baseDirectory, ['node_modules/']);
+  await Promise.all(filesToUpdate.map(fixFile(templates)));
+  return true;
 };
 
 export const createDirectoryContents = async (

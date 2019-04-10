@@ -62,13 +62,17 @@ export const makeDir = (filePath: string): Promise<string> => {
   });
 };
 
-export const writeFile = (filePath: string, data: string, encoding: string) => {
+export const writeFile = (
+  filePath: string,
+  data: string,
+  encoding: string
+): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     fs.writeFile(filePath, data, encoding, (err) => {
       if (err !== null) {
         reject(err);
       } else {
-        resolve();
+        resolve(true);
       }
     });
   });
