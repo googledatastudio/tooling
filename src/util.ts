@@ -22,6 +22,8 @@ import {ExecOptions} from 'child_process';
 import {Spinner} from 'cli-spinner';
 import * as fs from 'fs';
 import {Answers} from 'inquirer';
+import * as exec from 'execa';
+import {Options, ExecaReturns} from 'execa';
 
 export const readDir = (path: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
@@ -94,41 +96,15 @@ export interface Std {
   err: string;
 }
 
-export const exec = (
-  command: string,
-  options: ExecOptions,
-  pipeStd?: boolean
-): Promise<Std> => {
-  return new Promise((resolve, reject) => {
-    const child = cp.exec(
-      command,
-      options,
-      (err, stdout: string, stderr: string) => {
-        if (err !== null) {
-          reject(err);
-        } else {
-          resolve({out: stdout, err: stderr});
-        }
-      }
-    );
-    if (pipeStd !== undefined && pipeStd) {
-      if (child.stdout !== null && child.stderr !== null) {
-        child.stdout.pipe(process.stdout);
-        child.stderr.pipe(process.stderr);
-      }
-    }
-  });
-};
-
 export const npmInstall = async (
   projectPath: string,
   answers: Answers
-): Promise<Std> => {
-  const execOptions = {cwd: projectPath};
+): Promise<ExecaReturns> => {
+  const execOptions: Options = {cwd: projectPath, stdio: 'ignore'};
   if (answers.yarn) {
-    return exec('yarn install', execOptions, false);
+    return exec('yarn install', [], execOptions);
   } else {
-    return exec('npm install', execOptions, false);
+    return exec('npm install', [], execOptions);
   }
 };
 
