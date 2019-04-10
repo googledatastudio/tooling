@@ -17,13 +17,11 @@
 
 import * as bb from 'bluebird';
 import chalk from 'chalk';
-import * as cp from 'child_process';
-import {ExecOptions} from 'child_process';
 import {Spinner} from 'cli-spinner';
+import * as execa from 'execa';
+import {ExecaReturns, Options} from 'execa';
 import * as fs from 'fs';
 import {Answers} from 'inquirer';
-import * as exec from 'execa';
-import {Options, ExecaReturns} from 'execa';
 
 export const readDir = (path: string): Promise<string[]> => {
   return new Promise((resolve, reject) => {
@@ -102,9 +100,9 @@ export const npmInstall = async (
 ): Promise<ExecaReturns> => {
   const execOptions: Options = {cwd: projectPath, stdio: 'ignore'};
   if (answers.yarn) {
-    return exec('yarn install', [], execOptions);
+    return execa('yarn', [], execOptions);
   } else {
-    return exec('npm install', [], execOptions);
+    return execa('npm', ['install'], execOptions);
   }
 };
 

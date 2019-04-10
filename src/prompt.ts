@@ -1,5 +1,4 @@
 import * as inquirer from 'inquirer';
-import {setTimeout} from 'timers';
 import * as analytics from './analytics';
 import * as util from './util';
 

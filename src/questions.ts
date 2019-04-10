@@ -20,7 +20,6 @@ import {Question} from 'inquirer';
 import * as path from 'path';
 import * as connectorQuestions from './connector/questions';
 import {ConnectorAnswers} from './connector/questions';
-import * as files from './files';
 import {PWD} from './index';
 import {prompt} from './prompt';
 import * as util from './util';

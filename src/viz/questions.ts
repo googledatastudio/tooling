@@ -1,8 +1,5 @@
-import * as path from 'path';
-import {PWD} from '../index';
 import {prompt} from '../prompt';
 import {Answers, Args, CommonAnswers} from '../questions';
-import * as util from '../util';
 import * as validation from './validation';
 
 export interface VizAnswers {
