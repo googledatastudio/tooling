@@ -1,7 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const CSS_FILE = process.env.npm_package_config_cssFile;
+const CSS_FILE = process.env.npm_package_dsccViz_cssFile;
 
 module.exports = [
   {
