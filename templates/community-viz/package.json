@@ -1,5 +1,5 @@
 {
-  "config": {
+  "dsccViz": {
     "gcsDevBucket": "{{DEV_BUCKET}}",
     "gcsProdBucket": "{{PROD_BUCKET}}",
     "jsFile": "index.js",
