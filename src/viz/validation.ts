@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
+import * as execa from 'execa';
 import * as analytics from '../analytics';
 import {Action, Category} from '../analytics';
-import * as util from '../util';
 
 export const addBucketPrefix = (bucket: string) => `gs://${bucket}`;
 
 export const checkGsutilInstalled = async (): Promise<boolean> => {
   try {
-    await util.exec('which gsutil', {}, false);
+    await execa('which', ['gsutil'], {stdio: 'ignore'});
   } catch (e) {
     analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
     throw new Error(
@@ -52,7 +52,7 @@ export const hasBucketPermissions = async (
     return `${gcsPath} is an invalid gcs bucket name.`;
   }
   try {
-    await util.exec(`gsutil acl get ${gcsRootBucket}`, {}, false);
+    await execa(`gsutil`, ['acl', 'get', gcsRootBucket], {stdio: 'ignore'});
     return true;
   } catch (e) {
     return e.message;

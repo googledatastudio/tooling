@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as execa from 'execa';
 import * as path from 'path';
 import * as files from '../files';
 import {PWD} from '../index';
@@ -35,9 +36,9 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
 
   await util.spinnify('Installing project dependencies...', async () => {
     if (answers.yarn) {
-      await util.exec('yarn install', {cwd: projectPath}, false);
+      await execa('yarn', [], {cwd: projectPath, stdio: 'ignore'});
     } else {
-      await util.exec('npm install', {cwd: projectPath}, false);
+      await execa('npm', ['install'], {cwd: projectPath, stdio: 'ignore'});
     }
   });
 

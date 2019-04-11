@@ -15,18 +15,29 @@
  * limitations under the License.
  */
 
+import * as execa from 'execa';
+import {Options} from 'execa';
 import * as path from 'path';
 import * as files from '../files';
-import * as util from '../util';
 
 export const create = async (appsscriptPath: string, projectName: string) => {
-  const options = {
+  const options: Options = {
     cwd: appsscriptPath,
+    stdio: 'ignore',
   };
-  await util.exec(
-    `npx @google/clasp create --title ${projectName} --type standalone --rootDir src`,
-    options,
-    false
+  await execa(
+    'npx',
+    [
+      '@google/clasp',
+      'create',
+      '--title',
+      projectName,
+      '--type',
+      'standalone',
+      '--rootDir',
+      'src',
+    ],
+    options
   );
 };
 
@@ -35,24 +46,30 @@ export const clone = async (
   scriptId: string,
   rootDir?: string
 ) => {
-  const options = {
+  const options: Options = {
     cwd: appscriptPath,
+    stdio: 'ignore',
   };
-  const arg = rootDir !== undefined ? `--rootDir ${rootDir}` : '';
-  await util.exec(`npx @google/clasp clone ${arg} ${scriptId}`, options, false);
+  let args = ['@google/clasp', 'clone'];
+  args = rootDir !== undefined ? args.concat('--rootDir', rootDir) : args;
+  args = args.concat(scriptId);
+  await execa('npx', args, options);
 };
 
 export const push = async (appsscriptPath: string) => {
-  const options = {cwd: appsscriptPath};
-  await util.exec(`npx @google/clasp push --force`, options, false);
+  const options: Options = {
+    cwd: appsscriptPath,
+    stdio: 'ignore',
+  };
+  await execa('npx', ['@google/clasp', 'push', '--force'], options);
 };
 
 export const version = async (
   appsscriptPath: string,
   description: string = 'Initial code'
 ) => {
-  const options = {cwd: appsscriptPath};
-  await util.exec(`npx @google/clasp version ${description}`, options, false);
+  const options: Options = {cwd: appsscriptPath, stdio: 'ignore'};
+  await execa(`npx`, ['@google/clasp', 'version', description], options);
 };
 
 export const getScriptId = async (appsscriptPath: string) => {
@@ -65,15 +82,14 @@ export const deploy = async (
   appsscriptPath: string,
   deploymentName: string
 ) => {
-  const options = {cwd: appsscriptPath};
-  const {out} = await util.exec(
-    `npx @google/clasp deploy --description "${deploymentName}"`,
-    options,
-    false
+  const options: Options = {cwd: appsscriptPath};
+  const {stdout: out} = await execa(
+    'npx',
+    ['@google/clasp', 'deploy', '--description', `"${deploymentName}"`],
+    options
   );
-  const [_, deploymentId] = out.match(
-    /- ([-_A-Za-z\d]*) @[0-9]+\./
-  ) as string[];
+
+  const [, deploymentId] = out.match(/- ([-_A-Za-z\d]*) @[0-9]+\./) as string[];
   return deploymentId;
 };
 
@@ -91,11 +107,11 @@ export const getDeploymentIdByName = async (
   appsscriptPath: string,
   name: string
 ): Promise<string | undefined> => {
-  const options = {cwd: appsscriptPath};
-  const {out} = await util.exec(
-    `npx @google/clasp deployments`,
-    options,
-    false
+  const options: Options = {cwd: appsscriptPath};
+  const {stdout: out} = await execa(
+    `npx`,
+    ['@google/clasp', 'deployments'],
+    options
   );
 
   const deploymentStrings = out

@@ -7,7 +7,9 @@
     "module": "commonjs",
     "lib": ["es6"],
     "strict": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": [
     "./src/**/*"
