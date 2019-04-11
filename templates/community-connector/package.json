@@ -1,6 +1,6 @@
 {
   "name": "{{MANIFEST_NAME}}",
-  "deployments": {
+  "dsccConnector": {
     "production": "{{PRODUCTION_DEPLOYMENT_ID}}",
     "latest": "{{LATEST_DEPLOYMENT_ID}}"
   },
@@ -21,6 +21,7 @@
     "push": "dscc-scripts connector push_changes",
     "watch": "dscc-scripts connector watch_changes",
     "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
     "try_production": "dscc-scripts connector try_production",
     "try_latest": "dscc-scripts connector try_latest",
     "update_production": "dscc-scripts connector update_production"
