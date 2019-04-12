@@ -1,5 +1,5 @@
 {
-  "config": {
+  "dsccViz": {
     "gcsDevBucket": "{{DEV_BUCKET}}",
     "gcsProdBucket": "{{PROD_BUCKET}}",
     "jsFile": "index.js",
@@ -8,15 +8,16 @@
     "print": "printMessage.js"
   },
   "scripts": {
-    "build:dev": "node scripts/dscc-scripts.js --script=build",
-    "build:prod": "node scripts/dscc-scripts.js --script=build --prod",
-    "push:dev": "node scripts/dscc-scripts.js --script=push",
-    "push:prod": "node scripts/dscc-scripts.js --script=push --prod",
-    "update_message": "node scripts/dscc-scripts.js --script=update_message",
-    "start": "webpack-dev-server --open"
+    "build:dev": "dscc-scripts viz build -d dev",
+    "build:prod": "dscc-scripts viz build -d prod",
+    "push:dev": "dscc-scripts viz push -d dev",
+    "push:prod": "dscc-scripts viz push -d prod",
+    "update_message": "dscc-scripts viz update_message -f object",
+    "start": "dscc-scripts viz start"
   },
   "devDependencies": {
     "@google/dscc": "^0.3.8",
+    "@google/dscc-scripts": "1.0.0",
     "autoprefixer": "^9.4.5",
     "bluebird": "^3.5.3",
     "commander": "^2.19.0",
