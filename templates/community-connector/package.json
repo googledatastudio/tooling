@@ -9,7 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "@google/clasp": "^2.1.0",
-    "@google/dscc-scripts": "1.0.0",
+    "@google/dscc-scripts": "^1.0.0",
     "argparse": "^1.0.10",
     "chalk": "^2.4.2",
     "open": "^6.0.0",

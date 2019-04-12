@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@google/dscc": "^0.3.8",
-    "@google/dscc-scripts": "1.0.0",
+    "@google/dscc-scripts": "^1.0.0",
     "autoprefixer": "^9.4.5",
     "bluebird": "^3.5.3",
     "commander": "^2.19.0",
