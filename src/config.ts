@@ -5,7 +5,11 @@ import * as path from 'path';
 import {PWD} from './index';
 import {assertNever} from './util';
 import * as util from './util';
-import {addBucketPrefix, hasBucketPermissions} from './viz/validation';
+import {
+  addBucketPrefix,
+  hasBucketPermissions,
+  checkGsutilInstalled,
+} from './viz/validation';
 
 export enum ProjectChoice {
   VIZ = 'viz',
@@ -182,6 +186,7 @@ export const getConfig = async (): Promise<VizConfig | ConnectorConfig> => {
         manifestSources: '',
       });
     case ProjectChoice.VIZ:
+      await checkGsutilInstalled();
       return getMissing(args, vizQuestions);
     default:
       return assertNever(projectChoice);
