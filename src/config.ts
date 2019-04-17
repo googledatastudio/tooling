@@ -8,8 +8,8 @@ import * as util from './util';
 import {addBucketPrefix, hasBucketPermissions} from './viz/validation';
 
 export enum ProjectChoice {
-  VIZ = 'community-viz',
-  CONNECTOR = 'community-connector',
+  VIZ = 'viz',
+  CONNECTOR = 'connector',
 }
 
 interface CommonConfig {
