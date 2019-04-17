@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
+import {ConnectorConfig, getConfig, ProjectChoice, VizConfig} from './config';
 import * as connector from './connector/index';
-import * as questions from './questions';
-import {ProjectChoice} from './questions';
+import {assertNever} from './util';
 import * as viz from './viz/index';
 
 export interface Template {
@@ -26,15 +26,15 @@ export interface Template {
 }
 
 export const main = async (basePath: string): Promise<number> => {
-  const answers = await questions.getAnswers();
-  Object.assign(answers, {basePath});
+  const config = await getConfig();
+  Object.assign(config, {basePath});
 
-  switch (answers.projectChoice) {
+  switch (config.projectChoice) {
     case ProjectChoice.VIZ:
-      return viz.createFromTemplate(answers);
+      return viz.createFromTemplate(config as VizConfig);
     case ProjectChoice.CONNECTOR:
-      return connector.createFromTemplate(answers);
+      return connector.createFromTemplate(config as ConnectorConfig);
     default:
-      throw new Error(`${answers.projectChoice} is not supported.`);
+      return assertNever(config.projectChoice);
   }
 };

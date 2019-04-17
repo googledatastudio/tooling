@@ -16,14 +16,16 @@
  */
 import * as execa from 'execa';
 import * as path from 'path';
+import {VizConfig} from '../config';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
-import {Answers} from '../questions';
 import * as util from '../util';
 import {format} from '../util';
 
-export const createFromTemplate = async (answers: Answers): Promise<number> => {
+export const createFromTemplate = async (
+  answers: VizConfig
+): Promise<number> => {
   const {devBucket, prodBucket, projectName, basePath} = answers;
   const templatePath = path.join(basePath, 'templates', answers.projectChoice);
   const projectPath = path.join(PWD, projectName);

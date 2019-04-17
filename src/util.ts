@@ -133,3 +133,7 @@ export const format = {
   yellow: chalk.bold.rgb(244, 160, 0),
   red: chalk.bold.rgb(219, 68, 55),
 };
+
+export const assertNever = (x: never): never => {
+  throw new Error('Unexpected object: ' + x);
+};
