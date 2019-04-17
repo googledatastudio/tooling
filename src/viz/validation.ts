@@ -52,9 +52,13 @@ export const hasBucketPermissions = async (
     return `${gcsPath} is an invalid gcs bucket name.`;
   }
   try {
-    await execa(`gsutil`, ['acl', 'get', gcsRootBucket], {stdio: 'ignore'});
+    await execa(`gsutil`, ['acl', 'get', gcsRootBucket]);
     return true;
   } catch (e) {
-    return e.message;
+    if (e.failed) {
+      throw new Error(e.stderr);
+    } else {
+      throw e;
+    }
   }
 };
