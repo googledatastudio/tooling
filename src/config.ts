@@ -7,8 +7,8 @@ import {assertNever} from './util';
 import * as util from './util';
 import {
   addBucketPrefix,
-  hasBucketPermissions,
   checkGsutilInstalled,
+  hasBucketPermissions,
 } from './viz/validation';
 
 export enum ProjectChoice {
