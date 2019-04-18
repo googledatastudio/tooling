@@ -32,3 +32,15 @@ test('parseBucketName_bucketWithMultipleChildDirectories', () => {
   );
   expect(actual).toEqual('gs://bucketName');
 });
+
+test('addBucketPrefix no prefix', () => {
+  const actual = sut.addBucketPrefix('my-bucket-name');
+  expect(actual.startsWith('gs://')).toEqual(true);
+  expect(actual).toEqual('gs://my-bucket-name');
+});
+
+test('addBucketPrefix already has prefix', () => {
+  const actual = sut.addBucketPrefix('gs://my-bucket-name');
+  expect(actual.startsWith('gs://')).toEqual(true);
+  expect(actual).toEqual('gs://my-bucket-name');
+});
