@@ -16,16 +16,21 @@
  */
 import * as execa from 'execa';
 import * as path from 'path';
+import {VizConfig} from '../config';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
-import {Answers} from '../questions';
 import * as util from '../util';
 import {format} from '../util';
+import {addBucketPrefix} from './validation';
 
-export const createFromTemplate = async (answers: Answers): Promise<number> => {
-  const {devBucket, prodBucket, projectName, basePath} = answers;
-  const templatePath = path.join(basePath, 'templates', answers.projectChoice);
+export const createFromTemplate = async (
+  config: VizConfig
+): Promise<number> => {
+  config.devBucket = addBucketPrefix(config.devBucket);
+  config.prodBucket = addBucketPrefix(config.prodBucket);
+  const {devBucket, prodBucket, projectName, basePath} = config;
+  const templatePath = path.join(basePath, 'templates', config.projectChoice);
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   const templates: Template[] = [
@@ -35,14 +40,14 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   await files.fixTemplates(projectPath, templates);
 
   await util.spinnify('Installing project dependencies...', async () => {
-    if (answers.yarn) {
+    if (config.yarn) {
       await execa('yarn', [], {cwd: projectPath, stdio: 'ignore'});
     } else {
       await execa('npm', ['install'], {cwd: projectPath, stdio: 'ignore'});
     }
   });
 
-  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+  const runCmd = config.yarn ? 'yarn' : 'npm run';
 
   const cdDirection = format.blue(`cd ${projectName}`);
   const runStart = format.green(`${runCmd} start`);

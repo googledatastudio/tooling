@@ -16,33 +16,33 @@
  */
 
 import clear = require('clear');
-import {Options} from 'execa';
 import * as execa from 'execa';
+import {Options} from 'execa';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
+import {ConnectorConfig} from '../config';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
-import {Answers} from '../questions';
 import * as util from '../util';
 import {format} from '../util';
 import * as appsscript from './appsscript';
 import * as validation from './validation';
 
-const getTemplates = (answers: Answers): Template[] => {
+const getTemplates = (config: ConnectorConfig): Template[] => {
   return [
-    {match: /{{MANIFEST_NAME}}/, replace: answers.projectName},
-    {match: /{{MANIFEST_LOGO_URL}}/, replace: answers.manifestLogoUrl!},
-    {match: /{{MANIFEST_COMPANY}}/, replace: answers.manifestCompany!},
-    {match: /{{MANIFEST_COMPANY_URL}}/, replace: answers.manifestCompanyUrl!},
-    {match: /{{MANIFEST_ADDON_URL}}/, replace: answers.manifestAddonUrl!},
-    {match: /{{MANIFEST_SUPPORT_URL}}/, replace: answers.manifestSupportUrl!},
-    {match: /{{MANIFEST_DESCRIPTION}}/, replace: answers.manifestDescription!},
+    {match: /{{MANIFEST_NAME}}/, replace: config.projectName},
+    {match: /{{MANIFEST_LOGO_URL}}/, replace: config.manifestLogoUrl!},
+    {match: /{{MANIFEST_COMPANY}}/, replace: config.manifestCompany!},
+    {match: /{{MANIFEST_COMPANY_URL}}/, replace: config.manifestCompanyUrl!},
+    {match: /{{MANIFEST_ADDON_URL}}/, replace: config.manifestAddonUrl!},
+    {match: /{{MANIFEST_SUPPORT_URL}}/, replace: config.manifestSupportUrl!},
+    {match: /{{MANIFEST_DESCRIPTION}}/, replace: config.manifestDescription!},
     {
       match: /{{MANIFEST_SOURCES}}/,
-      replace: `[${answers
+      replace: `[${config
         .manifestSources!.split(',')
-        .map((a) => `"${a}"`)
+        .map((a: string) => `"${a}"`)
         .join(',')}]`,
     },
   ];
@@ -65,9 +65,12 @@ const ensureAuthenticated = async (execOptions: Options): Promise<void> => {
   }
 };
 
-const installDependencies = async (projectPath: string, answers: Answers) => {
+const installDependencies = async (
+  projectPath: string,
+  config: ConnectorConfig
+) => {
   return util.spinnify('Installing project dependencies...', async () =>
-    util.npmInstall(projectPath, answers)
+    util.npmInstall(projectPath, config)
   );
 };
 
@@ -101,9 +104,12 @@ const cloneAppsScriptProject = async (
   });
 };
 
-const manageDeployments = async (projectPath: string, answers: Answers) => {
+const manageDeployments = async (
+  projectPath: string,
+  config: ConnectorConfig
+) => {
   let productionDeploymentId: string | undefined;
-  if (answers.scriptId !== undefined) {
+  if (config.scriptId !== undefined) {
     // See if there is already a 'Production' deployment.
     productionDeploymentId = await util.spinnify(
       'Checking for a production deployment',
@@ -139,27 +145,29 @@ const manageDeployments = async (projectPath: string, answers: Answers) => {
   });
 };
 
-export const createFromTemplate = async (answers: Answers): Promise<number> => {
+export const createFromTemplate = async (
+  config: ConnectorConfig
+): Promise<number> => {
   clear();
-  const {projectName, basePath} = answers;
-  const templatePath = path.join(basePath, 'templates', answers.projectChoice);
+  const {projectName, basePath} = config;
+  const templatePath = path.join(basePath, 'templates', config.projectChoice);
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   await util.spinnify('Updating templates with your values...', async () => {
-    await files.fixTemplates(projectPath, getTemplates(answers));
+    await files.fixTemplates(projectPath, getTemplates(config));
   });
 
   const execOptions: Options = {cwd: projectPath};
 
-  await installDependencies(projectPath, answers);
+  await installDependencies(projectPath, config);
   await ensureAuthenticated(execOptions);
 
-  if (answers.scriptId !== undefined) {
-    await cloneAppsScriptProject(projectPath, answers.scriptId);
+  if (config.scriptId !== undefined) {
+    await cloneAppsScriptProject(projectPath, config.scriptId);
   } else {
     await createAppsScriptProject(projectPath, projectName, execOptions);
   }
-  await manageDeployments(projectPath, answers);
+  await manageDeployments(projectPath, config);
 
   // Remove temp directory.
   await execa('rm', ['-rf', 'temp'], execOptions);
@@ -172,7 +180,7 @@ export const createFromTemplate = async (answers: Answers): Promise<number> => {
   );
   const styledProjectName = format.green(projectName);
   const cdDirection = format.yellow(`cd ${projectName}`);
-  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+  const runCmd = config.yarn ? 'yarn' : 'npm run';
   const open = format.red(`${runCmd} open`);
   const push = format.blue(`${runCmd} push`);
   const watch = format.green(`${runCmd} watch`);

@@ -16,22 +16,35 @@
  */
 
 import * as execa from 'execa';
+import terminalLink from 'terminal-link';
 import * as analytics from '../analytics';
 import {Action, Category} from '../analytics';
+import {format} from '../util';
 
-export const addBucketPrefix = (bucket: string) => `gs://${bucket}`;
+export const addBucketPrefix = (bucket: string) =>
+  bucket.startsWith('gs://') ? bucket : `gs://${bucket}`;
 
 export const checkGsutilInstalled = async (): Promise<boolean> => {
   try {
     await execa('which', ['gsutil'], {stdio: 'ignore'});
   } catch (e) {
     analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
-    throw new Error(
-      '\nERROR: gsutil is not installed, but is needed for the viz template. \
-Please follow installation instructions at\n\
-https://cloud.google.com/storage/docs/gsutil_install\nExiting template \
-creation, no files have been created.'
+
+    const error = format.red.bold('ERROR');
+    const gsutil = format.blue('gsutil');
+    const gsutilInstall = format.yellow(
+      terminalLink(
+        'Install gsutil',
+        'https://cloud.google.com/storage/docs/gsutil_install'
+      )
     );
+
+    const errorString = `\
+${error}: ${gsutil} is not installed, but is needed for the viz template.\n\
+${gsutilInstall}, then re-run this command to continue.\n\
+No files have been created.
+`;
+    throw new Error(errorString);
   }
   return true;
 };
@@ -52,9 +65,13 @@ export const hasBucketPermissions = async (
     return `${gcsPath} is an invalid gcs bucket name.`;
   }
   try {
-    await execa(`gsutil`, ['acl', 'get', gcsRootBucket], {stdio: 'ignore'});
+    await execa(`gsutil`, ['acl', 'get', gcsRootBucket]);
     return true;
   } catch (e) {
-    return e.message;
+    if (e.failed) {
+      throw new Error(e.stderr);
+    } else {
+      throw e;
+    }
   }
 };
