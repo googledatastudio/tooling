@@ -67,6 +67,11 @@ const addConnectorParser = (
     description: 'Creates a project using a Community Connector template.',
   });
 
+  connectorParser.addArgument(['--script_id', '-s'], {
+    dest: 'scriptId',
+    help: 'The id of the script to clone.',
+  });
+
   return connectorParser;
 };
 
