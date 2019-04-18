@@ -19,7 +19,8 @@ import * as execa from 'execa';
 import * as analytics from '../analytics';
 import {Action, Category} from '../analytics';
 
-export const addBucketPrefix = (bucket: string) => `gs://${bucket}`;
+export const addBucketPrefix = (bucket: string) =>
+  bucket.startsWith('gs://') ? bucket : `gs://${bucket}`;
 
 export const checkGsutilInstalled = async (): Promise<boolean> => {
   try {

@@ -22,10 +22,13 @@ import {PWD} from '../index';
 import {Template} from '../main';
 import * as util from '../util';
 import {format} from '../util';
+import {addBucketPrefix} from './validation';
 
 export const createFromTemplate = async (
   answers: VizConfig
 ): Promise<number> => {
+  answers.devBucket = addBucketPrefix(answers.devBucket);
+  answers.prodBucket = addBucketPrefix(answers.prodBucket);
   const {devBucket, prodBucket, projectName, basePath} = answers;
   const templatePath = path.join(basePath, 'templates', answers.projectChoice);
   const projectPath = path.join(PWD, projectName);
