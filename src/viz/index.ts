@@ -25,12 +25,12 @@ import {format} from '../util';
 import {addBucketPrefix} from './validation';
 
 export const createFromTemplate = async (
-  answers: VizConfig
+  config: VizConfig
 ): Promise<number> => {
-  answers.devBucket = addBucketPrefix(answers.devBucket);
-  answers.prodBucket = addBucketPrefix(answers.prodBucket);
-  const {devBucket, prodBucket, projectName, basePath} = answers;
-  const templatePath = path.join(basePath, 'templates', answers.projectChoice);
+  config.devBucket = addBucketPrefix(config.devBucket);
+  config.prodBucket = addBucketPrefix(config.prodBucket);
+  const {devBucket, prodBucket, projectName, basePath} = config;
+  const templatePath = path.join(basePath, 'templates', config.projectChoice);
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   const templates: Template[] = [
@@ -40,14 +40,14 @@ export const createFromTemplate = async (
   await files.fixTemplates(projectPath, templates);
 
   await util.spinnify('Installing project dependencies...', async () => {
-    if (answers.yarn) {
+    if (config.yarn) {
       await execa('yarn', [], {cwd: projectPath, stdio: 'ignore'});
     } else {
       await execa('npm', ['install'], {cwd: projectPath, stdio: 'ignore'});
     }
   });
 
-  const runCmd = answers.yarn ? 'yarn' : 'npm run';
+  const runCmd = config.yarn ? 'yarn' : 'npm run';
 
   const cdDirection = format.blue(`cd ${projectName}`);
   const runStart = format.green(`${runCmd} start`);
