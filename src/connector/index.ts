@@ -19,7 +19,7 @@ import * as execa from 'execa';
 import {Options} from 'execa';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
-import {ConnectorConfig, AuthType} from '../config';
+import {AuthType, ConnectorConfig} from '../config';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';

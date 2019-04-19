@@ -3,23 +3,24 @@ var AUTH_PROPERTY_PATH = 'dscc.key';
 
 // TODO - implement your validateKey logic here.
 function validateKey(key) {
-  cc.newDebugError().setDebugText('Implement an actual auth check here.');
+  cc.newDebugError()
+    .setText('Implement an actual auth check in ./src/auth.js')
+    .throwException();
 }
 
 // https://developers.google.com/datastudio/connector/auth#getauthtype
 function getAuthType() {
-  return cc.newAuthTypeResponse()
-      .setAuthType(cc.AuthType.KEY)
-      .setHelpUrl('https://www.example.org/connector-auth-help')
-      .build();
+  return cc
+    .newAuthTypeResponse()
+    .setAuthType(cc.AuthType.KEY)
+    .setHelpUrl('https://www.example.org/connector-auth-help')
+    .build();
 }
 
 // https://developers.google.com/datastudio/connector/auth#isauthvalid
 function isAuthValid() {
   var userProperties = PropertiesService.getUserProperties();
   var key = userProperties.getProperty(AUTH_PROPERTY_PATH);
-  // This assumes you have a validateKey function that can validate
-  // if the key is valid.
   return validateKey(key);
 }
 
@@ -30,13 +31,13 @@ function setCredentials(request) {
   var validKey = validateKey(key);
   if (!validKey) {
     return {
-      errorCode: 'INVALID_CREDENTIALS'
+      errorCode: 'INVALID_CREDENTIALS',
     };
   }
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty(AUTH_PROPERTY_PATH, key);
   return {
-    errorCode: 'NONE'
+    errorCode: 'NONE',
   };
 }
 
