@@ -23,8 +23,17 @@ interface CommonConfig {
   basePath: string;
 }
 
-export interface ConnectorConfig extends CommonConfig {
-  scriptId?: string;
+export enum AuthType {
+  NONE = 'NONE',
+  OAUTH2 = 'OAUTH2',
+  KEY = 'KEY',
+  USER_PASS = 'USER_PASS',
+  USER_TOKEN = 'USER_TOKEN',
+}
+
+interface VizConfigHasDefaults {}
+
+interface ConnectorConfigHasDefaults {
   manifestLogoUrl: string;
   manifestCompany: string;
   manifestCompanyUrl: string;
@@ -32,8 +41,15 @@ export interface ConnectorConfig extends CommonConfig {
   manifestSupportUrl: string;
   manifestDescription: string;
   manifestSources: string;
+  authType: AuthType;
 }
-export interface VizConfig extends CommonConfig {
+
+export interface ConnectorConfig
+  extends CommonConfig,
+    ConnectorConfigHasDefaults {
+  scriptId?: string;
+}
+export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
   devBucket: string;
   prodBucket: string;
 }
@@ -70,6 +86,12 @@ const addConnectorParser = (
   connectorParser.addArgument(['--script_id', '-s'], {
     dest: 'scriptId',
     help: 'The id of the script to clone.',
+  });
+
+  connectorParser.addArgument(['--auth_type'], {
+    dest: 'authType',
+    help: 'The authorization type for the connector.',
+    choices: Object.values(AuthType),
   });
 
   return connectorParser;
@@ -145,10 +167,10 @@ const getParser = (): argparse.ArgumentParser => {
   return parser;
 };
 
-const getMissing = async <T>(
+const getMissing = async <T extends U, U>(
   args: T,
   questions: Array<Question<T>>,
-  defaults = {}
+  defaults: U
 ): Promise<T> => {
   const providedKeys = Object.keys(args).filter(
     (a) => (args as any)[a] !== null
@@ -181,7 +203,7 @@ const withMissing = async (
   const projectChoice = args.projectChoice;
   switch (projectChoice) {
     case ProjectChoice.CONNECTOR:
-      return getMissing(args as ConnectorConfig, connectorQuestions, {
+      const connectorDefaults: ConnectorConfigHasDefaults = {
         manifestLogoUrl: 'logoUrl',
         manifestCompany: 'manifestCompany',
         manifestCompanyUrl: 'companyUrl',
@@ -189,10 +211,17 @@ const withMissing = async (
         manifestSupportUrl: 'supportUrl',
         manifestDescription: 'description',
         manifestSources: '',
-      });
+        authType: AuthType.NONE,
+      };
+      return getMissing(
+        args as ConnectorConfig,
+        connectorQuestions,
+        connectorDefaults
+      );
     case ProjectChoice.VIZ:
       await checkGsutilInstalled();
-      return getMissing(args as VizConfig, vizQuestions);
+      const vizDefaults: VizConfigHasDefaults = {};
+      return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:
       return assertNever(projectChoice);
   }
