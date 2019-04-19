@@ -26,7 +26,7 @@ export const addBucketPrefix = (bucket: string) =>
 
 export const checkGsutilInstalled = async (): Promise<boolean> => {
   try {
-    await execa('which', ['gsutil'], {stdio: 'ignore'});
+    await execa('which', ['gsutil']);
   } catch (e) {
     analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
 
@@ -64,14 +64,6 @@ export const hasBucketPermissions = async (
   if (gcsRootBucket === undefined) {
     return `${gcsPath} is an invalid gcs bucket name.`;
   }
-  try {
-    await execa(`gsutil`, ['acl', 'get', gcsRootBucket]);
-    return true;
-  } catch (e) {
-    if (e.failed) {
-      throw new Error(e.stderr);
-    } else {
-      throw e;
-    }
-  }
+  await execa(`gsutil`, ['acl', 'get', gcsRootBucket]);
+  return true;
 };

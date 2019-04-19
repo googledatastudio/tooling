@@ -32,7 +32,11 @@ export const PWD = process.cwd();
     result = await main(path.join(__dirname, '..'));
   } catch (e) {
     analytics.trackEvent(Category.EXECUTION, Action.ERROR_STOP);
-    console.log(e.message);
+    if (e.failed) {
+      console.log(e.stderr);
+    } else {
+      console.log(e.message);
+    }
     return 1;
   }
   analytics.trackEvent(Category.EXECUTION, Action.STOP);

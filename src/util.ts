@@ -98,7 +98,7 @@ export const npmInstall = async (
   projectPath: string,
   answers: Answers
 ): Promise<ExecaReturns> => {
-  const execOptions: Options = {cwd: projectPath, stdio: 'ignore'};
+  const execOptions: Options = {cwd: projectPath};
   if (answers.yarn) {
     return execa('yarn', [], execOptions);
   } else {

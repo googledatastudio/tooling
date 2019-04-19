@@ -41,9 +41,9 @@ export const createFromTemplate = async (
 
   await util.spinnify('Installing project dependencies...', async () => {
     if (config.yarn) {
-      await execa('yarn', [], {cwd: projectPath, stdio: 'ignore'});
+      await execa('yarn', [], {cwd: projectPath});
     } else {
-      await execa('npm', ['install'], {cwd: projectPath, stdio: 'ignore'});
+      await execa('npm', ['install'], {cwd: projectPath});
     }
   });
 
