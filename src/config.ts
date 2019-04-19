@@ -175,13 +175,13 @@ const getMissing = async <T>(
   return Object.assign(defaults, args, answers);
 };
 
-export const getConfig = async (): Promise<VizConfig | ConnectorConfig> => {
-  const parser = getParser();
-  const args = parser.parseArgs();
-  const projectChoice: ProjectChoice = args.projectChoice as ProjectChoice;
+const withMissing = async (
+  args: VizConfig | ConnectorConfig
+): Promise<VizConfig | ConnectorConfig> => {
+  const projectChoice = args.projectChoice;
   switch (projectChoice) {
     case ProjectChoice.CONNECTOR:
-      return getMissing(args, connectorQuestions, {
+      return getMissing(args as ConnectorConfig, connectorQuestions, {
         manifestLogoUrl: 'logoUrl',
         manifestCompany: 'manifestCompany',
         manifestCompanyUrl: 'companyUrl',
@@ -192,8 +192,21 @@ export const getConfig = async (): Promise<VizConfig | ConnectorConfig> => {
       });
     case ProjectChoice.VIZ:
       await checkGsutilInstalled();
-      return getMissing(args, vizQuestions);
+      return getMissing(args as VizConfig, vizQuestions);
     default:
       return assertNever(projectChoice);
   }
+};
+
+export const getConfig = async (): Promise<VizConfig | ConnectorConfig> => {
+  const parser = getParser();
+  const args = parser.parseArgs();
+  const config = await withMissing(args);
+  Object.keys(config).forEach((key) => {
+    const val = (config as any)[key];
+    if (val === null) {
+      delete (config as any)[key];
+    }
+  });
+  return config;
 };

@@ -48,7 +48,6 @@ export const clone = async (
 ) => {
   const options: Options = {
     cwd: appscriptPath,
-    stdio: 'ignore',
   };
   let args = ['@google/clasp', 'clone'];
   args = rootDir !== undefined ? args.concat('--rootDir', rootDir) : args;
@@ -59,7 +58,6 @@ export const clone = async (
 export const push = async (appsscriptPath: string) => {
   const options: Options = {
     cwd: appsscriptPath,
-    stdio: 'ignore',
   };
   await execa('npx', ['@google/clasp', 'push', '--force'], options);
 };
@@ -68,7 +66,7 @@ export const version = async (
   appsscriptPath: string,
   description: string = 'Initial code'
 ) => {
-  const options: Options = {cwd: appsscriptPath, stdio: 'ignore'};
+  const options: Options = {cwd: appsscriptPath};
   await execa(`npx`, ['@google/clasp', 'version', description], options);
 };
 
