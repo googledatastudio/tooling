@@ -33,7 +33,7 @@ export const PWD = process.cwd();
   } catch (e) {
     analytics.trackEvent(Category.EXECUTION, Action.ERROR_STOP);
     if (e.failed) {
-      console.log(e.stderr)
+      console.log(e.stderr);
     } else {
       console.log(e.message);
     }
