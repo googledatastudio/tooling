@@ -63,37 +63,33 @@ function getOAuthService() {
 // variables.
 function checkConfiguration() {
   var scriptProperties = PropertiesService.getScriptProperties();
+  var errors = [];
   if (!scriptProperties.getProperty(CLIENT_ID_PROPERTY_NAME)) {
-    cc.newDebugError()
-      .setText(
-        'You must set the "' +
-          CLIENT_ID_PROPERTY_NAME +
-          '" script property for this project.'
-      )
-      .throwException();
+    errors.push(
+      'Set the "' +
+        CLIENT_ID_PROPERTY_NAME +
+        '" script property for this project.'
+    );
   }
   if (!scriptProperties.getProperty(CLIENT_ID_PROPERTY_NAME)) {
-    cc.newDebugError()
-      .setText(
-        'You must set the "' +
-          CLIENT_ID_PROPERTY_NAME +
-          '" script property for this project.'
-      )
-      .throwException();
+    errors.push(
+      'Set the "' +
+        CLIENT_ID_PROPERTY_NAME +
+        '" script property for this project.'
+    );
   }
   if (SERVICE_NAME === 'your-service-name') {
-    cc.newDebugError()
-      .setText('You must set "SERVICE_NAME" variable.')
-      .throwException();
+    errors.push('Set the "SERVICE_NAME" variable.');
   }
   if (AUTHORIZATION_BASE_URL === 'your-authorization-base-url') {
-    cc.newDebugError()
-      .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
-      .throwException();
+    errors.push('Set the "AUTHORIZATION_BASE_URL" variable.');
   }
   if (TOKEN_URL === 'your-token-url') {
+    errors.push('Set the "TOKEN_URL" variable.');
+  }
+  if (errors.length !== 0) {
     cc.newDebugError()
-      .setText('You must set "TOKEN_URL" variable.')
+      .setText(errors.join(' -  '))
       .throwException();
   }
 }
