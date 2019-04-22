@@ -5,16 +5,17 @@ var PASSWORD_PROPERTY_PATH = 'dscc.password';
 // TODO - implement your credentials validation logic here.
 function validateCredentials(username, password) {
   cc.newDebugError()
-      .setText('Implement the validateCredentials() function in ./src/auth.js')
-      .throwException();
+    .setText('Implement the validateCredentials() function in ./src/auth.js')
+    .throwException();
 }
 
 // https://developers.google.com/datastudio/connector/auth#getauthtype
 function getAuthType() {
-  return cc.newAuthTypeResponse()
-      .setAuthType(cc.AuthType.USER_PASS)
-      .setHelpUrl('https://www.example.org/connector-auth-help')
-      .build();
+  return cc
+    .newAuthTypeResponse()
+    .setAuthType(cc.AuthType.USER_PASS)
+    .setHelpUrl('https://www.example.org/connector-auth-help')
+    .build();
 }
 
 // https://developers.google.com/datastudio/connector/auth#isauthvalid
@@ -34,14 +35,14 @@ function setCredentials(request) {
   var validCreds = validateCredentials(username, password);
   if (!validCreds) {
     return {
-      errorCode: 'INVALID_CREDENTIALS'
+      errorCode: 'INVALID_CREDENTIALS',
     };
   }
   var userProperties = PropertiesService.getUserProperties();
   userProperties.setProperty(USERNAME_PROPERTY_PATH, username);
   userProperties.setProperty(PASSWORD_PROPERTY_PATH, password);
   return {
-    errorCode: 'NONE'
+    errorCode: 'NONE',
   };
 }
 

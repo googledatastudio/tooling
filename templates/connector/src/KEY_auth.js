@@ -4,8 +4,8 @@ var AUTH_PROPERTY_PATH = 'dscc.key';
 // TODO - implement your credentials validation logic here.
 function validateCredentials(key) {
   cc.newDebugError()
-      .setText('Implement the validateCredentials() function in ./src/auth.js')
-      .throwException();
+    .setText('Implement the validateCredentials() function in ./src/auth.js')
+    .throwException();
 }
 
 // https://developers.google.com/datastudio/connector/auth#getauthtype

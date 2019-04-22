@@ -12,28 +12,36 @@ var TOKEN_URL = 'your-token-url';
 (function checkConfiguration() {
   if (!PropertiesService.getProperty(CLIENT_ID_PROPERTY_NAME)) {
     cc.newDebugError()
-        .setText('You must set the "' + CLIENT_ID_PROPERTY_NAME + '" script property for this project.')
-        .throwException();
+      .setText(
+        'You must set the "' +
+          CLIENT_ID_PROPERTY_NAME +
+          '" script property for this project.'
+      )
+      .throwException();
   }
   if (!PropertiesService.getProperty(CLIENT_ID_PROPERTY_NAME)) {
     cc.newDebugError()
-        .setText('You must set the "' + CLIENT_ID_PROPERTY_NAME + '" script property for this project.')
-        .throwException();
+      .setText(
+        'You must set the "' +
+          CLIENT_ID_PROPERTY_NAME +
+          '" script property for this project.'
+      )
+      .throwException();
   }
   if (SERVICE_NAME === 'your-service-name') {
     cc.newDebugError()
-        .setText('You must set "SERVICE_NAME" variable.')
-        .throwException();
+      .setText('You must set "SERVICE_NAME" variable.')
+      .throwException();
   }
   if (AUTHORIZATION_BASE_URL === 'your-authorization-base-url') {
     cc.newDebugError()
-        .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
-        .throwException();
+      .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
+      .throwException();
   }
   if (TOKEN_URL === 'your-token-url') {
     cc.newDebugError()
-        .setText('You must set "TOKEN_URL" variable.')
-        .throwException();
+      .setText('You must set "TOKEN_URL" variable.')
+      .throwException();
   }
 })();
 
@@ -41,9 +49,9 @@ var TOKEN_URL = 'your-token-url';
 function getAuthType() {
   var AuthTypes = cc.AuthType;
   return cc
-      .newAuthTypeResponse()
-      .setAuthType(AuthTypes.OAUTH2)
-      .build();
+    .newAuthTypeResponse()
+    .setAuthType(AuthTypes.OAUTH2)
+    .build();
 }
 
 // https://developers.google.com/datastudio/connector/auth#get3pauthorizationurls
@@ -76,10 +84,10 @@ function getOAuthService() {
   var scriptProps = PropertiesService.getScriptProperties();
 
   return OAuth2.createService(SERVICE_NAME)
-      .setAuthorizationBaseUrl(AUTHORIZATION_BASE_URL)
-      .setTokenUrl(TOKEN_URL)
-      .setClientId(scriptProps.getProperty(CLIENT_ID_PROPERTY_NAME))
-      .setClientSecret(scriptProps.getProperty(CLIENT_SECRET_PROPERTY_NAME))
-      .setPropertyStore(PropertiesService.getUserProperties())
-      .setCallbackFunction('authCallback');
+    .setAuthorizationBaseUrl(AUTHORIZATION_BASE_URL)
+    .setTokenUrl(TOKEN_URL)
+    .setClientId(scriptProps.getProperty(CLIENT_ID_PROPERTY_NAME))
+    .setClientSecret(scriptProps.getProperty(CLIENT_SECRET_PROPERTY_NAME))
+    .setPropertyStore(PropertiesService.getUserProperties())
+    .setCallbackFunction('authCallback');
 }
