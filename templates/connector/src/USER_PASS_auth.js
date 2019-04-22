@@ -21,9 +21,9 @@ function getAuthType() {
 // https://developers.google.com/datastudio/connector/auth#isauthvalid
 function isAuthValid() {
   var userProperties = PropertiesService.getUserProperties();
-  var userName = userProperties.getProperty(USERNAME_PROPERTY_PATH);
+  var username = userProperties.getProperty(USERNAME_PROPERTY_PATH);
   var password = userProperties.getProperty(PASSWORD_PROPERTY_PATH);
-  return validateCredentials(userName, password);
+  return validateCredentials(username, password);
 }
 
 // https://developers.google.com/datastudio/connector/auth#setcredentials
