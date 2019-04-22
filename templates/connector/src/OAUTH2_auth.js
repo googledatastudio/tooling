@@ -9,7 +9,7 @@ var TOKEN_URL = 'your-token-url';
 
 // TODO - remove this function after setting the CLIENT_ID_PROPERTY_NAME &
 // CLIENT_SECRET_PROPERTY values in your script properties.
-(function () {
+(function checkConfiguration() {
   if (!PropertiesService.getProperty(CLIENT_ID_PROPERTY_NAME)) {
     cc.newDebugError()
         .setText('You must set the "' + CLIENT_ID_PROPERTY_NAME + '" script property for this project.')
@@ -18,6 +18,21 @@ var TOKEN_URL = 'your-token-url';
   if (!PropertiesService.getProperty(CLIENT_ID_PROPERTY_NAME)) {
     cc.newDebugError()
         .setText('You must set the "' + CLIENT_ID_PROPERTY_NAME + '" script property for this project.')
+        .throwException();
+  }
+  if (SERVICE_NAME = 'your-service-name') {
+    cc.newDebugError()
+        .setText('You must set "SERVICE_NAME" variable.')
+        .throwException();
+  }
+  if (AUTHORIZATION_BASE_URL = 'your-authorization-base-url') {
+    cc.newDebugError()
+        .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
+        .throwException();
+  }
+  if (TOKEN_URL = 'your-token-url') {
+    cc.newDebugError()
+        .setText('You must set "TOKEN_URL" variable.')
         .throwException();
   }
 })();

@@ -4,7 +4,7 @@ var AUTH_PROPERTY_PATH = 'dscc.key';
 // TODO - implement your validateKey logic here.
 function validateKey(key) {
   cc.newDebugError()
-    .setText('Implement an actual auth check in ./src/auth.js')
+    .setText('Implement the validateKey() function in ./src/auth.js')
     .throwException();
 }
 
