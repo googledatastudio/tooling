@@ -118,6 +118,7 @@ const commonQuestions: Array<Question<CommonConfig>> = [
     validate: projectNameValidator,
   },
 ];
+
 const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
   {
     name: 'devBucket',
@@ -134,9 +135,41 @@ const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
 ]);
+
+const getAuthHelpText = (authType: AuthType): string => {
+  switch (authType) {
+    case AuthType.NONE:
+      return 'No authentication required.';
+    case AuthType.KEY:
+      return 'Key or Token';
+    case AuthType.OAUTH2:
+      return 'Standard OAUTH2';
+    case AuthType.USER_PASS:
+      return 'Username & Password';
+    case AuthType.USER_TOKEN:
+      return 'Username & Token';
+    default:
+      return assertNever(authType);
+  }
+};
+
+const longestAuthType = Object.values(AuthType)
+  .map((a: AuthType): number => a.length)
+  .reduce((a, b) => Math.max(a, b), 0);
+
 const connectorQuestions: Array<
   Question<ConnectorConfig>
-> = commonQuestions.concat([]);
+> = commonQuestions.concat([
+  {
+    name: 'authType',
+    type: 'list',
+    message: 'How will users authenticate to your service?',
+    choices: Object.values(AuthType).map((auth: AuthType) => ({
+      name: `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
+      value: auth,
+    })),
+  },
+]);
 
 const getParser = (): argparse.ArgumentParser => {
   const parser = new argparse.ArgumentParser({
