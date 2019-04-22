@@ -31,7 +31,9 @@ export enum AuthType {
   USER_TOKEN = 'USER_TOKEN',
 }
 
-interface VizConfigHasDefaults {}
+interface VizConfigHasDefaults {
+  temp: string;
+}
 
 interface ConnectorConfigHasDefaults {
   manifestLogoUrl: string;
@@ -253,7 +255,7 @@ const withMissing = async (
       );
     case ProjectChoice.VIZ:
       await checkGsutilInstalled();
-      const vizDefaults: VizConfigHasDefaults = {};
+      const vizDefaults: VizConfigHasDefaults = {temp: 'temp'};
       return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:
       return assertNever(projectChoice);
