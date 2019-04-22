@@ -3,7 +3,7 @@ var USERNAME_PROPERTY_PATH = 'dscc.username';
 var TOKEN_PROPERTY_PATH = 'dscc.token';
 
 // TODO - implement your credentials validation logic here.
-function validateCredentials(username, password) {
+function validateCredentials(username, token) {
   cc.newDebugError()
     .setText('Implement the validateCredentials() function in ./src/auth.js')
     .throwException();
