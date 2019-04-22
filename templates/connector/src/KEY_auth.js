@@ -1,11 +1,11 @@
 var cc = DataStudioApp.createCommunityConnector();
 var AUTH_PROPERTY_PATH = 'dscc.key';
 
-// TODO - implement your validateKey logic here.
-function validateKey(key) {
+// TODO - implement your credentials validation logic here.
+function validateCredentials(key) {
   cc.newDebugError()
-    .setText('Implement the validateKey() function in ./src/auth.js')
-    .throwException();
+      .setText('Implement the validateCredentials() function in ./src/auth.js')
+      .throwException();
 }
 
 // https://developers.google.com/datastudio/connector/auth#getauthtype
@@ -21,14 +21,14 @@ function getAuthType() {
 function isAuthValid() {
   var userProperties = PropertiesService.getUserProperties();
   var key = userProperties.getProperty(AUTH_PROPERTY_PATH);
-  return validateKey(key);
+  return validateCredentials(key);
 }
 
 // https://developers.google.com/datastudio/connector/auth#setcredentials
 function setCredentials(request) {
   var key = request.key;
 
-  var validKey = validateKey(key);
+  var validKey = validateCredentials(key);
   if (!validKey) {
     return {
       errorCode: 'INVALID_CREDENTIALS',
