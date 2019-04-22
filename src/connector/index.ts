@@ -17,11 +17,11 @@
 
 import * as execa from 'execa';
 import {Options} from 'execa';
+import * as fs from 'mz/fs';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
 import {AuthType, ConnectorConfig} from '../config';
 import * as files from '../files';
-import * as fs from 'mz/fs';
 import {PWD} from '../index';
 import {Template} from '../main';
 import * as util from '../util';
