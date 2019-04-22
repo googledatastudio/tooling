@@ -21,12 +21,19 @@ import * as path from 'path';
 import terminalLink from 'terminal-link';
 import {AuthType, ConnectorConfig} from '../config';
 import * as files from '../files';
+import * as fs from 'mz/fs';
 import {PWD} from '../index';
 import {Template} from '../main';
 import * as util from '../util';
 import {format} from '../util';
 import * as appsscript from './appsscript';
 import * as validation from './validation';
+
+const OAUTH2_LIBRARY = {
+  userSymbol: 'OAuth2',
+  libraryId: '1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF',
+  version: '33',
+};
 
 const getTemplates = (config: ConnectorConfig): Template[] => {
   return [
@@ -80,7 +87,8 @@ const installDependencies = async (
 const createAppsScriptProject = async (
   projectPath: string,
   projectName: string,
-  execOptions: Options
+  execOptions: Options,
+  config: ConnectorConfig
 ): Promise<void> => {
   return util.spinnify('Creating Apps Script project...', async () => {
     await appsscript.create(projectPath, projectName);
@@ -91,6 +99,19 @@ const createAppsScriptProject = async (
       ['temp/appsscript.json', 'src/appsscript.json'],
       execOptions
     );
+    if (config.authType === AuthType.OAUTH2) {
+      const fileOptions = {encoding: 'utf8'};
+      const manifestPath = path.resolve(projectPath, 'src', 'appsscript.json');
+      const manifestString = await fs.readFile(manifestPath, fileOptions);
+      const manifest = JSON.parse(manifestString);
+      // Add the OAUTH2_LIBRARY dependency.
+      manifest.dependencies.libraries.push(OAUTH2_LIBRARY);
+      await fs.writeFile(
+        manifestPath,
+        JSON.stringify(manifest, undefined, '  '),
+        fileOptions
+      );
+    }
     await appsscript.push(projectPath);
   });
 };
@@ -194,7 +215,12 @@ export const createFromTemplate = async (
     if (config.scriptId !== undefined) {
       await cloneAppsScriptProject(projectPath, config.scriptId);
     } else {
-      await createAppsScriptProject(projectPath, projectName, execOptions);
+      await createAppsScriptProject(
+        projectPath,
+        projectName,
+        execOptions,
+        config
+      );
     }
     await manageDeployments(projectPath, config);
 

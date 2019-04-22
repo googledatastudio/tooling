@@ -13,7 +13,7 @@ function validateCredentials(username, password) {
 function getAuthType() {
   return cc
     .newAuthTypeResponse()
-    .setAuthType(cc.AuthType.USER_PASS)
+    .setAuthType(cc.AuthType.USER_TOKEN)
     .setHelpUrl('https://www.example.org/connector-auth-help')
     .build();
 }

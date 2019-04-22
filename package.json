@@ -42,6 +42,7 @@
     "prettier:check": "prettier --check \"{src,templates,test}/**/*.{ts,js}\""
   },
   "dependencies": {
+    "@types/mz": "^0.0.32",
     "argparse": "^1.0.10",
     "bluebird": "^3.5.1",
     "chalk": "^2.4.2",
@@ -51,6 +52,7 @@
     "execa": "^1.0.0",
     "inquirer": "^6.2.1",
     "insight": "^0.10.1",
+    "mz": "^2.7.0",
     "recursive-readdir": "^2.2.2",
     "terminal-link": "^1.2.0",
     "uuid": "^3.3.2"

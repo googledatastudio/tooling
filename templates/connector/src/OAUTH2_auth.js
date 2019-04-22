@@ -7,44 +7,6 @@ var SERVICE_NAME = 'your-service-name';
 var AUTHORIZATION_BASE_URL = 'your-authorization-base-url';
 var TOKEN_URL = 'your-token-url';
 
-// TODO - remove this function after setting the CLIENT_ID_PROPERTY_NAME &
-// CLIENT_SECRET_PROPERTY values in your script properties.
-(function checkConfiguration() {
-  if (!PropertiesService.getProperty(CLIENT_ID_PROPERTY_NAME)) {
-    cc.newDebugError()
-      .setText(
-        'You must set the "' +
-          CLIENT_ID_PROPERTY_NAME +
-          '" script property for this project.'
-      )
-      .throwException();
-  }
-  if (!PropertiesService.getProperty(CLIENT_ID_PROPERTY_NAME)) {
-    cc.newDebugError()
-      .setText(
-        'You must set the "' +
-          CLIENT_ID_PROPERTY_NAME +
-          '" script property for this project.'
-      )
-      .throwException();
-  }
-  if (SERVICE_NAME === 'your-service-name') {
-    cc.newDebugError()
-      .setText('You must set "SERVICE_NAME" variable.')
-      .throwException();
-  }
-  if (AUTHORIZATION_BASE_URL === 'your-authorization-base-url') {
-    cc.newDebugError()
-      .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
-      .throwException();
-  }
-  if (TOKEN_URL === 'your-token-url') {
-    cc.newDebugError()
-      .setText('You must set "TOKEN_URL" variable.')
-      .throwException();
-  }
-})();
-
 // https://developers.google.com/datastudio/connector/auth#getauthtype
 function getAuthType() {
   var AuthTypes = cc.AuthType;
@@ -81,6 +43,9 @@ function resetAuth() {
 
 // Helper function to get the configured OauthService.
 function getOAuthService() {
+  // Remove this call after setting the necessary config values.
+  checkConfiguration();
+
   var scriptProps = PropertiesService.getScriptProperties();
 
   return OAuth2.createService(SERVICE_NAME)
@@ -90,4 +55,45 @@ function getOAuthService() {
     .setClientSecret(scriptProps.getProperty(CLIENT_SECRET_PROPERTY_NAME))
     .setPropertyStore(PropertiesService.getUserProperties())
     .setCallbackFunction('authCallback');
+}
+
+// TODO - remove this function, (and it's invocation on line 47) after setting
+// the `OAUTH_CLIENT_ID`, & `OAUTH_CLIENT_SECRET` values in your script
+// properties and the SERVICE_NAME, AUTHORIZATION_BASE_URL, & TOKEN_URL
+// variables.
+function checkConfiguration() {
+  var scriptProperties = PropertiesService.getScriptProperties();
+  if (!scriptProperties.getProperty(CLIENT_ID_PROPERTY_NAME)) {
+    cc.newDebugError()
+      .setText(
+        'You must set the "' +
+          CLIENT_ID_PROPERTY_NAME +
+          '" script property for this project.'
+      )
+      .throwException();
+  }
+  if (!scriptProperties.getProperty(CLIENT_ID_PROPERTY_NAME)) {
+    cc.newDebugError()
+      .setText(
+        'You must set the "' +
+          CLIENT_ID_PROPERTY_NAME +
+          '" script property for this project.'
+      )
+      .throwException();
+  }
+  if (SERVICE_NAME === 'your-service-name') {
+    cc.newDebugError()
+      .setText('You must set "SERVICE_NAME" variable.')
+      .throwException();
+  }
+  if (AUTHORIZATION_BASE_URL === 'your-authorization-base-url') {
+    cc.newDebugError()
+      .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
+      .throwException();
+  }
+  if (TOKEN_URL === 'your-token-url') {
+    cc.newDebugError()
+      .setText('You must set "TOKEN_URL" variable.')
+      .throwException();
+  }
 }
