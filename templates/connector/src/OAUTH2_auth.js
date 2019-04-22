@@ -89,7 +89,7 @@ function checkConfiguration() {
   }
   if (errors.length !== 0) {
     cc.newDebugError()
-      .setText(errors.join(' -  '))
+      .setText(errors.join(' '))
       .throwException();
   }
 }
