@@ -20,17 +20,17 @@ var TOKEN_URL = 'your-token-url';
         .setText('You must set the "' + CLIENT_ID_PROPERTY_NAME + '" script property for this project.')
         .throwException();
   }
-  if (SERVICE_NAME = 'your-service-name') {
+  if (SERVICE_NAME === 'your-service-name') {
     cc.newDebugError()
         .setText('You must set "SERVICE_NAME" variable.')
         .throwException();
   }
-  if (AUTHORIZATION_BASE_URL = 'your-authorization-base-url') {
+  if (AUTHORIZATION_BASE_URL === 'your-authorization-base-url') {
     cc.newDebugError()
         .setText('You must set "AUTHORIZATION_BASE_URL" variable.')
         .throwException();
   }
-  if (TOKEN_URL = 'your-token-url') {
+  if (TOKEN_URL === 'your-token-url') {
     cc.newDebugError()
         .setText('You must set "TOKEN_URL" variable.')
         .throwException();
