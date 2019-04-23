@@ -6,7 +6,7 @@ beforeAll(async () => {
 });
 
 test('viz bad dev bucket', async () => {
-  expect(
+  await expect(
     execa('node', [
       path.resolve('build', 'index.js'),
       'viz',
@@ -17,7 +17,7 @@ test('viz bad dev bucket', async () => {
 });
 
 test('viz bad prod bucket', async () => {
-  expect(
+  await expect(
     execa('node', [
       path.resolve('build', 'index.js'),
       'viz',
