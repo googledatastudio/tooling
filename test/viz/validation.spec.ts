@@ -26,6 +26,16 @@ test('parseBucketName_bucketWithChildDirectories', () => {
   expect(actual).toEqual('gs://bucketName');
 });
 
+test('parseBucketName_extraSlashes', () => {
+  const actual = sut.parseBucketName('gs://bucketName//');
+  expect(actual).toBeUndefined();
+});
+
+test('parseBucketName_extraSlashesNested', () => {
+  const actual = sut.parseBucketName('gs://bucketName/test1//hi');
+  expect(actual).toBeUndefined();
+});
+
 test('parseBucketName_bucketWithMultipleChildDirectories', () => {
   const actual = sut.parseBucketName(
     'gs://bucketName/childPart/secondChildPart'

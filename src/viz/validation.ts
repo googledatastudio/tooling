@@ -50,11 +50,11 @@ No files have been created.
 };
 
 export const parseBucketName = (bucketPath: string): string | undefined => {
-  const matches = bucketPath.match(/(gs:\/\/[^/\s]+)/);
+  const matches = bucketPath.match(/(gs:\/\/[-a-zA-Z]+)\/?([-a-zA-Z]+\/?)*$/);
   if (matches === null) {
     return undefined;
   }
-  return matches[0];
+  return matches[1];
 };
 
 export const hasBucketPermissions = async (
@@ -62,7 +62,7 @@ export const hasBucketPermissions = async (
 ): Promise<boolean | string> => {
   const gcsRootBucket = parseBucketName(gcsPath);
   if (gcsRootBucket === undefined) {
-    return `${gcsPath} is an invalid gcs bucket name.`;
+    throw new Error(`${gcsPath} is an invalid gcs bucket name.`);
   }
   await execa(`gsutil`, ['acl', 'get', gcsRootBucket]);
   return true;
