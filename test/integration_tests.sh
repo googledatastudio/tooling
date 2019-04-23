@@ -4,9 +4,9 @@ set -ex
 
 yarn run build;
 
-# Interative Tests
-for f in ./integration-tests/*.exp; do
-  expect "$f"
+# Interactive Tests
+for f in ./test/integration-tests/*.exp; do
+  expect "$f" > /dev/null 2>&1
 done
 
 # Flag tests. Tests with prefixed with a `!` are expected to fail.

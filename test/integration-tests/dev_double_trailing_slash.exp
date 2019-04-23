@@ -43,7 +43,7 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn node ../build/index.js viz
+spawn node ./build/index.js viz
 match_max 100000
 send -- "m"
 send -- "y"
