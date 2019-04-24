@@ -17,21 +17,6 @@
   },
   "devDependencies": {
     "@google/dscc": "^0.3.8",
-    "@google/dscc-scripts": "^1.0.0",
-    "autoprefixer": "^9.4.5",
-    "bluebird": "^3.5.3",
-    "commander": "^2.19.0",
-    "copy-webpack-plugin": "^4.6.0",
-    "mini-css-extract-plugin": "^0.5.0",
-    "postcss-loader": "^3.0.0",
-    "shelljs": "^0.8.3",
-    "webpack": "^4.26.1",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
-    "webpack-merge": "^4.2.1",
-    "webpack-plugin-replace": "^1.1.1",
-    "chalk": "^2.4.2"
-  },
-  "dependencies": {
+    "@google/dscc-scripts": "^1.0.0"
   }
 }
