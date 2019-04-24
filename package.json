@@ -38,8 +38,8 @@
     "test": "jest",
     "test:watch": "jest --watchAll --coverage",
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\"",
-    "prettier": "prettier --write \"{src,templates,test}/**/*.{ts,js}\"",
-    "prettier:check": "prettier --check \"{src,templates,test}/**/*.{ts,js}\"",
+    "prettier": "prettier --write '{src,templates,test}/**/*.{ts,js}'",
+    "prettier:check": "prettier --check '{src,templates,test}/**/*.{ts,js}'",
     "test:ci": "yarn prettier:check && yarn lint && yarn build:check && yarn test && ./test/integration_tests.sh"
   },
   "dependencies": {
