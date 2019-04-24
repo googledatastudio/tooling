@@ -50,7 +50,7 @@ No files have been created.
 };
 
 export const parseBucketName = (bucketPath: string): string => {
-  const matches = bucketPath.match(/^(gs:\/\/[-\w]+)?(?:\/[\w-]+)*\/?$/);
+  const matches = bucketPath.match(/^(gs:\/\/[-\w]+)(?:\/[\w-]+)*\/?$/);
 
   if (matches === null) {
     throw new Error(`${bucketPath} is an invalid gcs bucket name.`);
