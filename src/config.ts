@@ -23,8 +23,19 @@ interface CommonConfig {
   basePath: string;
 }
 
-export interface ConnectorConfig extends CommonConfig {
-  scriptId?: string;
+export enum AuthType {
+  NONE = 'NONE',
+  OAUTH2 = 'OAUTH2',
+  KEY = 'KEY',
+  USER_PASS = 'USER_PASS',
+  USER_TOKEN = 'USER_TOKEN',
+}
+
+interface VizConfigHasDefaults {
+  temp: string;
+}
+
+interface ConnectorConfigHasDefaults {
   manifestLogoUrl: string;
   manifestCompany: string;
   manifestCompanyUrl: string;
@@ -32,8 +43,15 @@ export interface ConnectorConfig extends CommonConfig {
   manifestSupportUrl: string;
   manifestDescription: string;
   manifestSources: string;
+  authType: AuthType;
 }
-export interface VizConfig extends CommonConfig {
+
+export interface ConnectorConfig
+  extends CommonConfig,
+    ConnectorConfigHasDefaults {
+  scriptId?: string;
+}
+export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
   devBucket: string;
   prodBucket: string;
 }
@@ -72,6 +90,12 @@ const addConnectorParser = (
     help: 'The id of the script to clone.',
   });
 
+  connectorParser.addArgument(['--auth_type'], {
+    dest: 'authType',
+    help: 'The authorization type for the connector.',
+    choices: Object.values(AuthType),
+  });
+
   return connectorParser;
 };
 
@@ -96,6 +120,7 @@ const commonQuestions: Array<Question<CommonConfig>> = [
     validate: projectNameValidator,
   },
 ];
+
 const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
   {
     name: 'devBucket',
@@ -112,9 +137,41 @@ const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
 ]);
+
+const getAuthHelpText = (authType: AuthType): string => {
+  switch (authType) {
+    case AuthType.NONE:
+      return 'No authentication required.';
+    case AuthType.KEY:
+      return 'Key or Token';
+    case AuthType.OAUTH2:
+      return 'Standard OAUTH2';
+    case AuthType.USER_PASS:
+      return 'Username & Password';
+    case AuthType.USER_TOKEN:
+      return 'Username & Token';
+    default:
+      return assertNever(authType);
+  }
+};
+
+const longestAuthType = Object.values(AuthType)
+  .map((a: AuthType): number => a.length)
+  .reduce((a, b) => Math.max(a, b), 0);
+
 const connectorQuestions: Array<
   Question<ConnectorConfig>
-> = commonQuestions.concat([]);
+> = commonQuestions.concat([
+  {
+    name: 'authType',
+    type: 'list',
+    message: 'How will users authenticate to your service?',
+    choices: Object.values(AuthType).map((auth: AuthType) => ({
+      name: `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
+      value: auth,
+    })),
+  },
+]);
 
 const getParser = (): argparse.ArgumentParser => {
   const parser = new argparse.ArgumentParser({
@@ -145,10 +202,10 @@ const getParser = (): argparse.ArgumentParser => {
   return parser;
 };
 
-const getMissing = async <T>(
+const getMissing = async <T extends U, U>(
   args: T,
   questions: Array<Question<T>>,
-  defaults = {}
+  defaults: U
 ): Promise<T> => {
   const providedKeys = Object.keys(args).filter(
     (a) => (args as any)[a] !== null
@@ -181,7 +238,7 @@ const withMissing = async (
   const projectChoice = args.projectChoice;
   switch (projectChoice) {
     case ProjectChoice.CONNECTOR:
-      return getMissing(args as ConnectorConfig, connectorQuestions, {
+      const connectorDefaults: ConnectorConfigHasDefaults = {
         manifestLogoUrl: 'logoUrl',
         manifestCompany: 'manifestCompany',
         manifestCompanyUrl: 'companyUrl',
@@ -189,10 +246,17 @@ const withMissing = async (
         manifestSupportUrl: 'supportUrl',
         manifestDescription: 'description',
         manifestSources: '',
-      });
+        authType: AuthType.NONE,
+      };
+      return getMissing(
+        args as ConnectorConfig,
+        connectorQuestions,
+        connectorDefaults
+      );
     case ProjectChoice.VIZ:
       await checkGsutilInstalled();
-      return getMissing(args as VizConfig, vizQuestions);
+      const vizDefaults: VizConfigHasDefaults = {temp: 'temp'};
+      return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:
       return assertNever(projectChoice);
   }

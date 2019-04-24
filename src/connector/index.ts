@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import clear = require('clear');
 import * as execa from 'execa';
 import {Options} from 'execa';
+import * as fs from 'mz/fs';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
-import {ConnectorConfig} from '../config';
+import {AuthType, ConnectorConfig} from '../config';
 import * as files from '../files';
 import {PWD} from '../index';
 import {Template} from '../main';
@@ -28,6 +28,12 @@ import * as util from '../util';
 import {format} from '../util';
 import * as appsscript from './appsscript';
 import * as validation from './validation';
+
+const OAUTH2_LIBRARY = {
+  userSymbol: 'OAuth2',
+  libraryId: '1B7FSrk5Zi6L1rSxxTDgDEUsPzlukDsi4KGuTMorsTQHhGBzBkMun4iDF',
+  version: '33',
+};
 
 const getTemplates = (config: ConnectorConfig): Template[] => {
   return [
@@ -81,7 +87,8 @@ const installDependencies = async (
 const createAppsScriptProject = async (
   projectPath: string,
   projectName: string,
-  execOptions: Options
+  execOptions: Options,
+  config: ConnectorConfig
 ): Promise<void> => {
   return util.spinnify('Creating Apps Script project...', async () => {
     await appsscript.create(projectPath, projectName);
@@ -92,6 +99,19 @@ const createAppsScriptProject = async (
       ['temp/appsscript.json', 'src/appsscript.json'],
       execOptions
     );
+    if (config.authType === AuthType.OAUTH2) {
+      const fileOptions = {encoding: 'utf8'};
+      const manifestPath = path.resolve(projectPath, 'src', 'appsscript.json');
+      const manifestString = await fs.readFile(manifestPath, fileOptions);
+      const manifest = JSON.parse(manifestString);
+      // Add the OAUTH2_LIBRARY dependency.
+      manifest.dependencies.libraries.push(OAUTH2_LIBRARY);
+      await fs.writeFile(
+        manifestPath,
+        JSON.stringify(manifest, undefined, '  '),
+        fileOptions
+      );
+    }
     await appsscript.push(projectPath);
   });
 };
@@ -148,52 +168,84 @@ const manageDeployments = async (
   });
 };
 
+type AuthTypeFileMap = {[TKey in AuthType]: string};
+const authTypeToFile: AuthTypeFileMap = {
+  [AuthType.NONE]: 'NONE_auth.js',
+  [AuthType.USER_PASS]: 'USER_PASS_auth.js',
+  [AuthType.USER_TOKEN]: 'USER_TOKEN_auth.js',
+  [AuthType.OAUTH2]: 'OAUTH2_auth.js',
+  [AuthType.KEY]: 'KEY_auth.js',
+};
+
+const removeExcessAuthFiles = async (
+  projectPath: string,
+  config: ConnectorConfig
+) => {
+  const chosenAuthType = config.authType;
+  const execOptions: Options = {cwd: path.join(projectPath, 'src')};
+  return Promise.all(
+    Object.values(AuthType).map(async (authType: AuthType) => {
+      if (authType !== chosenAuthType) {
+        return execa('rm', [authTypeToFile[authType]], execOptions);
+      } else {
+        return execa('mv', [authTypeToFile[authType], 'auth.js'], execOptions);
+      }
+    })
+  );
+};
+
 export const createFromTemplate = async (
   config: ConnectorConfig
 ): Promise<number> => {
-  clear();
   const {projectName, basePath} = config;
   const templatePath = path.join(basePath, 'templates', config.projectChoice);
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
-  await util.spinnify('Updating templates with your values...', async () => {
-    await files.fixTemplates(projectPath, getTemplates(config));
-  });
+  try {
+    await util.spinnify('Updating templates with your values...', async () => {
+      await files.fixTemplates(projectPath, getTemplates(config));
+      await removeExcessAuthFiles(projectPath, config);
+    });
 
-  const execOptions: Options = {cwd: projectPath};
+    const execOptions: Options = {cwd: projectPath};
 
-  await installDependencies(projectPath, config);
-  await ensureAuthenticated(execOptions);
+    await installDependencies(projectPath, config);
+    await ensureAuthenticated(execOptions);
 
-  if (config.scriptId !== undefined) {
-    await cloneAppsScriptProject(projectPath, config.scriptId);
-  } else {
-    await createAppsScriptProject(projectPath, projectName, execOptions);
-  }
-  await manageDeployments(projectPath, config);
+    if (config.scriptId !== undefined) {
+      await cloneAppsScriptProject(projectPath, config.scriptId);
+    } else {
+      await createAppsScriptProject(
+        projectPath,
+        projectName,
+        execOptions,
+        config
+      );
+    }
+    await manageDeployments(projectPath, config);
 
-  // Remove temp directory.
-  await execa('rm', ['-rf', 'temp'], execOptions);
+    // Remove temp directory.
+    await execa('rm', ['-rf', 'temp'], execOptions);
 
-  const connectorOverview = format.blue(
-    terminalLink(
-      'connector overview',
-      'https://developers.google.com/datastudio/connector/'
-    )
-  );
-  const styledProjectName = format.green(projectName);
-  const cdDirection = format.yellow(`cd ${projectName}`);
-  const runCmd = config.yarn ? 'yarn' : 'npm run';
-  const open = format.red(`${runCmd} open`);
-  const push = format.blue(`${runCmd} push`);
-  const watch = format.green(`${runCmd} watch`);
-  const prettier = format.yellow(`${runCmd} prettier`);
-  const tryLatest = format.red(`${runCmd} try_latest`);
-  const tryProduction = format.blue(`${runCmd} try_production`);
-  const updateProduction = format.green(`${runCmd} update_production`);
+    const connectorOverview = format.blue(
+      terminalLink(
+        'connector overview',
+        'https://developers.google.com/datastudio/connector/'
+      )
+    );
+    const styledProjectName = format.green(projectName);
+    const cdDirection = format.yellow(`cd ${projectName}`);
+    const runCmd = config.yarn ? 'yarn' : 'npm run';
+    const open = format.red(`${runCmd} open`);
+    const push = format.blue(`${runCmd} push`);
+    const watch = format.green(`${runCmd} watch`);
+    const prettier = format.yellow(`${runCmd} prettier`);
+    const tryLatest = format.red(`${runCmd} try_latest`);
+    const tryProduction = format.blue(`${runCmd} try_production`);
+    const updateProduction = format.green(`${runCmd} update_production`);
 
-  console.log(
-    `\
+    console.log(
+      `\
 Created a new community connector: ${styledProjectName}\n\
 \n\
 If this is your first connector, see ${connectorOverview}\n\
@@ -210,6 +262,10 @@ ${tryLatest} - opens the deployment with your latest code.\n\
 ${tryProduction} - opens your production deployment.\n\
 ${updateProduction} - updates your production deployment to use the latest code.\n\
 `
-  );
-  return 0;
+    );
+    return 0;
+  } catch (e) {
+    await execa('rm', ['-rf', projectPath]);
+    throw e;
+  }
 };
