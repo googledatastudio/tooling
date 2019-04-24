@@ -16,30 +16,50 @@
  */
 import * as sut from '../../src/viz/validation';
 
-test('parseBucketName_topLevelBucket', () => {
+test('parseBucketName top-level bucket w/ no trailing slash is parsed correctly.', () => {
   const actual = sut.parseBucketName('gs://bucketName');
   expect(actual).toEqual('gs://bucketName');
 });
 
-test('parseBucketName_bucketWithChildDirectories', () => {
+test('parseBucketName bucket w/ child directory is parsed correctly.', () => {
   const actual = sut.parseBucketName('gs://bucketName/childPart');
   expect(actual).toEqual('gs://bucketName');
 });
 
-test('parseBucketName_bucketWithMultipleChildDirectories', () => {
+test('parseBucketName bucket w/ multiple child directories is parsed correctly.', () => {
   const actual = sut.parseBucketName(
     'gs://bucketName/childPart/secondChildPart'
   );
   expect(actual).toEqual('gs://bucketName');
 });
 
-test('addBucketPrefix no prefix', () => {
+test('parseBucketName extra slashes are considered invalid.', () => {
+  expect(() => sut.parseBucketName('gs://bucketName//')).toThrow(
+    'invalid gcs bucket name'
+  );
+});
+
+test('parseBucketName very long invalid path can be parsed quickly.', async () => {
+  expect(() =>
+    sut.parseBucketName(
+      'gs://bucketName/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa//aaaaaaaaaa/'
+    )
+  ).toThrow('invalid gcs bucket name');
+}, 1000);
+
+test('parseBucketName double slashes are considered invalid.', () => {
+  expect(() => sut.parseBucketName('gs://bucketName/test1//hi')).toThrow(
+    'invalid gcs bucket name'
+  );
+});
+
+test('addBucketPrefix adds prefix when no prefix is present.', () => {
   const actual = sut.addBucketPrefix('my-bucket-name');
   expect(actual.startsWith('gs://')).toEqual(true);
   expect(actual).toEqual('gs://my-bucket-name');
 });
 
-test('addBucketPrefix already has prefix', () => {
+test('addBucketPrefix does nothing when a prefix is already present.', () => {
   const actual = sut.addBucketPrefix('gs://my-bucket-name');
   expect(actual.startsWith('gs://')).toEqual(true);
   expect(actual).toEqual('gs://my-bucket-name');

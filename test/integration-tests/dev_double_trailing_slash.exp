@@ -1,0 +1,22 @@
+#!/usr/bin/expect -f
+
+log_user 0
+set force_conservative 1  ;# set to 1 to force conservative mode even if
+;# script wasn't run conservatively originally
+if {$force_conservative} {
+    set send_slow {1 .1}
+    proc send {ignore arg} {
+        sleep .3
+        exp_send -s -- $arg
+    }
+}
+
+set timeout -1
+spawn node ./build/index.js viz
+match_max 100000
+send -- "my-viz\r"
+expect "What is your dev bucket?"
+send -- "test//\r"
+expect "Error: gs://test// is an invalid gcs bucket name."
+send -- ""
+expect eof
