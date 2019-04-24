@@ -6,7 +6,7 @@ yarn run build;
 
 # Interactive Tests
 for f in ./test/integration-tests/*.exp; do
-  expect "$f" > /dev/null 2>&1
+  expect "$f"
 done
 
 # Flag tests. Tests with prefixed with a `!` are expected to fail.

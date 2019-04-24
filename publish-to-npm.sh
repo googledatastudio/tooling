@@ -21,6 +21,8 @@ if test "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)"; then
   exit 1
 fi
 
+yarn test:ci
+
 set -x
 # Install needed dependencies
 yarn install

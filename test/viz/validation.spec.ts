@@ -27,13 +27,23 @@ test('parseBucketName_bucketWithChildDirectories', () => {
 });
 
 test('parseBucketName_extraSlashes', () => {
-  const actual = sut.parseBucketName('gs://bucketName//');
-  expect(actual).toBeUndefined();
+  expect(() => sut.parseBucketName('gs://bucketName//')).toThrow(
+    'invalid gcs bucket name'
+  );
+});
+
+test('parseBucketName_bigPath', async () => {
+  expect(() =>
+    sut.parseBucketName(
+      'gs://bucketName/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa//aaaaaaaaaa/'
+    )
+  ).toThrow('invalid gcs bucket name');
 });
 
 test('parseBucketName_extraSlashesNested', () => {
-  const actual = sut.parseBucketName('gs://bucketName/test1//hi');
-  expect(actual).toBeUndefined();
+  expect(() => sut.parseBucketName('gs://bucketName/test1//hi')).toThrow(
+    'invalid gcs bucket name'
+  );
 });
 
 test('parseBucketName_bucketWithMultipleChildDirectories', () => {
