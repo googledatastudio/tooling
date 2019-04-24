@@ -7,4 +7,8 @@ branches:
 cache:
   directories:
   - node_modules/
-script: yarn prettier:check && yarn lint && yarn build:check
+script:  yarn test:ci
+addons:
+  apt:
+    packages:
+      - expect
