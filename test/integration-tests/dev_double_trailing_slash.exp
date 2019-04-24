@@ -15,6 +15,7 @@ set timeout -1
 spawn node ./build/index.js viz
 match_max 100000
 send -- "my-viz\r"
+expect "What is your dev bucket?"
 send -- "test//\r"
 expect "Error: gs://test// is an invalid gcs bucket name."
 send -- ""
