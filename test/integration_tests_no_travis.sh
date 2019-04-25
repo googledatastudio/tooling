@@ -5,7 +5,7 @@ set -e
 function kill_children() {
   for job in $(jobs -p)
   do
-    kill -s SIGINT "$job"
+    kill -s SIGTERM "$job"
   done
 }
 
@@ -20,10 +20,13 @@ trap kill_children EXIT
 yarn run build;
 
 # Logout of clasp
-npx @google/clasp logout
-echo "Log into clasp with a test account, or you will pollute your Apps Scripts UI with a bunch of nonsense projects."
-npx @google/clasp login
+if ! test "$1" = "skip_logout"; then
+  npx @google/clasp logout
+  echo "Log into clasp with a test account, or you will pollute your Apps Scripts UI with a bunch of nonsense projects."
+  npx @google/clasp login
+fi
 
+set -x
 (# Happy path for connector
   trap 'rm -rf ./my-connector' EXIT
   ./test/integration-tests-no-travis/connector_happy_path.exp
