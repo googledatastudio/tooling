@@ -1,26 +1,43 @@
 #!/bin/bash
 
-set -ex
+set -e
+
+function kill_children() {
+  for job in $(jobs -p)
+  do
+    kill -s SIGINT "$job"
+  done
+}
+
+function failed() {
+  echo "$1"
+  exit 1
+}
+
+# Make sure that children are sent a SIGINT if any part of this script fails.
+trap kill_children EXIT
 
 yarn run build;
 
 # Logout of clasp
 npx @google/clasp logout
-set +x
 echo "Log into clasp with a test account, or you will pollute your Apps Scripts UI with a bunch of nonsense projects."
-set -x
 npx @google/clasp login
 
-# Happy path for connector
-./test/integration-tests-no-travis/connector_happy_path.exp
-# Just check that it created a directory.
-test -d ./my-connector
-# Clean up created connector
-rm -rf ./my-connector
+(# Happy path for connector
+  trap 'rm -rf ./my-connector' EXIT
+  ./test/integration-tests-no-travis/connector_happy_path.exp
+  test -d ./my-connector || failed "Connector happy path failed."
+) &
 
-# Happy path for viz
-./test/integration-tests-no-travis/viz_happy_path.exp
-# Just check that it created a directory.
-test -d ./my-viz
-# Clean up created connector
-rm -rf ./my-viz
+(# Happy path for viz
+  trap 'rm -rf ./my-viz' EXIT
+  ./test/integration-tests-no-travis/viz_happy_path.exp
+  test -d ./my-viz || failed "Viz happy path failed."
+) &
+
+while wait -n;
+do :
+done
+LAST_STATUS="$?"
+test "$LAST_STATUS" -eq 127 || exit "$LAST_STATUS"
