@@ -1,6 +1,6 @@
 {
   "name": "@google/dscc-gen",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "repository": "googledatastudio/dscc-gen",
   "description": "Create component & connector projects with sane defaults.",
   "main": "build/index.js",
@@ -43,6 +43,7 @@
     "test:ci": "yarn prettier:check && yarn lint && yarn build:check && yarn test && ./test/integration_tests.sh"
   },
   "dependencies": {
+    "@google/clasp": "^2.1.0",
     "@types/mz": "^0.0.32",
     "argparse": "^1.0.10",
     "bluebird": "^3.5.1",
@@ -59,7 +60,6 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@google/clasp": "^2.1.0",
     "@types/argparse": "^1.0.36",
     "@types/bluebird": "^3.5.26",
     "@types/cli-spinner": "^0.2.0",
