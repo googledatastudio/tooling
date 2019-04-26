@@ -161,10 +161,11 @@ const longestAuthType = Object.values(AuthType)
 
 const connectorQuestions: Array<
   Question<ConnectorConfig>
-> = commonQuestions.concat([
+> = (commonQuestions as Array<Question<ConnectorConfig>>).concat([
   {
     name: 'authType',
     type: 'list',
+    when: (answers: ConnectorConfig) => answers.scriptId === undefined,
     message: 'How will users authenticate to your service?',
     choices: Object.values(AuthType).map((auth: AuthType) => ({
       name: `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
@@ -207,26 +208,43 @@ const getMissing = async <T extends U, U>(
   questions: Array<Question<T>>,
   defaults: U
 ): Promise<T> => {
-  const providedKeys = Object.keys(args).filter(
-    (a) => (args as any)[a] !== null
+  // Since args is coming from argparse, they are null if not provided. Since
+  // we're cheating a bit and saying that the type that argparse returns is T,
+  // we need to remove null values so optional values are undefined instead of
+  // null.
+  const nonNullArgs = (Object.keys(args) as Array<keyof T>).reduce(
+    (acc: T, a: keyof T) => {
+      if (acc[a] === null) {
+        delete acc[a];
+      }
+      return acc;
+    },
+    Object.assign({}, args) as T
   );
-  const validations = providedKeys.map(async (a) => {
-    const value = (args as any)[a];
-    if (value !== undefined) {
-      const question = questions.find((q) => q.name === a);
-      if (question !== undefined) {
-        const {validate} = question;
-        if (validate !== undefined) {
-          return validate(value);
+  const providedKeys = Object.keys(nonNullArgs);
+  const validations = (Object.keys(nonNullArgs) as Array<keyof T>).map(
+    async (a: keyof T) => {
+      const value = args[a];
+      if (value !== undefined) {
+        const question = questions.find((q) => q.name === a);
+        if (question !== undefined) {
+          const {validate} = question;
+          if (validate !== undefined) {
+            return validate(value);
+          }
         }
       }
     }
-  });
+  );
   await Promise.all(validations);
 
-  const remainingQuestions = questions.filter((q) => {
-    return providedKeys.find((key) => q.name === key) === undefined;
-  });
+  const remainingQuestions = questions
+    .filter((q) => providedKeys.find((key) => q.name === key) === undefined)
+    .filter((q) =>
+      q.when !== undefined && typeof q.when !== 'boolean'
+        ? q.when(nonNullArgs)
+        : true
+    );
 
   const answers = await inquirer.prompt(remainingQuestions);
   return Object.assign(defaults, args, answers);
