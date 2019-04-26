@@ -1,6 +1,6 @@
 {
   "name": "@google/dscc-gen",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "repository": "googledatastudio/dscc-gen",
   "description": "Create component & connector projects with sane defaults.",
   "main": "build/index.js",
