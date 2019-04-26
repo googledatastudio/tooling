@@ -23,7 +23,6 @@ import * as files from '../files';
 export const create = async (appsscriptPath: string, projectName: string) => {
   const options: Options = {
     cwd: appsscriptPath,
-    stdio: 'ignore',
   };
   await execa(
     'npx',
