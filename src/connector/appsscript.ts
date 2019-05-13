@@ -82,7 +82,7 @@ export const deploy = async (
   const options: Options = {cwd: appsscriptPath};
   const {stdout: out} = await execa(
     'npx',
-    ['@google/clasp', 'deploy', '--description', `"${deploymentName}"`],
+    ['@google/clasp', 'deploy', '--description', `${deploymentName}`],
     options
   );
 
