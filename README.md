@@ -1,14 +1,20 @@
-# dscc-gen
+<h1 align="center">
+  <br>
+  dscc-gen
+  <br>
+</h1>
+
+<p align="center"><a href="https://www.npmjs.com/package/@google/dscc-gen"><img src="https://img.shields.io/npm/v/@google/dscc-gen.svg" alt="npm Version"></a> <a href="https://npmcharts.com/compare/@google/dscc-gen?minimal=true"><img src="https://img.shields.io/npm/dw/@google/dscc-gen.svg" alt="npm Downloads"></a> <a href="http://packagequality.com/#?package=%40google%2Fdscc-gen"><img src="http://npm.packagequality.com/shield/%40google%2Fdscc-gen.svg" alt="Package Quality"></a> <a href="https://github.com/google/clasp"><img src="https://img.shields.io/badge/built%20with-clasp-4285f4.svg" alt="Built with Clasp"></a></p>
 
 Bootstrap a community connector or community viz from the commandline.
 
-**dscc-gen requires npm 5.2.0 or later**
+> Note: **dscc-gen requires npm 5.2.0 or later**
 
 ## Running
 
 `npx @google/dscc-gen viz` or `npx @google/dscc-gen connector`
 
-Note: dscc-gen supports a few flags. Call with a `-h` or `--help` to see
+> Note: dscc-gen supports a few flags. Call with a `-h` or `--help` to see
 options.
 
 dscc-gen will ask a series of questions, then create a new project based on the
