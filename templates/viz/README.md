@@ -28,7 +28,7 @@ CSS        | `src/index.css`     | [write css code]
 To create a new community visualization based on this template, run the command
 
 ```bash
-npx @google/dscc-gen --project_choice community-viz
+npx @google/dscc-gen viz
 ```
 
 After running this command (and answering some prompts), you will have a minimal
@@ -39,15 +39,14 @@ working visualization and have set GCS buckets for a dev and prod version. Edit
 
 1.  Update the dimensions and metrics your visualization requires in
     `src/index.json`
-1.  Run the command `npm run update_message -- --format=object` to build and
-    deploy your visualization to your "dev" bucket.
+1.  Run the command `npm run update_message` to build and deploy your
+    visualization to your "dev" bucket.
 1.  [Create a new report][datastudio] and connect to the dataset you want to use
     for your sample message.
 1.  Use your "dev bucket" to add this visualization to your report. It will
     display div with the `data` returned by the [ds-component] helper library.
 1.  Copy the `data` in the visualization and replace the empty object in
-    `scripts/data/localData.js`. This is the "local data" that you will develop
-    with.
+    `src/localData.js`. This is the "local data" that you will develop with.
 
 ### Local development workflow
 
@@ -73,22 +72,15 @@ To deploy:
 
 ### Key commands:
 
-Update the message and deploy it to your dev bucket:
-
-The `format` argument must be either `object` or `table`.
-[Read more about formats][ds-component].
-
-To update the message with the object format:
+To update the message:
 
 ```bash
-npm run update_message -- --format=object
+npm run update_message
 ```
 
-To update the message with the table format:
-
-```bash
-npm run update_message -- --format=table
-```
+Note: The message update script uses the `object` format by default. To update
+the message with the `table` format, change the `-f` parameter `update_message`
+script in `package.json` from `object` to `table`.
 
 Build the "dev" (devMode is true) visualization
 
