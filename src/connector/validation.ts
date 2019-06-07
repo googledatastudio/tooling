@@ -1,6 +1,6 @@
-import dotf = require('dotf');
+import * as dotf from 'dotf';
 
 export const claspAuthenticated = async (): Promise<boolean> => {
-  const dotglobal = dotf.default('~', 'clasprc.json');
+  const dotglobal = dotf('~', 'clasprc.json');
   return dotglobal.exists();
 };
