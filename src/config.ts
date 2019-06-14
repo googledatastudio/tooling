@@ -102,7 +102,7 @@ const addConnectorParser = (
     dest: 'ts',
     help: 'Use typescript for connector.',
     action: 'storeTrue',
-  })
+  });
 
   return connectorParser;
 };
