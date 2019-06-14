@@ -72,7 +72,7 @@
     "@types/terminal-link": "^1.1.0",
     "@types/uuid": "^3.4.4",
     "jest": "^24.5.0",
-    "prettier": "^1.11.1",
+    "prettier": "^1.18.2",
     "ts-jest": "^24.0.0",
     "tslint": "^5.14.0",
     "typescript": "^3.3.4000"

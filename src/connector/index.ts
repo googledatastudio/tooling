@@ -170,25 +170,28 @@ const manageDeployments = async (
 
 type AuthTypeFileMap = {[TKey in AuthType]: string};
 const authTypeToFile: AuthTypeFileMap = {
-  [AuthType.NONE]: 'NONE_auth.js',
-  [AuthType.USER_PASS]: 'USER_PASS_auth.js',
-  [AuthType.USER_TOKEN]: 'USER_TOKEN_auth.js',
-  [AuthType.OAUTH2]: 'OAUTH2_auth.js',
-  [AuthType.KEY]: 'KEY_auth.js',
+  [AuthType.NONE]: 'NONE_auth',
+  [AuthType.USER_PASS]: 'USER_PASS_auth',
+  [AuthType.USER_TOKEN]: 'USER_TOKEN_auth',
+  [AuthType.OAUTH2]: 'OAUTH2_auth',
+  [AuthType.KEY]: 'KEY_auth',
 };
 
 const removeExcessAuthFiles = async (
   projectPath: string,
   config: ConnectorConfig
 ) => {
+  const extension = config.ts ? '.ts' : '.js';
   const chosenAuthType = config.authType;
   const execOptions: Options = {cwd: path.join(projectPath, 'src')};
   return Promise.all(
     Object.values(AuthType).map(async (authType: AuthType) => {
+      const authFile = authTypeToFile[authType] + extension;
       if (authType !== chosenAuthType) {
-        return execa('rm', [authTypeToFile[authType]], execOptions);
+        return execa('rm', [authFile], execOptions);
       } else {
-        return execa('mv', [authTypeToFile[authType], 'auth.js'], execOptions);
+        const projectAuthFile = 'auth' + extension;
+        return execa('mv', [authFile, projectAuthFile], execOptions);
       }
     })
   );
@@ -198,7 +201,11 @@ export const createFromTemplate = async (
   config: ConnectorConfig
 ): Promise<number> => {
   const {projectName, basePath} = config;
-  const templatePath = path.join(basePath, 'templates', config.projectChoice);
+  const templatePath = path.join(
+    basePath,
+    'templates',
+    config.projectChoice.toString() + (config.ts ? '-ts' : '')
+  );
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   try {

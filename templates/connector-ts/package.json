@@ -1,0 +1,24 @@
+{
+  "dsccConnector": {
+    "production": "{{PRODUCTION_DEPLOYMENT_ID}}",
+    "latest": "{{LATEST_DEPLOYMENT_ID}}"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.ts\"",
+    "push": "dscc-scripts connector push_changes",
+    "watch": "dscc-scripts connector watch_changes",
+    "open": "dscc-scripts connector open_script",
+    "open_template": "dscc-scripts connector open_template",
+    "try_production": "dscc-scripts connector try_production",
+    "try_latest": "dscc-scripts connector try_latest",
+    "update_production": "dscc-scripts connector update_production"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.1.0",
+    "@google/dscc-scripts": "^1.0.0",
+    "@types/google-apps-script": "^0.0.48",
+    "@types/google-apps-script-oauth2": "^24.0.1",
+    "prettier": "^1.16.4",
+    "typescript": "^3.5.2"
+  }
+}
