@@ -50,7 +50,9 @@ export interface ConnectorConfig
   extends CommonConfig,
     ConnectorConfigHasDefaults {
   scriptId?: string;
+  ts?: boolean;
 }
+
 export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
   devBucket: string;
   prodBucket: string;
@@ -94,6 +96,12 @@ const addConnectorParser = (
     dest: 'authType',
     help: 'The authorization type for the connector.',
     choices: Object.values(AuthType),
+  });
+
+  connectorParser.addArgument(['--ts', '--typescript'], {
+    dest: 'ts',
+    help: 'Use typescript for connector.',
+    action: 'storeTrue',
   });
 
   return connectorParser;

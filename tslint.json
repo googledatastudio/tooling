@@ -18,7 +18,7 @@
         "typeLiterals": "always"
       }
     }],
-    "strict-boolean-expressions": [true]
+    "strict-boolean-expressions": [true, "allow-null-union", "allow-undefined-union", "allow-boolean-or-undefined"]
   },
   "rulesDirectory": []
 }
