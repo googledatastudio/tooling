@@ -79,23 +79,6 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/google-apps-script-oauth2@^24.0.1":
-  version "24.0.1"
-  resolved "https://registry.yarnpkg.com/@types/google-apps-script-oauth2/-/google-apps-script-oauth2-24.0.1.tgz#0f622f2582eb20ec77c7481d29f11daa9e970ccb"
-  integrity sha512-bT70o2sCpVOo//Pd3gEqaxu2i9IlDb+aZypZJjfuYcayMsTl9PcI2Y215c0PQuzIWK0OYP13vhRw2RcZCl3Wtg==
-  dependencies:
-    "@types/google-apps-script" "*"
-
-"@types/google-apps-script@*":
-  version "0.0.53"
-  resolved "https://registry.yarnpkg.com/@types/google-apps-script/-/google-apps-script-0.0.53.tgz#72bcd785a2b40c0b63f1cd84298b5b36c7b912c1"
-  integrity sha512-ycYjNrHZkl9Ah25H3BvKXqEyKHlK4rMLNvUwAqjbl2v29522pDinjBolDXuWTHV8JC+5tc38I/GA/I3B3Y+ihA==
-
-"@types/google-apps-script@^0.0.48":
-  version "0.0.48"
-  resolved "https://registry.yarnpkg.com/@types/google-apps-script/-/google-apps-script-0.0.48.tgz#3625017d1ab5d98eae0bb64ad47b1c29fa11a45a"
-  integrity sha512-0hZKXzpZZpCWdIVFYLQWdrH2JTo7t2SkozIZ0yb9YdGFUvEeFXf93PjUMMZ4p/WAgM/ftL505oqZ+riA6pYY2Q==
-
 "@types/minimatch@*":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
@@ -4892,7 +4875,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.2.2, typescript@^3.5.2:
+typescript@^3.2.2:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.2.tgz#a09e1dc69bc9551cadf17dba10ee42cf55e5d56c"
   integrity sha512-7KxJovlYhTX5RaRbUdkAXN1KUZ8PwWlTzQdHV6xNqvuFOs7+WBo10TQUqT19Q/Jz2hk5v9TQDIhyLhhJY4p5AA==

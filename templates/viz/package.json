@@ -17,6 +17,6 @@
   },
   "devDependencies": {
     "@google/dscc": "^0.3.8",
-    "@google/dscc-scripts": "^1.0.6"
+    "@google/dscc-scripts": "^1.0.7"
   }
 }
