@@ -15,6 +15,8 @@ import {
 jest.mock('../../src/connector/appsscript');
 jest.mock('../../src/connector/validation');
 
+console.log = jest.fn();
+
 describe('End-to-end-tests w/ mocked appsscript & validation', () => {
   const connectorNames = {
     happyPath: 'happy_path',
