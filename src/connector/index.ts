@@ -125,10 +125,10 @@ const cloneAppsScriptProject = async (
     // The user is trying to migrate an existing project to be an appsscript
     // one.
     return util.spinnify('Cloning existing project...', async () => {
-      await execa('mv', ['src', 'src_bak'], {cwd: projectPath});
-      await appsscript.clone(projectPath, scriptId, 'src');
-      await execa('mv', ['src_bak/global.d.ts', 'src/global.d.ts']);
-      await execa('rm', ['-rf', 'src_bak']);
+      await appsscript.clone(projectPath, scriptId, 'old_js');
+      await execa('cp', ['old_js/appsscript.json', 'src/appsscript.json'], {
+        cwd: projectPath,
+      });
     });
   } else {
     // We don't need the template source files since we want the Apps Scripts project's

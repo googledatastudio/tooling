@@ -7,7 +7,7 @@ type GetAuthTypeResponse = Object;
 
 // getSchema
 
-interface GetSchemaRequest<T = DefaultConfigParams> {
+interface GetSchemaRequest<T> {
   configParams: T;
 }
 interface GetSchemaResponse {
@@ -26,7 +26,7 @@ type GetConfigResponse = Object;
 interface DefaultConfigParams {
   [configId: string]: string;
 }
-interface GetDataRequest<T = DefaultConfigParams> {
+interface GetDataRequest<T> {
   configParams?: T;
   scriptParams: {
     sampleExtraction: boolean;
@@ -89,8 +89,12 @@ type GetFields = () => Fields;
 
 type IsAdminUser = () => boolean;
 type GetConfig = (request: GetConfigRequest) => GetConfigResponse;
-type GetData<T> = (request: GetDataRequest<T>) => GetDataResponse;
-type GetSchema<T> = (request: GetSchemaRequest<T>) => GetSchemaResponse;
+type GetData<T = DefaultConfigParams> = (
+  request: GetDataRequest<T>
+) => GetDataResponse;
+type GetSchema<T = DefaultConfigParams> = (
+  request: GetSchemaRequest<T>
+) => GetSchemaResponse;
 type IsAuthValid = () => boolean;
 type ResetAuth = () => void;
 type AuthCallback = (request: object) => GoogleAppsScript.HTML.HtmlOutput;
