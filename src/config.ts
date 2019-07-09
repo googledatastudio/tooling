@@ -235,10 +235,10 @@ const getMissing = async <T extends U, U>(
       const value = args[a];
       if (value !== undefined) {
         const question = questions.find((q) => q.name === a);
-        if (question !== undefined) {
+        if (question !== undefined && question.type === 'input') {
           const {validate} = question;
           if (validate !== undefined) {
-            return validate(value);
+            return validate((value as any) as string);
           }
         }
       }
