@@ -283,7 +283,6 @@ ${updateProduction} - updates your production deployment to use the latest code.
     );
     return 0;
   } catch (e) {
-    console.log('here');
     await files.removeDirectory(projectPath);
     throw e;
   }
