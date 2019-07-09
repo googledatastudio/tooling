@@ -19,7 +19,7 @@ import * as bb from 'bluebird';
 import chalk from 'chalk';
 import {Spinner} from 'cli-spinner';
 import * as execa from 'execa';
-import {ExecaReturns, Options} from 'execa';
+import {ExecaReturnValue, Options} from 'execa';
 import * as fs from 'fs';
 import {Answers} from 'inquirer';
 
@@ -97,7 +97,7 @@ export interface Std {
 export const npmInstall = async (
   projectPath: string,
   answers: Answers
-): Promise<ExecaReturns> => {
+): Promise<ExecaReturnValue> => {
   const execOptions: Options = {cwd: projectPath};
   if (answers.yarn) {
     return execa('yarn', [], execOptions);
