@@ -38,7 +38,6 @@ const getConfig: GetConfig = () => {
   return config.build();
 };
 
-type Fields = GoogleAppsScript.Data_Studio.Fields;
 const getFields = (): Fields => {
   const fields = cc.getFields();
   const types = cc.FieldType;
