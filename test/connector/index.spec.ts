@@ -61,7 +61,7 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
     expect(hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
 
     await files.removeDirectory(connectorName);
-  }, 10000);
+  }, 20000);
 
   test('happy path for typescript', async () => {
     const connectorName = connectorNames.happyPathTs;
@@ -83,5 +83,5 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
     expect(hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
 
     await files.removeDirectory(connectorName);
-  }, 10000);
+  }, 20000);
 });
