@@ -20,10 +20,9 @@ import {Options} from 'execa';
 import * as fs from 'mz/fs';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
-import {AuthType, ConnectorConfig} from '../config';
+import {PWD} from '../constants';
 import * as files from '../files';
-import {PWD} from '../index';
-import {Template} from '../main';
+import {AuthType, ConnectorConfig, Template} from '../types';
 import * as util from '../util';
 import {format} from '../util';
 import * as appsscript from './appsscript';
@@ -284,7 +283,8 @@ ${updateProduction} - updates your production deployment to use the latest code.
     );
     return 0;
   } catch (e) {
-    await execa('rm', ['-rf', projectPath]);
+    console.log('here');
+    await files.removeDirectory(projectPath);
     throw e;
   }
 };

@@ -2,7 +2,16 @@ import * as argparse from 'argparse';
 import {Question} from 'inquirer';
 import inquirer = require('inquirer');
 import * as path from 'path';
-import {PWD} from './index';
+import {PWD} from './constants';
+import {
+  AuthType,
+  CommonConfig,
+  ConnectorConfig,
+  ConnectorConfigHasDefaults,
+  ProjectChoice,
+  VizConfig,
+  VizConfigHasDefaults,
+} from './types';
 import {assertNever} from './util';
 import * as util from './util';
 import {
@@ -10,53 +19,6 @@ import {
   checkGsutilInstalled,
   hasBucketPermissions,
 } from './viz/validation';
-
-export enum ProjectChoice {
-  VIZ = 'viz',
-  CONNECTOR = 'connector',
-}
-
-interface CommonConfig {
-  yarn: boolean;
-  projectName: string;
-  projectChoice: ProjectChoice;
-  basePath: string;
-}
-
-export enum AuthType {
-  NONE = 'NONE',
-  OAUTH2 = 'OAUTH2',
-  KEY = 'KEY',
-  USER_PASS = 'USER_PASS',
-  USER_TOKEN = 'USER_TOKEN',
-}
-
-interface VizConfigHasDefaults {
-  temp: string;
-}
-
-interface ConnectorConfigHasDefaults {
-  manifestLogoUrl: string;
-  manifestCompany: string;
-  manifestCompanyUrl: string;
-  manifestAddonUrl: string;
-  manifestSupportUrl: string;
-  manifestDescription: string;
-  manifestSources: string;
-  authType: AuthType;
-}
-
-export interface ConnectorConfig
-  extends CommonConfig,
-    ConnectorConfigHasDefaults {
-  scriptId?: string;
-  ts?: boolean;
-}
-
-export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
-  devBucket: string;
-  prodBucket: string;
-}
 
 const addVizParser = (
   subparser: argparse.SubParser
