@@ -173,7 +173,8 @@ const connectorQuestions: Array<
   {
     name: 'authType',
     type: 'list',
-    when: (answers: ConnectorConfig) => answers.scriptId === undefined,
+    when: (answers: ConnectorConfig) =>
+      answers.scriptId === undefined || answers.ts === true,
     message: 'How will users authenticate to your service?',
     choices: Object.values(AuthType).map((auth: AuthType) => ({
       name: `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
