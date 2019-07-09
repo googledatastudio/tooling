@@ -39,14 +39,6 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
     jest.clearAllMocks();
   });
 
-  afterEach(async () => {
-    await Promise.all(
-      Object.values(connectorNames).map(async (connectorName) => {
-        return files.removeDirectory(connectorName);
-      })
-    );
-  });
-
   const hasFile = async (...paths: string[]): Promise<boolean> => {
     return fs.exists(path.resolve(constants.PWD, ...paths));
   };
@@ -67,6 +59,8 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
     await sut.createFromTemplate(config);
     expect(hasFile(connectorName)).toBeTruthy();
     expect(hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
+
+    await files.removeDirectory(connectorName);
   }, 10000);
 
   test('happy path for typescript', async () => {
@@ -87,5 +81,7 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
 
     expect(hasFile(connectorName)).toBeTruthy();
     expect(hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
+
+    await files.removeDirectory(connectorName);
   }, 10000);
 });
