@@ -118,13 +118,25 @@ const createAppsScriptProject = async (
 
 const cloneAppsScriptProject = async (
   projectPath: string,
-  scriptId: string
+  config: ConnectorConfig
 ): Promise<void> => {
-  // We don't need the template source files since we want the Apps Scripts project's
-  return util.spinnify('Cloning existing project...', async () => {
-    await execa('rm', ['-rf', 'src'], {cwd: projectPath});
-    await appsscript.clone(projectPath, scriptId, 'src');
-  });
+  const scriptId = config.scriptId!;
+  if (config.ts === true) {
+    // The user is trying to migrate an existing project to be an appsscript
+    // one.
+    return util.spinnify('Cloning existing project...', async () => {
+      await execa('mv', ['src', 'src_bak'], {cwd: projectPath});
+      await appsscript.clone(projectPath, scriptId, 'src');
+      await execa('mv', ['src_bak/global.d.ts', 'src/global.d.ts']);
+      await execa('rm', ['-rf', 'src_bak']);
+    });
+  } else {
+    // We don't need the template source files since we want the Apps Scripts project's
+    return util.spinnify('Cloning existing project...', async () => {
+      await execa('rm', ['-rf', 'src'], {cwd: projectPath});
+      await appsscript.clone(projectPath, scriptId, 'src');
+    });
+  }
 };
 
 const manageDeployments = async (
@@ -220,7 +232,7 @@ export const createFromTemplate = async (
     await ensureAuthenticated(execOptions);
 
     if (config.scriptId !== undefined) {
-      await cloneAppsScriptProject(projectPath, config.scriptId);
+      await cloneAppsScriptProject(projectPath, config);
     } else {
       await createAppsScriptProject(
         projectPath,
