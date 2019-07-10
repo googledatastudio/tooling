@@ -20,10 +20,9 @@ import {Options} from 'execa';
 import * as fs from 'mz/fs';
 import * as path from 'path';
 import terminalLink from 'terminal-link';
-import {AuthType, ConnectorConfig} from '../config';
+import {PWD} from '../constants';
 import * as files from '../files';
-import {PWD} from '../index';
-import {Template} from '../main';
+import {AuthType, ConnectorConfig, Template} from '../types';
 import * as util from '../util';
 import {format} from '../util';
 import * as appsscript from './appsscript';
@@ -118,13 +117,25 @@ const createAppsScriptProject = async (
 
 const cloneAppsScriptProject = async (
   projectPath: string,
-  scriptId: string
+  config: ConnectorConfig
 ): Promise<void> => {
-  // We don't need the template source files since we want the Apps Scripts project's
-  return util.spinnify('Cloning existing project...', async () => {
-    await execa('rm', ['-rf', 'src'], {cwd: projectPath});
-    await appsscript.clone(projectPath, scriptId, 'src');
-  });
+  const scriptId = config.scriptId!;
+  if (config.ts === true) {
+    // The user is trying to migrate an existing project to be an appsscript
+    // one.
+    return util.spinnify('Cloning existing project...', async () => {
+      await appsscript.clone(projectPath, scriptId, 'old_js');
+      await execa('cp', ['old_js/appsscript.json', 'src/appsscript.json'], {
+        cwd: projectPath,
+      });
+    });
+  } else {
+    // We don't need the template source files since we want the Apps Scripts project's
+    return util.spinnify('Cloning existing project...', async () => {
+      await execa('rm', ['-rf', 'src'], {cwd: projectPath});
+      await appsscript.clone(projectPath, scriptId, 'src');
+    });
+  }
 };
 
 const manageDeployments = async (
@@ -220,7 +231,7 @@ export const createFromTemplate = async (
     await ensureAuthenticated(execOptions);
 
     if (config.scriptId !== undefined) {
-      await cloneAppsScriptProject(projectPath, config.scriptId);
+      await cloneAppsScriptProject(projectPath, config);
     } else {
       await createAppsScriptProject(
         projectPath,
@@ -272,7 +283,7 @@ ${updateProduction} - updates your production deployment to use the latest code.
     );
     return 0;
   } catch (e) {
-    await execa('rm', ['-rf', projectPath]);
+    await files.removeDirectory(projectPath);
     throw e;
   }
 };

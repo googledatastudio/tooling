@@ -7,8 +7,8 @@ type GetAuthTypeResponse = Object;
 
 // getSchema
 
-interface GetSchemaRequest {
-  configParams: ConfigParams;
+interface GetSchemaRequest<T> {
+  configParams: T;
 }
 interface GetSchemaResponse {
   schema: Object[];
@@ -23,11 +23,11 @@ type GetConfigResponse = Object;
 
 // getData
 
-interface ConfigParams {
+interface DefaultConfigParams {
   [configId: string]: string;
 }
-interface GetDataRequest {
-  configParams?: ConfigParams;
+interface GetDataRequest<T> {
+  configParams?: T;
   scriptParams: {
     sampleExtraction: boolean;
     lastRefresh: string;
@@ -80,14 +80,25 @@ interface SetCredentialsResponse {
   errorCode: 'NONE' | 'INVALID_CREDENTIALS';
 }
 
+type Fields = GoogleAppsScript.Data_Studio.Fields;
+
+// Useful connector functions
+type GetFields = () => Fields;
+
 // Connector Function Types
 
 type IsAdminUser = () => boolean;
 type GetConfig = (request: GetConfigRequest) => GetConfigResponse;
-type GetData = (request: GetDataRequest) => GetDataResponse;
-type GetSchema = (request: GetSchemaRequest) => GetSchemaResponse;
+type GetData<T = DefaultConfigParams> = (
+  request: GetDataRequest<T>
+) => GetDataResponse;
+type GetSchema<T = DefaultConfigParams> = (
+  request: GetSchemaRequest<T>
+) => GetSchemaResponse;
 type IsAuthValid = () => boolean;
 type ResetAuth = () => void;
 type AuthCallback = (request: object) => GoogleAppsScript.HTML.HtmlOutput;
-type SetCredentials = (r: SetCredentialsRequest) => SetCredentialsResponse;
+type SetCredentials = (
+  request: SetCredentialsRequest
+) => SetCredentialsResponse;
 type GetAuthType = () => GetAuthTypeResponse;

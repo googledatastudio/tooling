@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-import {ConnectorConfig, getConfig, ProjectChoice, VizConfig} from './config';
+import {getConfig} from './config';
 import * as connector from './connector/index';
+import {ConnectorConfig, ProjectChoice, VizConfig} from './types';
 import {assertNever} from './util';
 import * as viz from './viz/index';
-
-export interface Template {
-  match: RegExp;
-  replace: string;
-}
 
 export const main = async (basePath: string): Promise<number> => {
   const config = await getConfig();

@@ -14,11 +14,11 @@
     "update_production": "dscc-scripts connector update_production"
   },
   "devDependencies": {
-    "@google/clasp": "^2.1.0",
-    "@google/dscc-scripts": "^1.0.7",
-    "@types/google-apps-script": "^0.0.48",
+    "@google/clasp": "^2.2.1",
+    "@google/dscc-scripts": "^1.0.8",
+    "@types/google-apps-script": "^0.0.54",
     "@types/google-apps-script-oauth2": "^24.0.1",
-    "prettier": "^1.16.4",
-    "typescript": "^3.5.2"
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
   }
 }

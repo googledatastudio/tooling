@@ -2,7 +2,16 @@ import * as argparse from 'argparse';
 import {Question} from 'inquirer';
 import inquirer = require('inquirer');
 import * as path from 'path';
-import {PWD} from './index';
+import {PWD} from './constants';
+import {
+  AuthType,
+  CommonConfig,
+  ConnectorConfig,
+  ConnectorConfigHasDefaults,
+  ProjectChoice,
+  VizConfig,
+  VizConfigHasDefaults,
+} from './types';
 import {assertNever} from './util';
 import * as util from './util';
 import {
@@ -10,53 +19,6 @@ import {
   checkGsutilInstalled,
   hasBucketPermissions,
 } from './viz/validation';
-
-export enum ProjectChoice {
-  VIZ = 'viz',
-  CONNECTOR = 'connector',
-}
-
-interface CommonConfig {
-  yarn: boolean;
-  projectName: string;
-  projectChoice: ProjectChoice;
-  basePath: string;
-}
-
-export enum AuthType {
-  NONE = 'NONE',
-  OAUTH2 = 'OAUTH2',
-  KEY = 'KEY',
-  USER_PASS = 'USER_PASS',
-  USER_TOKEN = 'USER_TOKEN',
-}
-
-interface VizConfigHasDefaults {
-  temp: string;
-}
-
-interface ConnectorConfigHasDefaults {
-  manifestLogoUrl: string;
-  manifestCompany: string;
-  manifestCompanyUrl: string;
-  manifestAddonUrl: string;
-  manifestSupportUrl: string;
-  manifestDescription: string;
-  manifestSources: string;
-  authType: AuthType;
-}
-
-export interface ConnectorConfig
-  extends CommonConfig,
-    ConnectorConfigHasDefaults {
-  scriptId?: string;
-  ts?: boolean;
-}
-
-export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
-  devBucket: string;
-  prodBucket: string;
-}
 
 const addVizParser = (
   subparser: argparse.SubParser
@@ -173,7 +135,8 @@ const connectorQuestions: Array<
   {
     name: 'authType',
     type: 'list',
-    when: (answers: ConnectorConfig) => answers.scriptId === undefined,
+    when: (answers: ConnectorConfig) =>
+      answers.scriptId === undefined || answers.ts === true,
     message: 'How will users authenticate to your service?',
     choices: Object.values(AuthType).map((auth: AuthType) => ({
       name: `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
@@ -235,10 +198,10 @@ const getMissing = async <T extends U, U>(
       const value = args[a];
       if (value !== undefined) {
         const question = questions.find((q) => q.name === a);
-        if (question !== undefined) {
+        if (question !== undefined && question.type === 'input') {
           const {validate} = question;
           if (validate !== undefined) {
-            return validate(value);
+            return validate((value as any) as string);
           }
         }
       }

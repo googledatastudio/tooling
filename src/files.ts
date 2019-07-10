@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
+import * as execa from 'execa';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
-import {Template} from './main';
+import {Template} from './types';
 import * as util from './util';
 
 const ENCODING = 'utf8';
@@ -109,3 +110,7 @@ export const createAndCopyFiles = async (
     'Creating directories and copying template files...',
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
+
+export const removeDirectory = async (directory: string) => {
+  return execa('rm', ['-rf', directory]);
+};

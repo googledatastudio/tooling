@@ -16,10 +16,9 @@
  */
 import * as execa from 'execa';
 import * as path from 'path';
-import {VizConfig} from '../config';
+import {PWD} from '../constants';
 import * as files from '../files';
-import {PWD} from '../index';
-import {Template} from '../main';
+import {Template, VizConfig} from '../types';
 import * as util from '../util';
 import {format} from '../util';
 import {addBucketPrefix} from './validation';
