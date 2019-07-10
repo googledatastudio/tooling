@@ -80,7 +80,7 @@ interface SetCredentialsResponse {
   errorCode: 'NONE' | 'INVALID_CREDENTIALS';
 }
 
-type Fields = GoogleAppsScript.DataStudio.Fields;
+type Fields = GoogleAppsScript.Data_Studio.Fields;
 
 // Useful connector functions
 type GetFields = () => Fields;
