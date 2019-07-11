@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
+import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
+import * as rimraf from 'rimraf';
 import {Template} from './types';
 import * as util from './util';
-import * as rimraf from 'rimraf';
-import * as fs from 'mz/fs';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -123,7 +123,7 @@ export const remove = async (...directoryParts: string[]): Promise<boolean> => {
   }
   return new Promise((resolve, reject) => {
     rimraf(directory, (err) => {
-      if (err) {
+      if (err !== null) {
         reject(err);
       } else {
         resolve(true);
