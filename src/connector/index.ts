@@ -132,7 +132,7 @@ const cloneAppsScriptProject = async (
   } else {
     // We don't need the template source files since we want the Apps Scripts project's
     return util.spinnify('Cloning existing project...', async () => {
-      await execa('rm', ['-rf', 'src'], {cwd: projectPath});
+      await files.remove(projectPath, 'src');
       await appsscript.clone(projectPath, scriptId, 'src');
     });
   }
@@ -199,7 +199,7 @@ const removeExcessAuthFiles = async (
     Object.values(AuthType).map(async (authType: AuthType) => {
       const authFile = authTypeToFile[authType] + extension;
       if (authType !== chosenAuthType) {
-        return execa('rm', [authFile], execOptions);
+        return files.remove(projectPath, 'src', authFile);
       } else {
         const projectAuthFile = 'auth' + extension;
         return execa('mv', [authFile, projectAuthFile], execOptions);
@@ -243,7 +243,7 @@ export const createFromTemplate = async (
     await manageDeployments(projectPath, config);
 
     // Remove temp directory.
-    await execa('rm', ['-rf', 'temp'], execOptions);
+    await files.remove(projectPath, 'temp');
 
     const connectorOverview = format.blue(
       terminalLink(
@@ -283,7 +283,7 @@ ${updateProduction} - updates your production deployment to use the latest code.
     );
     return 0;
   } catch (e) {
-    await files.removeDirectory(projectPath);
+    await files.remove(projectPath);
     throw e;
   }
 };

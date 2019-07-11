@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-import * as execa from 'execa';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
 import {Template} from './types';
 import * as util from './util';
+import * as rimraf from 'rimraf';
+import * as fs from 'mz/fs';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -60,7 +61,7 @@ export const createDirectoryContents = async (
         const writePath = path.join(CURR_DIR, newProjectPath, file);
         await util.writeFile(writePath, contents, ENCODING);
       } else if (stats.isDirectory()) {
-        await util.makeDir(path.join(CURR_DIR, newProjectPath, file));
+        await mkdir(CURR_DIR, newProjectPath, file);
         const newTemplatePath = path.join(templatePath, file);
         const newNewProjectPath = path.join(newProjectPath, file);
         await createDirectoryContents(newTemplatePath, newNewProjectPath);
@@ -90,7 +91,7 @@ const createAndCopyFilesImpl = async (
   projectName: string
 ) => {
   try {
-    await util.makeDir(projectPath);
+    await mkdir(projectPath);
   } catch (e) {
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
@@ -111,6 +112,30 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 
-export const removeDirectory = async (directory: string) => {
-  return execa('rm', ['-rf', directory]);
+export const remove = async (...directoryParts: string[]): Promise<boolean> => {
+  if (directoryParts.length === 0) {
+    throw new Error('You must pass directoryParts to this function');
+  }
+  const directory = path.join(...directoryParts);
+  const directoryExists = await fs.exists(directory);
+  if (!directoryExists) {
+    throw new Error(`Directory: ${directory} does not exist`);
+  }
+  return new Promise((resolve, reject) => {
+    rimraf(directory, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+};
+
+export const mkdir = async (...directoryParts: string[]): Promise<boolean> => {
+  if (directoryParts.length === 0) {
+    throw new Error('You must pass directoryParts to this function');
+  }
+  const directory = path.join(...directoryParts);
+  return fs.mkdir(directory).then(() => true);
 };
