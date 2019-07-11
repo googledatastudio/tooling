@@ -19,6 +19,7 @@ import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
 import * as rimraf from 'rimraf';
+import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
 
@@ -138,4 +139,14 @@ export const mkdir = async (...directoryParts: string[]): Promise<boolean> => {
   }
   const directory = path.join(...directoryParts);
   return fs.mkdir(directory).then(() => true);
+};
+
+export const cp = async (
+  fromParts: string[],
+  toParts: string[]
+): Promise<boolean> => {
+  const fromPath = path.join(...fromParts);
+  const toPath = path.join(...toParts);
+  shelljs.cp('-r', fromPath, toPath);
+  return true;
 };
