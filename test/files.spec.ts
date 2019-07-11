@@ -26,6 +26,7 @@ describe('For the file utility', () => {
       );
     });
   });
+
   describe('cp', () => {
     const filename = 'hi.fake.jpg';
 
@@ -37,8 +38,8 @@ describe('For the file utility', () => {
       sut.cp([source], [destination]);
       expect(await fs.exists(destination)).toBeTruthy();
 
-      sut.remove(source);
-      sut.remove(destination);
+      await sut.remove(source);
+      await sut.remove(destination);
     });
 
     test('Copies folder recursively', async () => {
@@ -59,8 +60,42 @@ describe('For the file utility', () => {
         await fs.exists(path.join(destination, sub, filename))
       ).toBeTruthy();
 
-      sut.remove(source);
-      sut.remove(destination);
+      await sut.remove(source);
+      await sut.remove(destination);
+    });
+  });
+
+  describe('mv', () => {
+    test('Moves file successfully', async () => {
+      const sourceDir = path.join(PWD, 'my-dir');
+      const source = path.join(sourceDir, 'my-file');
+      shelljs.mkdir(sourceDir);
+      shelljs.touch(source);
+      const destinationDir = PWD;
+      const destination = path.join(destinationDir, 'my-file');
+      expect(await fs.exists(destination)).toBeFalsy();
+
+      await sut.mv([source], [destinationDir]);
+      expect(await fs.exists(destination)).toBeTruthy();
+
+      await sut.remove(sourceDir);
+      await sut.remove(destination);
+    });
+  });
+
+  describe('rename', () => {
+    test('renames a file sucessfully', async () => {
+      const source = path.join(PWD, 'my-rename-file');
+      const dest = path.join(PWD, 'my-new-name');
+      shelljs.touch(source);
+
+      expect(await fs.exists(dest)).toBeFalsy();
+
+      await sut.rename([source], [dest]);
+
+      expect(await fs.exists(dest)).toBeTruthy();
+
+      await sut.remove(dest);
     });
   });
 });

@@ -147,6 +147,32 @@ export const cp = async (
 ): Promise<boolean> => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
-  shelljs.cp('-r', fromPath, toPath);
+  const result = shelljs.cp('-r', fromPath, toPath);
+  if (result.stderr !== null) {
+    throw new Error(result.stderr);
+  }
   return true;
+};
+
+export const mv = async (
+  fromParts: string[],
+  toDirParts: string[]
+): Promise<boolean> => {
+  const fromPath = path.join(...fromParts);
+  const toPath = path.join(...toDirParts);
+  // const result =
+  shelljs.mv('', fromPath, toPath);
+  // if (result.stderr !== null) {
+  //   throw new Error(result.stderr);
+  // }
+  return true;
+};
+
+export const rename = async (
+  fromParts: string[],
+  toParts: string[]
+): Promise<boolean> => {
+  const fromPath = path.join(...fromParts);
+  const toPath = path.join(...toParts);
+  return fs.rename(fromPath, toPath).then(() => true);
 };
