@@ -11,7 +11,7 @@ branches:
 cache:
   directories:
   - node_modules/
-script:  yarn test:ci
+script:  yarn travis
 addons:
   apt:
     packages:

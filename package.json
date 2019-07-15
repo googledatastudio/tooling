@@ -40,7 +40,7 @@
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\"",
     "prettier": "prettier --write '{src,templates,test}/**/*.{ts,js}'",
     "prettier:check": "prettier --check '{src,templates,test}/**/*.{ts,js}'",
-    "test:ci": "yarn prettier:check && yarn lint && yarn build:check && yarn test && ./test/integration_tests.sh"
+    "travis": "yarn prettier:check && yarn lint && yarn build:check && yarn test"
   },
   "dependencies": {
     "@google/clasp": "^2.2.1",

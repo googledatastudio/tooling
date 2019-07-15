@@ -19,7 +19,7 @@ console.log = jest.fn();
 
 jest.setTimeout(40000);
 
-describe('End-to-end-tests w/ mocked appsscript & validation', () => {
+describe('End-to-end-tests for connectors w/ mocked appsscript & validation', () => {
   const connectorNames = {
     happyPath: 'happy_path',
     happyPathTs: 'happy_path_ts',
@@ -61,8 +61,8 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
       basePath: '.',
     };
     await sut.createFromTemplate(config);
-    expect(hasFile(connectorName)).toBeTruthy();
-    expect(hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
+    expect(await hasFile(connectorName)).toBeTruthy();
+    expect(await hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
 
     await files.remove(connectorName);
   });
@@ -83,8 +83,8 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
     };
     await sut.createFromTemplate(config);
 
-    expect(hasFile(connectorName)).toBeTruthy();
-    expect(hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
+    expect(await hasFile(connectorName)).toBeTruthy();
+    expect(await hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
 
     await files.remove(connectorName);
   });
