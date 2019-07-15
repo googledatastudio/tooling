@@ -18,7 +18,6 @@
 import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
-import * as rimraf from 'rimraf';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
@@ -123,13 +122,11 @@ export const remove = async (...directoryParts: string[]): Promise<boolean> => {
     throw new Error(`Directory: ${directory} does not exist`);
   }
   return new Promise((resolve, reject) => {
-    rimraf(directory, (err) => {
-      if (err !== null) {
-        reject(err);
-      } else {
-        resolve(true);
-      }
-    });
+    const result = shelljs.rm('-rf', directory);
+    if (result.stderr !== null) {
+      reject(result.stderr);
+    }
+    resolve(true);
   });
 };
 
