@@ -7,7 +7,8 @@ import * as sut from '../../src/viz';
 
 console.log = jest.fn();
 
-jest.setTimeout(40000);
+const fiveMinutes = 5 * 60 * 1000;
+jest.setTimeout(fiveMinutes);
 
 describe('End-to-end-tests for viz', () => {
   const vizNames = {

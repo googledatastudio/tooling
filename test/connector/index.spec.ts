@@ -17,7 +17,8 @@ jest.mock('../../src/connector/validation');
 
 console.log = jest.fn();
 
-jest.setTimeout(40000);
+const fiveMinutes = 5 * 60 * 1000;
+jest.setTimeout(fiveMinutes);
 
 describe('End-to-end-tests for connectors w/ mocked appsscript & validation', () => {
   const connectorNames = {
