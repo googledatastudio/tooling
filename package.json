@@ -37,11 +37,11 @@
     "build:watch": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watchAll --coverage",
-    "lint": "tslint -c tslint.json -p tsconfig.json 'src/**/*.ts' 'test/**/*.ts'",
-    "prettier:base": "prettier 'src/**/*.ts' 'templates/**/*.js' 'templates/**/*.ts' 'test/**/*.ts'",
+    "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\" \"test/**/*.ts\"",
+    "prettier:base": "prettier \"src/**/*.ts\" \"templates/**/*.js\" \"templates/**/*.ts\" \"test/**/*.ts\"",
     "prettier:check": "yarn run prettier:base --check",
     "prettier": "yarn run prettier:base --write",
-    "travis": "yarn prettier:check && ((test \"$TRAVIS_OS_NAME\" != 'windows' && yarn lint) || true) && yarn build:check && yarn test"
+    "travis": "yarn prettier:check && yarn lint && yarn build:check && yarn test"
   },
   "dependencies": {
     "@google/clasp": "^2.2.1",
