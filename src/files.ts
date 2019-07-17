@@ -21,6 +21,7 @@ import * as listFiles from 'recursive-readdir';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
+import * as rimraf from 'rimraf';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -122,11 +123,12 @@ export const remove = async (...directoryParts: string[]): Promise<boolean> => {
     throw new Error(`Directory: ${directory} does not exist`);
   }
   return new Promise((resolve, reject) => {
-    const result = shelljs.rm('-rf', directory);
-    if (result.stderr !== null) {
-      reject(result.stderr);
-    }
-    resolve(true);
+    rimraf(directory, (error) => {
+      if (error !== null) {
+        reject(error);
+      }
+      resolve(true);
+    });
   });
 };
 
