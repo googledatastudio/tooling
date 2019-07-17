@@ -24,8 +24,7 @@ fi
 set -x
 
 # Double check that all tests are working.
-yarn test:ci
-./test/integration_tests_no_travis.sh "$1"
+yarn travis
 # Install needed dependencies
 yarn install
 # Delete old build files
