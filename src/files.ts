@@ -18,10 +18,10 @@
 import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
+import * as rimraf from 'rimraf';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
-import * as rimraf from 'rimraf';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();

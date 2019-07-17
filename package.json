@@ -41,7 +41,8 @@
     "prettier:base": "prettier \"src/**/*.ts\" \"templates/**/*.js\" \"templates/**/*.ts\" \"test/**/*.ts\"",
     "prettier:check": "yarn run prettier:base --check",
     "prettier": "yarn run prettier:base --write",
-    "travis": "yarn prettier:check && yarn lint && yarn build:check && yarn test"
+    "travis": "yarn prettier:check && yarn lint && yarn build:check && yarn test",
+    "fix": "yarn prettier && yarn lint --fix"
   },
   "dependencies": {
     "@google/clasp": "^2.2.1",
