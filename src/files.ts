@@ -27,6 +27,7 @@ const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
 
 const fixFile = (templates: Template[]) => async (file: string) => {
+  console.log(`Fixing file: ${file}`);
   const contents = await util.readFile(file, ENCODING);
   const newContents = templates.reduce(
     (acc, {match, replace}) => acc.replace(match, replace),
@@ -39,7 +40,7 @@ export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
 ): Promise<boolean> => {
-  const filesToUpdate = await listFiles(baseDirectory, ['node_modules/']);
+  const filesToUpdate = await listFiles(baseDirectory, ['node_modules']);
   await Promise.all(filesToUpdate.map(fixFile(templates)));
   return true;
 };
