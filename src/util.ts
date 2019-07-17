@@ -50,18 +50,6 @@ export const readFile = (
   });
 };
 
-export const makeDir = (filePath: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    fs.mkdir(filePath, (err) => {
-      if (err !== null) {
-        reject(err);
-      } else {
-        resolve(filePath);
-      }
-    });
-  });
-};
-
 export const writeFile = (
   filePath: string,
   data: string,

@@ -15,9 +15,11 @@
  * limitations under the License.
  */
 
-import * as execa from 'execa';
+import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
+import * as rimraf from 'rimraf';
+import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
 
@@ -37,7 +39,7 @@ export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
 ): Promise<boolean> => {
-  const filesToUpdate = await listFiles(baseDirectory, ['node_modules/']);
+  const filesToUpdate = await listFiles(baseDirectory, ['node_modules']);
   await Promise.all(filesToUpdate.map(fixFile(templates)));
   return true;
 };
@@ -60,7 +62,7 @@ export const createDirectoryContents = async (
         const writePath = path.join(CURR_DIR, newProjectPath, file);
         await util.writeFile(writePath, contents, ENCODING);
       } else if (stats.isDirectory()) {
-        await util.makeDir(path.join(CURR_DIR, newProjectPath, file));
+        await mkdir(CURR_DIR, newProjectPath, file);
         const newTemplatePath = path.join(templatePath, file);
         const newNewProjectPath = path.join(newProjectPath, file);
         await createDirectoryContents(newTemplatePath, newNewProjectPath);
@@ -90,7 +92,7 @@ const createAndCopyFilesImpl = async (
   projectName: string
 ) => {
   try {
-    await util.makeDir(projectPath);
+    await mkdir(projectPath);
   } catch (e) {
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
@@ -111,6 +113,65 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 
-export const removeDirectory = async (directory: string) => {
-  return execa('rm', ['-rf', directory]);
+export const remove = async (...directoryParts: string[]): Promise<boolean> => {
+  if (directoryParts.length === 0) {
+    throw new Error('You must pass directoryParts to this function');
+  }
+  const directory = path.join(...directoryParts);
+  const directoryExists = await fs.exists(directory);
+  if (!directoryExists) {
+    throw new Error(`Directory: ${directory} does not exist`);
+  }
+  return new Promise((resolve, reject) => {
+    rimraf(directory, (error) => {
+      if (error !== null) {
+        reject(error);
+      }
+      resolve(true);
+    });
+  });
+};
+
+export const mkdir = async (...directoryParts: string[]): Promise<boolean> => {
+  if (directoryParts.length === 0) {
+    throw new Error('You must pass directoryParts to this function');
+  }
+  const directory = path.join(...directoryParts);
+  return fs.mkdir(directory).then(() => true);
+};
+
+export const cp = async (
+  fromParts: string[],
+  toParts: string[]
+): Promise<boolean> => {
+  const fromPath = path.join(...fromParts);
+  const toPath = path.join(...toParts);
+  const result = shelljs.cp('-r', fromPath, toPath);
+  if (result.stderr !== null) {
+    throw new Error(result.stderr);
+  }
+  return true;
+};
+
+export const mv = async (
+  fromParts: string[],
+  toDirParts: string[]
+): Promise<boolean> => {
+  const fromPath = path.join(...fromParts);
+  const toPath = path.join(...toDirParts);
+  // const result =
+  shelljs.mv('', fromPath, toPath);
+  // if (result.stderr !== null) {
+  //   throw new Error(result.stderr);
+  // }
+  return true;
+};
+
+export const rename = async (
+  fromParts: string[],
+  toParts: string[]
+): Promise<boolean> => {
+  const fromPath = path.join(...fromParts);
+  const toPath = path.join(...toParts);
+  return fs.rename(fromPath, toPath).then(() => true);
 };

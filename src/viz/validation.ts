@@ -16,6 +16,7 @@
  */
 
 import * as execa from 'execa';
+import * as shelljs from 'shelljs';
 import terminalLink from 'terminal-link';
 import * as analytics from '../analytics';
 import {Action, Category} from '../analytics';
@@ -24,10 +25,8 @@ import {format} from '../util';
 export const addBucketPrefix = (bucket: string) =>
   bucket.startsWith('gs://') ? bucket : `gs://${bucket}`;
 
-export const checkGsutilInstalled = async (): Promise<boolean> => {
-  try {
-    await execa('which', ['gsutil']);
-  } catch (e) {
+export const checkGsutilInstalled = (): boolean => {
+  if (shelljs.which('gsutil') === null) {
     analytics.trackEvent(Category.EXECUTION, Action.GSUTIL_NOT_INSTALLED);
 
     const error = format.red.bold('ERROR');

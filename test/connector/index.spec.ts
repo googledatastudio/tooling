@@ -17,9 +17,10 @@ jest.mock('../../src/connector/validation');
 
 console.log = jest.fn();
 
-jest.setTimeout(40000);
+const fiveMinutes = 5 * 60 * 1000;
+jest.setTimeout(fiveMinutes);
 
-describe('End-to-end-tests w/ mocked appsscript & validation', () => {
+describe('End-to-end-tests for connectors w/ mocked appsscript & validation', () => {
   const connectorNames = {
     happyPath: 'happy_path',
     happyPathTs: 'happy_path_ts',
@@ -61,10 +62,10 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
       basePath: '.',
     };
     await sut.createFromTemplate(config);
-    expect(hasFile(connectorName)).toBeTruthy();
-    expect(hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
+    expect(await hasFile(connectorName)).toBeTruthy();
+    expect(await hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
 
-    await files.removeDirectory(connectorName);
+    await files.remove(connectorName);
   });
 
   test('happy path for typescript', async () => {
@@ -83,9 +84,9 @@ describe('End-to-end-tests w/ mocked appsscript & validation', () => {
     };
     await sut.createFromTemplate(config);
 
-    expect(hasFile(connectorName)).toBeTruthy();
-    expect(hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
+    expect(await hasFile(connectorName)).toBeTruthy();
+    expect(await hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
 
-    await files.removeDirectory(connectorName);
+    await files.remove(connectorName);
   });
 });
