@@ -2,7 +2,7 @@ import * as argparse from 'argparse';
 import {Question} from 'inquirer';
 import inquirer = require('inquirer');
 import * as path from 'path';
-import {PWD} from './constants';
+import * as constants from './constants';
 import {
   AuthType,
   CommonConfig,
@@ -75,7 +75,7 @@ const projectNameValidator = async (input: string) => {
   if (!projectNameRegEx.test(input)) {
     return 'Name may only include letters, numbers, dashes, and underscores.';
   }
-  const projectPath = path.join(PWD, input);
+  const projectPath = path.join(constants.PWD, input);
   if (await util.fileExists(projectPath)) {
     return `The directory ${input} already exists.`;
   }
@@ -147,7 +147,7 @@ const connectorQuestions: Array<
 
 const getParser = (): argparse.ArgumentParser => {
   const parser = new argparse.ArgumentParser({
-    version: process.env.npm_package_version,
+    version: constants.packageJSON.version,
     addHelp: true,
     description: 'Tool for generating Data Studio Developer feature projects.',
   });
