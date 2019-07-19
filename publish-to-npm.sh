@@ -23,10 +23,10 @@ fi
 
 set -x
 
-# Double check that all tests are working.
-yarn travis
 # Install needed dependencies
 yarn install
+# Double check that all tests are working.
+yarn travis
 # Delete old build files
 rm -rf build
 # Build code
