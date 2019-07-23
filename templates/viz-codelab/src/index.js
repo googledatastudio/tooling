@@ -15,15 +15,14 @@ const drawViz = (data) => {
 
   // append the data to a div
   let div = document.createElement('div');
-  div.innerHTML = 
-  `<h2>Community Visualization Codelab</h2>
+  div.innerHTML = `<h2>Community Visualization Codelab</h2>
   This is the starter template for the <code>dscc-gen</code> codelab.
   <p>
   There are currently ${data.tables.DEFAULT.length} rows in the data.
   </p>
   `;
 
-  document.body.appendChild(div);  
+  document.body.appendChild(div);
   console.log(data);
 };
 
