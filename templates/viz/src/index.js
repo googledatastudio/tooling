@@ -8,6 +8,7 @@ export const LOCAL = true;
 
 // write viz code here
 const drawViz = (data) => {
+  viz.readmeViz();
   viz.firstViz(data);
 };
 
