@@ -8,6 +8,22 @@ export const LOCAL = true;
 // write viz code here
 const drawViz = (data) => {
   // add a README
+  if (document.querySelector('div')) {
+    var oldDiv = document.querySelector('div');
+    oldDiv.parentNode.removeChild(oldDiv);
+  }
+
+  // append the data to a div
+  let div = document.createElement('div');
+  div.innerHTML = 
+  `<h2>Community Visualization Codelab</h2>
+  This is the starter template for the <code>dscc-gen</code> codelab.
+  <p>
+  There are currently ${data.tables.DEFAULT.length} rows in the data.
+  </p>
+  `;
+
+  document.body.appendChild(div);  
   console.log(data);
 };
 
