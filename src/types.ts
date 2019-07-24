@@ -19,7 +19,7 @@ export enum AuthType {
 }
 
 export interface VizConfigHasDefaults {
-  temp: string;
+  codelab: boolean;
 }
 
 export interface ConnectorConfigHasDefaults {
@@ -35,13 +35,12 @@ export interface ConnectorConfigHasDefaults {
 
 export interface ConnectorConfig
   extends CommonConfig,
-    ConnectorConfigHasDefaults {
+  ConnectorConfigHasDefaults {
   scriptId?: string;
   ts?: boolean;
 }
 
 export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
-  codelab: boolean;
   devBucket: string;
   prodBucket: string;
 }

@@ -250,7 +250,7 @@ const withMissing = async (
       );
     case ProjectChoice.VIZ:
       await checkGsutilInstalled();
-      const vizDefaults: VizConfigHasDefaults = {temp: 'temp'};
+      const vizDefaults: VizConfigHasDefaults = {codelab: false};
       return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:
       return assertNever(projectChoice);

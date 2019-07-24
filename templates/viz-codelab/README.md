@@ -31,7 +31,7 @@ CSS        | `src/index.css`     | [write css code]
 To create a new community visualization based on this template, run the command
 
 ```bash
-npx @google/dscc-gen viz
+npx @google/dscc-gen viz --codelab
 ```
 
 After running this command (and answering some prompts), you will have a minimal

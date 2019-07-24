@@ -29,9 +29,8 @@ export const createFromTemplate = async (
   config.devBucket = addBucketPrefix(config.devBucket);
   config.prodBucket = addBucketPrefix(config.prodBucket);
   const {devBucket, prodBucket, projectName, basePath} = config;
-  const templatePath = config.codelab
-    ? path.join(basePath, 'templates', `${config.projectChoice}-codelab`)
-    : path.join(basePath, 'templates', config.projectChoice);
+  const templateName = config.codelab ? 'viz-codelab' : 'viz';
+  const templatePath = path.join(basePath, 'templates', templateName);
   const projectPath = path.join(PWD, projectName);
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
   const templates: Template[] = [

@@ -18,7 +18,7 @@ const drawViz = (data) => {
   div.innerHTML = `<h2>Community Visualization Codelab</h2>
   This is the starter template for the <code>dscc-gen</code> codelab.
   <p>
-  There are currently ${data.tables.DEFAULT.length} rows in the data.
+  There are currently ${data.tables.DEFAULT.length} rows of data.
   </p>
   `;
 
