@@ -1,5 +1,5 @@
 {
-  "name": "dscc-codelab",
+  "name": "dscc-gen-codelab",
   "organization": "MyOrg",
   "description": "My first visualization package.",
   "logoUrl": "https://logo",
@@ -11,7 +11,7 @@
   "devMode": "DEVMODE_BOOL",
   "components": [
     {
-      "name": "dscc-codelab",
+      "name": "dscc-gen-codelab",
       "description": "My first Community Visualization",
       "iconUrl": "https://url",
       "resource": {
