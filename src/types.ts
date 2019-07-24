@@ -41,6 +41,7 @@ export interface ConnectorConfig
 }
 
 export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
+  codelab: boolean;
   devBucket: string;
   prodBucket: string;
 }

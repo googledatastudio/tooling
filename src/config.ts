@@ -38,6 +38,12 @@ const addVizParser = (
     help: 'The dev bucket',
   });
 
+  vizParser.addArgument(['--codelab', '-c'], {
+    dest: 'codelab',
+    action: 'storeTrue',
+    help: 'Use the codelab template.',
+  });
+
   return vizParser;
 };
 
