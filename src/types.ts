@@ -35,7 +35,7 @@ export interface ConnectorConfigHasDefaults {
 
 export interface ConnectorConfig
   extends CommonConfig,
-  ConnectorConfigHasDefaults {
+    ConnectorConfigHasDefaults {
   scriptId?: string;
   ts?: boolean;
 }
