@@ -19,7 +19,7 @@ export enum AuthType {
 }
 
 export interface VizConfigHasDefaults {
-  temp: string;
+  codelab: boolean;
 }
 
 export interface ConnectorConfigHasDefaults {
