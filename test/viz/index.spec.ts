@@ -29,6 +29,7 @@ describe('End-to-end-tests for viz', () => {
       devBucket: 'test/dscc-gen-test-dev',
       prodBucket: 'test/dscc-gen-test-prod',
       yarn: false,
+      codelab: false,
       projectName: vizName,
       projectChoice: ProjectChoice.VIZ,
       basePath: '.',
