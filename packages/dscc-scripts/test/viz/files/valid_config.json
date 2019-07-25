@@ -1,0 +1,155 @@
+{
+  "data": [
+    {
+      "id": "concepts",
+      "label": "concepts",
+      "elements": [
+        {
+          "id": "dimension",
+          "label": "Dimensions",
+          "type": "DIMENSION",
+          "options": {
+            "min": 1,
+            "max": 4,
+            "supportedTypes": ["TIME", "GEO", "DEFAULT"]
+          }
+        },
+        {
+          "id": "metric",
+          "label": "Metric",
+          "type": "METRIC",
+          "options": {
+            "min": 1,
+            "max": 1
+          }
+        },
+        {
+          "id": "maxres",
+          "label": "maxres",
+          "type": "MAX_RESULTS",
+          "options": {
+            "max": 1
+          }
+        }
+      ]
+    }
+  ],
+  "style": [
+    {
+      "id": "styleSection",
+      "label": "styling",
+      "elements": [
+        {
+          "id": "style1",
+          "label": "style1",
+          "type": "FONT_COLOR",
+          "defaultValue": {
+            "value": "#000000"
+          }
+        },
+        {
+          "id": "style2",
+          "label": "style1",
+          "type": "FONT_SIZE"
+        },
+        {
+          "id": "style3",
+          "label": "style1",
+          "type": "FONT_FAMILY"
+        },
+        {
+          "id": "style4",
+          "label": "style1",
+          "type": "CHECKBOX"
+        },
+        {
+          "id": "style5",
+          "label": "style1",
+          "type": "TEXTINPUT"
+        },
+        {
+          "id": "style6",
+          "label": "style1",
+          "type": "SELECT_SINGLE",
+          "options": [
+            {
+              "label": "hello",
+              "value": "hello"
+            },
+            {
+              "label": "world",
+              "value": "world"
+            }
+          ]
+        },
+        {
+          "id": "style7",
+          "label": "style1",
+          "type": "SELECT_RADIO",
+            "options": [
+              {
+                "label": "hello",
+                "value": "hello"
+              },
+              {
+                "label": "world",
+                "value": "world"
+              }
+            ]
+        },
+        {
+          "id": "style8",
+          "label": "style1",
+          "type": "FILL_COLOR",
+          "defaultValue": "#000000"
+        },
+        {
+          "id": "style9",
+          "label": "style1",
+          "type": "BORDER_COLOR"
+        },
+        {
+          "id": "style10",
+          "label": "style1",
+          "type": "AXIS_COLOR"
+        },
+        {
+          "id": "style11",
+          "label": "style1",
+          "type": "GRID_COLOR"
+        },
+        {
+          "id": "style12",
+          "label": "style1",
+          "type": "OPACITY"
+        },
+        {
+          "id": "style13",
+          "label": "style1",
+          "type": "LINE_WEIGHT"
+        },
+        {
+          "id": "style14",
+          "label": "style1",
+          "type": "LINE_STYLE"
+        },
+        {
+          "id": "style15",
+          "label": "style1",
+          "type": "BORDER_RADIUS"
+        },
+        {
+          "id": "style16",
+          "label": "style1",
+          "type": "INTERVAL"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "id": "onClick",
+      "supportedActions": ["FILTER"]
+    }
+  ]
+}

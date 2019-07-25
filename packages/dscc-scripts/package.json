@@ -1,0 +1,91 @@
+{
+  "name": "@google/dscc-scripts",
+  "version": "1.0.8",
+  "repository": {
+    "type": "git",
+    "url": "googledatastudio/dscc-gen",
+    "directory": "packages/dscc-gen"
+  },
+  "description": "Scripts for managing Data Studio developer projects.",
+  "main": "build/index.js",
+  "bin": {
+    "dscc-scripts": "build/index.js"
+  },
+  "engines": {
+    "node": ">=7.10.0",
+    "npm": ">=5.2.0"
+  },
+  "author": "Matt Hamrick <matthewjhamrick@gmail.com>",
+  "license": "Apache-2.0",
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "bracketSpacing": false,
+    "arrowParens": "always"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:check": "tsc --noEmit",
+    "build:watch": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watchAll --coverage",
+    "lint": "tslint -c tslint.json  \"{src,test}/**/*.{ts,js}\"",
+    "prettier": "prettier --write \"{src,test}/**/*.{ts,js}\"",
+    "prettier:check": "prettier --check \"{src,test}/**/*.{ts,js}\"",
+    "fix": "yarn lint --fix && yarn prettier"
+  },
+  "dependencies": {
+    "argparse": "^1.0.10",
+    "bluebird": "^3.5.3",
+    "chalk": "^2.4.2",
+    "cli-spinner": "^0.2.8",
+    "copy-webpack-plugin": "^4.6.0",
+    "execa": "^1.0.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "mz": "^2.7.0",
+    "open": "^6.0.0",
+    "postcss-loader": "^3.0.0",
+    "terminal-link": "^1.2.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.2.1",
+    "webpack-plugin-replace": "^1.1.1"
+  },
+  "devDependencies": {
+    "@google/clasp": "^2.0.1",
+    "@types/argparse": "^1.0.36",
+    "@types/bluebird": "^3.5.26",
+    "@types/cli-spinner": "^0.2.0",
+    "@types/copy-webpack-plugin": "^4.4.3",
+    "@types/execa": "^0.9.0",
+    "@types/inquirer": "^0.0.43",
+    "@types/insight": "^0.8.0",
+    "@types/jest": "^24.0.8",
+    "@types/mz": "^0.0.32",
+    "@types/node": "^11.9.5",
+    "@types/open": "^6.0.0",
+    "@types/terminal-link": "^1.1.0",
+    "@types/webpack": "^4.4.26",
+    "ajv": "^6.10.0",
+    "jest": "^24.5.0",
+    "prettier": "^1.11.1",
+    "ts-jest": "^24.0.0",
+    "tslint": "^5.13.1",
+    "typescript": "^3.3.3333"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
