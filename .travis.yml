@@ -2,6 +2,7 @@ language: node_js
 env:
   - YARN_GPG=no
 os:
+  - windows
   - linux
   - osx
 node_js:
@@ -12,7 +13,7 @@ branches:
 cache:
   directories:
   - node_modules/
-script:  cd projects/dscc-gen && yarn travis
+script:  cd packages/dscc-gen && yarn travis
 addons:
   apt:
     packages:
