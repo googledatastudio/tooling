@@ -45,7 +45,7 @@
     "prettier:base": "prettier \"src/**/*.ts\" \"templates/**/*.js\" \"templates/**/*.ts\" \"test/**/*.ts\"",
     "prettier:check": "yarn run prettier:base --check",
     "prettier": "yarn run prettier:base --write",
-    "travis": "yarn build && yarn prettier:check && yarn lint && yarn build:check && yarn test",
+    "travis": "npm install && yarn prettier:check && yarn lint && yarn build:check && yarn test",
     "fix": "yarn prettier && yarn lint --fix"
   },
   "dependencies": {
