@@ -12,7 +12,7 @@ branches:
 cache:
   directories:
   - node_modules/
-script:  cd packages/dscc-gen && yarn travis
+script:  cd packages/dscc-gen && yarn && yarn travis
 addons:
   apt:
     packages:
