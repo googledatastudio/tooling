@@ -1,52 +1,54 @@
 <h1 align="center">
   <br>
-  Data Studio Developer Tooling
+  dscc-gen
   <br>
 </h1>
 
-JavaScript packages to make it easier to develop Data Studio [community
-connectors] and [community visualizations]. The packages can be found in the
-[packages](./packages) directory.
+<p align="center"><a href="https://www.npmjs.com/package/@google/dscc-gen"><img src="https://img.shields.io/npm/v/@google/dscc-gen.svg" alt="npm Version"></a> <a href="https://npmcharts.com/compare/@google/dscc-gen?minimal=true"><img src="https://img.shields.io/npm/dw/@google/dscc-gen.svg" alt="npm Downloads"></a> <a href="http://packagequality.com/#?package=%40google%2Fdscc-gen"><img src="http://npm.packagequality.com/shield/%40google%2Fdscc-gen.svg" alt="Package Quality"></a> <a href="https://github.com/google/clasp"><img src="https://img.shields.io/badge/built%20with-clasp-4285f4.svg" alt="Built with Clasp"></a></p>
 
+Bootstrap a community connector or community viz from the commandline.
 
-## Packages
+> Note: **dscc-gen requires npm 5.2.0 or later**
 
-### dscc-gen
+## Running
 
-A command-line tool that provides opinionated templates and defaults for
-developing community visualizations and community connectors.
+`npx @google/dscc-gen viz` or `npx @google/dscc-gen connector`
 
-To get started:
+> Note: dscc-gen supports a few flags. Call with a `-h` or `--help` to see
+options.
 
-```
-npx @google/dscc-gen viz
-```
+dscc-gen will ask a series of questions, then create a new project based on the
+responses. Once your project has been created, you'll be presented with
+information with next steps.
 
-or
+## What We Collect
 
-```
-npx @google/dscc-gen connector
-```
+To improve dscc-gen over time, we gather the following:
 
-### dscc-scripts
++   Start of Execution
++   Stop of Execution
++   Error Stops of Execution (i.e. an exception was thrown)
++   gsutil was not installed
++   SigInt Stop (i.e. C-c to abort running)
 
-Scripts to simplify development and management of Data Studio developer
-features.
+None of this is sent if you opt-out of analytics. To opt out at any time, run
+`rm ~/.config/insight-nodejs/insight-@google/dscc-gen.json` and you'll be
+prompted again the next time you run the tool.
 
-To use:
+### How We Collect
 
-```
-npm install -D @google/dscc-scripts
-```
+dscc-gen generates a random uuid to identify your computer, and a random uuid to
+identify an individual run of the tool. An individual run of the tool will look
+something like: `[Execution Starts] -> [Execution Stops]`.
 
-or
+If you're interested in the weeds of this, check out [analytics.ts].
 
-```
-yarn add -D @google/dscc-scripts
-```
+### Why We Collect
 
+These analytics are used to:
 
-[community connectors]: https://developers.google.com/datastudio/connector/
++   Ensure the tool isn't regularly throwing errors
++   Identify gaps in documentation for common errors
++   Understand how users interact with this tool.
 
-[community visualizations]: https://developers.google.com/datastudio/visualization/
-
+[analytics.ts]: ./src/analytics.ts
