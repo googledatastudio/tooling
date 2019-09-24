@@ -23,6 +23,8 @@ fi
 
 set -x
 
+# Go to the package directory
+cd packages/dscc-gen
 # Install needed dependencies
 yarn install
 # Double check that all tests are working.
