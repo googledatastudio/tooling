@@ -1,5 +1,3 @@
 #!/bin/bash
 
-cd packages/dscc-gen
-yarn install
-yarn travis
+bash packages/dscc-gen/test.sh
