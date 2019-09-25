@@ -139,7 +139,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@google/clasp@^2.2.1":
+"@google/clasp@2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@google/clasp/-/clasp-2.2.1.tgz#1b7841f75ff0eb169bd978964d963fa85af8bb87"
   integrity sha512-dUdEBfwOuC1d95o1ntZ+4a60M65q2vwvHvgD22bPCx+OU0m+ZUBs5rZSloh/IGDjEVqFbDsHU6SLgM0x3MOhgA==
@@ -2178,7 +2178,7 @@ inquirer-autocomplete-prompt@1.0.1:
     figures "^2.0.0"
     run-async "^2.3.0"
 
-inquirer@^6.3.1, inquirer@^6.4.1:
+inquirer@6.4.1, inquirer@^6.3.1, inquirer@^6.4.1:
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-6.4.1.tgz#7bd9e5ab0567cd23b41b0180b68e0cfa82fc3c0b"
   integrity sha512-/Jw+qPZx4EDYsaT6uz7F4GJRNFMRdKNeUZw3ZnKV8lyuUgz/YWRCSUAJMZSVhSq4Ec0R2oYnyi6b3d4JXcL5Nw==
@@ -4890,7 +4890,7 @@ type-fest@^0.3.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.3.1.tgz#63d00d204e059474fe5e1b7c011112bbd1dc29e1"
   integrity sha512-cUGJnCdr4STbePCgqNFbpVNCepa+kAVohJs1sLhxzdH+gnEoOd8VhbYa7pD3zZYGiURWM2xzEII3fQcRizDkYQ==
 
-typescript@^3.4.4, typescript@^3.5.2, typescript@^3.5.3:
+typescript@3.5.3, typescript@^3.4.4, typescript@^3.5.2:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
   integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
