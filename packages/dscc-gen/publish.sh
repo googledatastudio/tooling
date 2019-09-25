@@ -1,15 +1,17 @@
 #!/bin/bash
 
+# Change to package directory
+cd packages/dscc-gen
 # Install needed dependencies
-npm install
+yarn 
 # Double check all tests work
-npm run travis
+yarn travis
 # Delete old build files
 rm -rf build
 # Build code
-npm run build
+yarn build
 # Create a new version
-npm run version
+yarn version
 # Create a new publish token
 npm login --registry https://wombat-dressing-room.appspot.com
 # Publish new version to npm
