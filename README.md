@@ -51,4 +51,8 @@ These analytics are used to:
 +   Identify gaps in documentation for common errors
 +   Understand how users interact with this tool.
 
+## Developer notes
+- The top-level `package.json` and `yarn.lock` exist to make sure that yarn is
+  available in our travis environment.
+
 [analytics.ts]: ./src/analytics.ts
