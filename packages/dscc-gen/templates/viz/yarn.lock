@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@google/dscc-scripts@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.9.tgz#004afca6166bcea8dc3cd14ffb9a1b726650be69"
-  integrity sha512-szBsRKXpsd0xqK4WJ077n/aOy1x5tGZh+pbUD0cFR5uykzSLrXn6NS+hnvSxNCQvv8TLQa8/4A857AOA+HV3aA==
+"@google/dscc-scripts@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.10.tgz#2f670e90c0f442496d41dc29866367e427f9e16b"
+  integrity sha512-fSza1/QkC/MELwQMVL+NvzBfnRUNPyHGGFHa/Yj2AxbOFQ7Raig/H9T/ZaDi64A3mJxxKi6pbPVEsQpOIUQ0dg==
   dependencies:
     argparse "^1.0.10"
     bluebird "^3.5.3"
