@@ -26,5 +26,8 @@ set -x
 # Publish dscc-gen
 bash packages/dscc-gen/publish.sh
 
+# Publish dscc-scripts
+bash packages/dscc-scripts/publish.sh
+
 # Push the new version
 git push
