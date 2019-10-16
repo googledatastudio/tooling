@@ -1,19 +1,12 @@
 #!/bin/bash
-set -e
+set -ex
 
-echo "Checking linting..."
-if ! yarn lint > /dev/null 2>&1; then
-  echo "Linting failed, fix any lint problems before deploying another build."
-  exit 1
-fi
+yarn lint
+echo
 
-echo "Checking prettier..."
-if ! yarn prettier:check > /dev/null 2>&1; then
-  echo "Prettier failed. Run prettier before deploying another build."
-  exit 1
-fi
+yarn prettier:check
+echo
 
-set -x
 # Install needed dependencies
 yarn install
 # Delete old build files
