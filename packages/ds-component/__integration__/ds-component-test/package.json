@@ -1,0 +1,27 @@
+{
+  "dsccViz": {
+    "gcsDevBucket": "gs://mjhamrick/ds-component-test-dev",
+    "gcsProdBucket": "gs://mjhamrick/ds-component-test-prod",
+    "jsFile": "index.js",
+    "jsonFile": "index.json",
+    "cssFile": "index.css",
+    "print": "printMessage.js",
+    "testReport": "https://datastudio.google.com/c/u/0/reporting/1lx0XNLBSZDCKH3T6_VaXztX5FlS540ho/page/h74q"
+  },
+  "scripts": {
+    "try_report": "open $npm_package_dsccViz_testReport",
+    "build:dev": "(cd ../..; yarn build); rm -rf node_modules/@google/dscc; rsync -r --exclude=__integration__ ../../ node_modules/@google/dscc/; dscc-scripts viz build -d dev",
+    "build:prod": "dscc-scripts viz build -d prod",
+    "push:dev": "dscc-scripts viz push -d dev",
+    "push:prod": "dscc-scripts viz push -d prod",
+    "update_message": "dscc-scripts viz update_message -f object",
+    "start": "dscc-scripts viz start"
+  },
+  "devDependencies": {
+    "@google/dscc-scripts": "^1.0.0",
+    "open-cli": "^5.0.0"
+  },
+  "dependencies": {
+    "@google/dscc": "^0.3.11"
+  }
+}
