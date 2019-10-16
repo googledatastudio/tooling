@@ -1,0 +1,68 @@
+{
+  "name": "@google/dscc",
+  "libraryName": "dscc",
+  "version": "0.3.12",
+  "main": "lib/index.js",
+  "license": "Apache-2.0",
+  "author": "Matt Hamrick",
+  "scripts": {
+    "clean": "rm -rf _bundles lib lib-esm",
+    "build": "yarn build-js && yarn build-ts",
+    "build-js": "yarn prettier && webpack && NODE_ENV=production webpack",
+    "build-ts": "tsc && tsc -m es6 --outDir lib-esm",
+    "build-watch": "onchange \"{src,__tests__}/**/*.ts\" -- yarn build",
+    "lint": "tslint -c tslint.json \"{src,__tests__}/**/*.ts\"",
+    "test": "jest --no-cache",
+    "prettier": "prettier --write \"{src,__tests__,examples}/**/*.ts\"",
+    "prettier:check": "prettier --check \"{src,__tests__,examples}/**/*.ts\"",
+    "dev": "webpack --progress --colors --watch --env dev"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/url-parse": "^1.4.3",
+    "jest": "^24.5.0",
+    "onchange": "^5.2.0",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.0",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.3333",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "yargs": "^13.2.2"
+  },
+  "dependencies": {
+    "url-parse": "^1.4.7"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "bracketSpacing": false,
+    "arrowParens": "always"
+  },
+  "description": "`dscc` (Data Studio Community Component) is a library to help with the building of community components for Google Data Studio. It can be used as a standalone library, or as a npm dependency.",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": "googledatastudio/ds-component",
+  "keywords": [
+    "datastudio",
+    "visualization",
+    "component"
+  ]
+}
