@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -ex
 
 (cd packages/dscc-gen && ./test.sh)

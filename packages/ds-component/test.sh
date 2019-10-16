@@ -1,7 +1,6 @@
 #!/bin/bash
-
+set -ex
 # Run from the root dir
 
-cd packages/ds-component
 yarn install
-yarn test 
+yarn test
