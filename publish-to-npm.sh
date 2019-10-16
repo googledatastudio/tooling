@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 if ! git branch | grep -q "^\* master\$"; then
   echo "You must be on the master branch to run this script"
@@ -23,15 +23,14 @@ fi
 
 set -x
 
-# Publish dscc-scripts
-bash packages/ds-component/publish.sh
+# Publish ds-component
+(cd packages/ds-component && ./publish.sh)
 
 # Publish dscc-scripts
-bash packages/dscc-scripts/publish.sh
+(cd packages/dscc-scripts && ./publish.sh)
 
 # Publish dscc-gen
-bash packages/dscc-gen/publish.sh
-
+(cd packages/dscc-gen && ./publish.sh)
 
 # Push the new version
 git push
