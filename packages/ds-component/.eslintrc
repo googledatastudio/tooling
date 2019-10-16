@@ -1,0 +1,17 @@
+{
+
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "document": false,
+    "window": false
+  },
+  "parser": "babel-eslint",
+  "plugins": [
+  ],
+  "extends": "google",
+  "rules": {
+  }
+}

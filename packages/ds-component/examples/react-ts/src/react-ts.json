@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "id": "concepts",
+      "heading": "Concepts",
+      "elements": [
+        {
+          "id": "dimensions",
+          "label": "Dimensions",
+          "type": "DIMENSION",
+          "options": {
+            "min": 1,
+            "max": 10,
+            "supportedTypes": ["DEFAULT"]
+          }
+        },
+        {
+          "id": "metrics",
+          "label": "Metric",
+          "type": "METRIC",
+          "options": {
+            "min": 1,
+            "max": 10
+          }
+        }
+      ]
+    }
+  ],
+  "style": []
+}

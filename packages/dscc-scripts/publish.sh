@@ -4,6 +4,9 @@
 cd packages/dscc-scripts
 
 # Install needed deps
+yarn
+
+# Run tests
 yarn travis
 
 # Delete old build files
