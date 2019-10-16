@@ -27,7 +27,7 @@ import {
   subscribeToData,
   getHeight,
   getWidth,
-} from 'dscc'
+} from '@google/dscc'
 
 const main = () => {
   const unSub = subscribeToData((message) => {
