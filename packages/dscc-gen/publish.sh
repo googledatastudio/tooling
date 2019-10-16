@@ -1,9 +1,14 @@
 #!/bin/bash
+set -ex
 
-# Change to package directory
-cd packages/dscc-gen
 # Install needed dependencies
-yarn 
+yarn
+
+yarn lint
+echo
+yarn prettier:check
+echo
+
 # Double check all tests work
 yarn travis
 # Delete old build files
