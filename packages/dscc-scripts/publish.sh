@@ -1,14 +1,15 @@
 #!/bin/bash
 set -ex
 
+# Install needed deps
+yarn
+
 yarn lint
 echo
 
 yarn prettier:check
 echo
 
-# Install needed deps
-yarn
 # Run tests
 yarn test
 # Delete old build files

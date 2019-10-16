@@ -1,14 +1,15 @@
 #!/bin/bash
 set -ex
 
+# Install needed dependencies
+yarn install
+
 yarn lint
 echo
 
 yarn prettier:check
 echo
 
-# Install needed dependencies
-yarn install
 # Delete old build files
 rm -rf _bundles
 # Build code

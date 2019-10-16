@@ -1,13 +1,14 @@
 #!/bin/bash
 set -ex
 
+# Install needed dependencies
+yarn
+
 yarn lint
 echo
 yarn prettier:check
 echo
 
-# Install needed dependencies
-yarn
 # Double check all tests work
 yarn travis
 # Delete old build files
