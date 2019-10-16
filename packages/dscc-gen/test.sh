@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# This is run from the root directory
+set -ex
 
-cd packages/dscc-gen
-yarn install
+yarn
 yarn travis

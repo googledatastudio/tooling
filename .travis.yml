@@ -13,7 +13,7 @@ branches:
 cache:
   directories:
   - node_modules/
-script: bash test.sh
+script: ./test.sh
 addons:
   apt:
     packages:
