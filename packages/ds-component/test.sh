@@ -4,4 +4,4 @@
 
 cd packages/ds-component
 yarn install
-yarn travis
+yarn test 
