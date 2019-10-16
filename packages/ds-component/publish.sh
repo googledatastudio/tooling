@@ -2,7 +2,7 @@
 set -ex
 
 # Install needed dependencies
-yarn install
+yarn
 
 yarn lint
 echo
