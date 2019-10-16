@@ -4,4 +4,4 @@
 
 cd packages/dscc-gen
 yarn install
-yarn travis
+yarn test
