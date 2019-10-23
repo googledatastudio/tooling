@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import * as nodeFs from 'fs';
 import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as listFiles from 'recursive-readdir';
@@ -92,7 +93,16 @@ const createAndCopyFilesImpl = async (
   projectName: string
 ) => {
   try {
-    await mkdir(projectPath);
+    await new Promise((resolve, reject) => {
+      // mkdir(projectPath);
+      nodeFs.mkdir(projectPath, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(projectPath);
+        }
+      });
+    });
   } catch (e) {
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
