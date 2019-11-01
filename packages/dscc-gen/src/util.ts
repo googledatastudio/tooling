@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-import * as bb from 'bluebird';
 import chalk from 'chalk';
 import {Spinner} from 'cli-spinner';
 import * as execa from 'execa';
@@ -24,49 +23,27 @@ import * as fs from 'fs';
 import {Answers} from 'inquirer';
 
 export const readDir = (path: string): Promise<string[]> => {
-  return new Promise((resolve, reject) => {
-    fs.readdir(path, (err, data) => {
-      if (err !== null) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
+  return new Promise((resolve, _) => {
+    const data = fs.readdirSync(path);
+    resolve(data)
+  });  
 };
 
 export const readFile = (
   filePath: string,
   encoding: string
-): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, encoding, (err, data) => {
-      if (err !== null) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
+): string => {
+  return fs.readFileSync(filePath, encoding);
 };
 
 export const writeFile = (
-  filePath: string,
-  data: string,
-  encoding: string
-): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(filePath, data, encoding, (err) => {
-      if (err !== null) {
-        reject(err);
-      } else {
-        resolve(true);
-      }
-    });
-  });
-};
-
-export const statSync = bb.promisify(fs.stat);
+    filePath: string,
+    data: string,
+    encoding: string
+  ): boolean => {
+    fs.writeFileSync(filePath, data, encoding);
+    return true;
+  };
 
 export const fileExists = (filePath: string): Promise<boolean> => {
   return new Promise((resolve, _) => {

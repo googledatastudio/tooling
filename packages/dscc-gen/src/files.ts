@@ -15,14 +15,16 @@
  * limitations under the License.
  */
 
-import * as nodeFs from 'fs';
-import * as fs from 'mz/fs';
+//import * as fs from 'mz/fs';
+//import {promises as fs} from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
-import * as listFiles from 'recursive-readdir';
-import * as rimraf from 'rimraf';
+//import * as listFiles from 'recursive-readdir';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
+
+// import promisify from 'util';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -36,11 +38,27 @@ const fixFile = (templates: Template[]) => async (file: string) => {
   return util.writeFile(file, newContents, ENCODING);
 };
 
+export const recursiveReaddirSync = async (baseDirectory: string): Promise<string[]> => 
+{
+  const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
+  const files: string[][] =  await Promise.all(
+    dirContents.map(async (item) => {
+      const itemPath: string  = path.resolve(baseDirectory, item.name);
+      return item.isDirectory() ? (await recursiveReaddirSync(itemPath)) : [itemPath]; 
+    })
+  )
+  return files.reduce((acc, files) => {return acc.concat(files)}, []);
+}
 export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
 ): Promise<boolean> => {
-  const filesToUpdate = await listFiles(baseDirectory, ['node_modules']);
+  console.log('in fix templates');
+  const filesToUpdate = await recursiveReaddirSync(baseDirectory);
+  console.log('here', filesToUpdate);
+  //const filesToUpdate = await listFiles(baseDirectory, ['node_modules']);
+  console.log('after listFiles');
+  console.log(templates);
   await Promise.all(filesToUpdate.map(fixFile(templates)));
   return true;
 };
@@ -53,7 +71,7 @@ export const createDirectoryContents = async (
   return Promise.all(
     filesToCreate.map(async (file) => {
       const originalFilePath = path.join(templatePath, file);
-      const stats = await util.statSync(originalFilePath);
+      const stats = fs.statSync(originalFilePath);
       if (stats.isFile()) {
         const contents = await util.readFile(originalFilePath, ENCODING);
         // npm renames .gitignore to .npmignore so rename it back to .gitignore.
@@ -93,21 +111,16 @@ const createAndCopyFilesImpl = async (
   projectName: string
 ) => {
   try {
-    await new Promise((resolve, reject) => {
-      // mkdir(projectPath);
-      nodeFs.mkdir(projectPath, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(projectPath);
-        }
-      });
-    });
+    console.log('in createAndCopyFilesImpl');
+    await mkdir(projectName);
+    console.log('i made a folder yay!');
   } catch (e) {
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
   try {
+    console.log('create directory contents!');
     await createDirectoryContents(templatePath, projectName);
+    console.log('i made dir contents');
   } catch (e) {
     throw new Error(`Couldn't copy over the template files to: ${projectPath}`);
   }
@@ -128,26 +141,23 @@ export const remove = async (...directoryParts: string[]): Promise<boolean> => {
     throw new Error('You must pass directoryParts to this function');
   }
   const directory = path.join(...directoryParts);
-  const directoryExists = await fs.exists(directory);
-  if (!directoryExists) {
-    throw new Error(`Directory: ${directory} does not exist`);
-  }
-  return new Promise((resolve, reject) => {
-    rimraf(directory, (error) => {
-      if (error !== null) {
-        reject(error);
-      }
-      resolve(true);
-    });
-  });
+  await fs.accessSync(directory);
+  await fs.rmdirSync(directory);
+  return true;
 };
 
 export const mkdir = async (...directoryParts: string[]): Promise<boolean> => {
+  console.log('in mkdir');
+  console.log(directoryParts);
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');
   }
+  //const directory = path.join(...directoryParts);
   const directory = path.join(...directoryParts);
-  return fs.mkdir(directory).then(() => true);
+  console.log(`making this directory ${directory}`)
+  fs.mkdirSync(directory);
+  return true;
+  //return fs.mkdir(directory).then(() => true);
 };
 
 export const cp = async (
@@ -183,5 +193,7 @@ export const rename = async (
 ): Promise<boolean> => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
-  return fs.rename(fromPath, toPath).then(() => true);
+  fs.renameSync(fromPath, toPath);
+  return true;
+  //return fs.rename(fromPath, toPath).then(() => true);
 };

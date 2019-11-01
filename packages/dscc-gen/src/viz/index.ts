@@ -32,18 +32,24 @@ export const createFromTemplate = async (
   const templateName = config.codelab ? 'viz-codelab' : 'viz';
   const templatePath = path.join(basePath, 'templates', templateName);
   const projectPath = path.join(PWD, projectName);
+  console.log('before copies');
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
+  console.log('finishedcreateAndCopy');
   const templates: Template[] = [
     {match: /{{DEV_BUCKET}}/g, replace: devBucket!},
     {match: /{{PROD_BUCKET}}/g, replace: prodBucket!},
   ];
+  console.log('before fix templates');
   await files.fixTemplates(projectPath, templates);
+  console.log('after fix templates');
 
   await util.spinnify('Installing project dependencies...', async () => {
     if (config.yarn) {
       await execa('yarn', [], {cwd: projectPath});
     } else {
+      console.log('about to install');
       await execa('npm', ['install'], {cwd: projectPath});
+      console.log('i finished installing');
     }
   });
 
