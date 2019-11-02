@@ -6,6 +6,7 @@ os:
   - linux
   - osx
 node_js:
+  - 12
   - "node"
 branches:
   only:

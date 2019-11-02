@@ -15,16 +15,11 @@
  * limitations under the License.
  */
 
-//import * as fs from 'mz/fs';
-//import {promises as fs} from 'fs';
 import * as fs from 'fs';
 import * as path from 'path';
-//import * as listFiles from 'recursive-readdir';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
-
-// import promisify from 'util';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -53,12 +48,7 @@ export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
 ): Promise<boolean> => {
-  console.log('in fix templates');
   const filesToUpdate = await recursiveReaddirSync(baseDirectory);
-  console.log('here', filesToUpdate);
-  //const filesToUpdate = await listFiles(baseDirectory, ['node_modules']);
-  console.log('after listFiles');
-  console.log(templates);
   await Promise.all(filesToUpdate.map(fixFile(templates)));
   return true;
 };
@@ -111,16 +101,12 @@ const createAndCopyFilesImpl = async (
   projectName: string
 ) => {
   try {
-    console.log('in createAndCopyFilesImpl');
     await mkdir(projectName);
-    console.log('i made a folder yay!');
   } catch (e) {
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
   try {
-    console.log('create directory contents!');
     await createDirectoryContents(templatePath, projectName);
-    console.log('i made dir contents');
   } catch (e) {
     throw new Error(`Couldn't copy over the template files to: ${projectPath}`);
   }
@@ -141,23 +127,24 @@ export const remove = async (...directoryParts: string[]): Promise<boolean> => {
     throw new Error('You must pass directoryParts to this function');
   }
   const directory = path.join(...directoryParts);
-  await fs.accessSync(directory);
-  await fs.rmdirSync(directory);
+  fs.accessSync(directory);
+  // TODO: rmdirSync
+  fs.rmdirSync(directory);
   return true;
 };
 
 export const mkdir = async (...directoryParts: string[]): Promise<boolean> => {
-  console.log('in mkdir');
-  console.log(directoryParts);
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');
   }
-  //const directory = path.join(...directoryParts);
   const directory = path.join(...directoryParts);
-  console.log(`making this directory ${directory}`)
-  fs.mkdirSync(directory);
+  try {
+    fs.mkdirSync(directory, {recursive: true});
+  }
+  catch (err){
+    throw Error(err);
+  }
   return true;
-  //return fs.mkdir(directory).then(() => true);
 };
 
 export const cp = async (
@@ -179,11 +166,10 @@ export const mv = async (
 ): Promise<boolean> => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toDirParts);
-  // const result =
-  shelljs.mv('', fromPath, toPath);
-  // if (result.stderr !== null) {
-  //   throw new Error(result.stderr);
-  // }
+  const result = shelljs.mv('', fromPath, toPath);
+  if (result.stderr !== null){
+    throw new Error(result.stderr);
+  }
   return true;
 };
 
@@ -193,7 +179,10 @@ export const rename = async (
 ): Promise<boolean> => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
-  fs.renameSync(fromPath, toPath);
+  try {
+    fs.renameSync(fromPath, toPath);
+  } catch(err){
+    throw new Error(err);
+  }
   return true;
-  //return fs.rename(fromPath, toPath).then(() => true);
 };

@@ -19,7 +19,6 @@ import * as path from 'path';
 import {PWD} from '../constants';
 import * as files from '../files';
 import {Template, VizConfig} from '../types';
-import * as util from '../util';
 import {format} from '../util';
 import {addBucketPrefix} from './validation';
 
@@ -32,27 +31,18 @@ export const createFromTemplate = async (
   const templateName = config.codelab ? 'viz-codelab' : 'viz';
   const templatePath = path.join(basePath, 'templates', templateName);
   const projectPath = path.join(PWD, projectName);
-  console.log('before copies');
   await files.createAndCopyFiles(projectPath, templatePath, projectName);
-  console.log('finishedcreateAndCopy');
   const templates: Template[] = [
     {match: /{{DEV_BUCKET}}/g, replace: devBucket!},
     {match: /{{PROD_BUCKET}}/g, replace: prodBucket!},
   ];
-  console.log('before fix templates');
   await files.fixTemplates(projectPath, templates);
-  console.log('after fix templates');
-
-  await util.spinnify('Installing project dependencies...', async () => {
-    if (config.yarn) {
-      await execa('yarn', [], {cwd: projectPath});
-    } else {
-      console.log('about to install');
-      await execa('npm', ['install'], {cwd: projectPath});
-      console.log('i finished installing');
-    }
-  });
-
+  console.log('Installing dependencies...');
+  if (config.yarn) {
+    execa.sync('yarn', [], {cwd: projectPath});
+  } else {
+    execa.sync('npm', ['install'], {cwd: projectPath});
+  }
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
   const cdDirection = format.blue(`cd ${projectName}`);
