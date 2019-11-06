@@ -95,7 +95,7 @@ export const validateManifest = (manifest: object) => {
   try {
     return validateWithSchema(manifest, manifestSchema);
   } catch (e) {
-    throw new Error(`Invalid manifest: ${JSON.stringify(e)}`);
+    throw new Error(`Invalid manifest: ${JSON.stringify(e, undefined, '  ')}`);
   }
 };
 
