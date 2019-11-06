@@ -47,6 +47,7 @@
   "dependencies": {
     "@google/clasp": "2.2.1",
     "@types/mz": "^0.0.32",
+    "@types/node": "^12.12.6",
     "@types/shelljs": "^0.8.5",
     "argparse": "^1.0.10",
     "bluebird": "^3.7.1",
@@ -72,7 +73,6 @@
     "@types/inquirer": "^6.0.3",
     "@types/insight": "^0.8.0",
     "@types/jest": "^24.0.15",
-    "@types/node": "^12.6.1",
     "@types/recursive-readdir": "^2.2.0",
     "@types/rimraf": "^2.0.2",
     "@types/terminal-link": "^1.1.0",
