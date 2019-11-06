@@ -23,9 +23,10 @@ export const manifestSchema = {
     privacyPolicyUrl: {type: 'string'},
     termsOfServiceUrl: {type: 'string'},
     packageUrl: {type: 'string'},
-    devMode: {type: 'string'},
+    devMode: {type: ['string', 'boolean']},
     components: {
       type: 'array',
+      minItems: 1,
       items: {
         $ref: '#/definitions/component',
       },
@@ -485,6 +486,9 @@ export const configSchema = {
             $ref: '#/definitions/styleElementOptions',
           },
         },
+        defaultValue: {
+          type: 'string',
+        },
       },
     },
     selectRadio: {
@@ -503,6 +507,9 @@ export const configSchema = {
           items: {
             $ref: '#/definitions/styleElementOptions',
           },
+        },
+        defaultValue: {
+          type: 'string',
         },
       },
     },

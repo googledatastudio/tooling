@@ -1,11 +1,5 @@
-import * as fs from 'mz/fs';
 import {VizScripts} from '../../src/args';
 import * as sut from '../../src/viz/util';
-
-const readFile = async (fn: string) => {
-  const encoding = 'utf-8';
-  return fs.readFile(fn, encoding);
-};
 
 beforeEach(() => {
   process.env.npm_package_dsccViz_cssFile = 'cssFile';
@@ -72,32 +66,89 @@ test('validateBuildValues missing gcsProdBucket', () => {
   );
 });
 
-test('valid manifest', () => {
-  const validManifestFn = './test/viz/files/valid_manifest.json';
-  return readFile(validManifestFn).then((manifestContents) => {
-    expect(sut.validateManifest(manifestContents)).toBe(true);
+describe('manifest validation', () => {
+  test('passes when devMode is a boolean', () => {
+    const manifest = {
+      packageUrl: '',
+      components: [
+        {
+          name: '',
+          description: '',
+          iconUrl: '',
+          resource: {
+            js: '',
+            config: '',
+          },
+        },
+      ],
+      devMode: true,
+      termsOfServiceUrl: '',
+      privacyPolicyUrl: '',
+      logoUrl: '',
+      description: '',
+      organization: '',
+      organizationUrl: '',
+      name: '',
+      supportUrl: '',
+    };
+    expect(sut.validateManifest(manifest)).toBe(true);
   });
-});
 
-test('invalid manifest', () => {
-  const manifestFn = './test/viz/files/manifest_no_privacyPolicyUrl.json';
-  return readFile(manifestFn).then((manifestContents) => {
-    expect(() => sut.validateManifest(manifestContents)).toThrow(
+  test('passes when all required fields provided', () => {
+    const validManifestFn = './test/viz/files/valid_manifest.json';
+    expect(sut.validateManifestFile(validManifestFn)).toBe(true);
+  });
+
+  test('throws when missing privacyPolicy', () => {
+    const manifestFn = './test/viz/files/manifest_no_privacyPolicyUrl.json';
+    expect(() => sut.validateManifestFile(manifestFn)).toThrow(
       'Invalid manifest'
     );
   });
 });
 
-test('valid config', () => {
-  const validConfigFn = './test/viz/files/valid_config.json';
-  return readFile(validConfigFn).then((configContents) => {
-    expect(sut.validateConfig(configContents)).toBe(true);
+describe('config validation', () => {
+  test('throws when encountering extra key', () => {
+    const configPath = './test/viz/files/config_extraStyleKey.json';
+    expect(() => sut.validateConfigFile(configPath)).toThrow('Invalid config');
   });
-});
 
-test('invalid config', () => {
-  const validConfigFn = './test/viz/files/config_extraStyleKey.json';
-  return readFile(validConfigFn).then((configContents) => {
-    expect(() => sut.validateConfig(configContents)).toThrow('Invalid config');
+  test('passes when all required fields provided', () => {
+    const configPath = 'test/viz/files/valid_config.json';
+    expect(sut.validateConfigFile(configPath)).toBe(true);
+  });
+
+  test('allows default values for SELECT_SINGLE & SELECT_RADIO', () => {
+    const config = {
+      style: [
+        {
+          id: 'id',
+          label: 'label',
+          elements: [
+            {
+              id: 'select-single',
+              label: 'My Select Single',
+              options: [
+                {value: 'first', label: 'First'},
+                {value: 'second', label: 'Second'},
+              ],
+              defaultValue: 'first',
+              type: 'SELECT_SINGLE',
+            },
+            {
+              id: 'select-radio',
+              label: 'My Select Radio',
+              options: [
+                {value: 'first', label: 'First'},
+                {value: 'second', label: 'Second'},
+              ],
+              defaultValue: 'second',
+              type: 'SELECT_RADIO',
+            },
+          ],
+        },
+      ],
+    };
+    expect(sut.validateConfig(config)).toBe(true);
   });
 });
