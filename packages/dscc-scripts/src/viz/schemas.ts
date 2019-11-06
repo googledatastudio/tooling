@@ -486,6 +486,9 @@ export const configSchema = {
             $ref: '#/definitions/styleElementOptions',
           },
         },
+        defaultValue: {
+          type: 'string',
+        },
       },
     },
     selectRadio: {
@@ -504,6 +507,9 @@ export const configSchema = {
           items: {
             $ref: '#/definitions/styleElementOptions',
           },
+        },
+        defaultValue: {
+          type: 'string',
         },
       },
     },
