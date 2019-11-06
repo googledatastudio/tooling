@@ -87,11 +87,3 @@ export const invalidVizConfig = (path: keyof VizConfig['dsccViz']) => {
 };
 
 export const pipeStdIO: CommonOptions = {stdio: 'inherit'};
-
-export const invalidVizJSON = (fileName: string, validationError: any) => {
-  const prettyPrintedError = JSON.stringify(validationError, undefined, '  ');
-  return new Error(`
-    Invalid ${fileName} file\n
-    ${prettyPrintedError}
-  `);
-};

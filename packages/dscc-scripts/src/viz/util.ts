@@ -16,8 +16,9 @@
  */
 import * as Ajv from 'ajv';
 import {DeploymentChoices, VizArgs} from '../args';
-import {invalidVizConfig, invalidVizJSON} from '../util';
+import {invalidVizConfig} from '../util';
 import {configSchema, manifestSchema} from './schemas';
+import {PathLike, existsSync, readFileSync} from 'fs';
 
 export interface BuildValues {
   devBucket: string;
@@ -69,24 +70,69 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   };
 };
 
-const validateJSON = (jsonStr: string, schema: any, fn: string) => {
+const friendifyError = (error: Ajv.ErrorObject): string =>
+  `The value at: ${error.dataPath} is invalid. ${error.message}.`;
+
+const unique = <T>(ts: T[]): T[] => [...new Set(ts)];
+
+const validateWithSchema = (o: object, schema: object): boolean => {
   const ajv = new Ajv({allErrors: true});
-  const jsonObject = JSON.parse(jsonStr);
-  const testJson = ajv.compile(schema);
-  const isValid = testJson(jsonObject);
-  // testJson.errors
-  if (isValid === false) {
-    throw invalidVizJSON(fn, testJson.errors);
+  const configValidator = ajv.compile(schema);
+  const isValidConfig = configValidator(o);
+  if (!isValidConfig) {
+    const friendlyError = unique(
+      (configValidator.errors || [])
+        .map(friendifyError)
+        // The error messages talking about `anyOf` aren't useful to most developers.
+        .filter((s) => !s.includes('anyOf'))
+    );
+    throw friendlyError;
   }
-  return isValid;
+  return true;
 };
 
-export const validateConfig = (configContents: string) => {
-  const filename = 'config';
-  return validateJSON(configContents, configSchema, filename);
+export const validateManifest = (manifest: object) => {
+  try {
+    return validateWithSchema(manifest, manifestSchema);
+  } catch (e) {
+    throw new Error(`Invalid manifest: ${JSON.stringify(e, undefined, '  ')}`);
+  }
 };
 
-export const validateManifest = (manifestContents: string) => {
-  const filename = 'manifest';
-  return validateJSON(manifestContents, manifestSchema, filename);
+export const validateManifestFile = (path: PathLike) => {
+  const fileExists = existsSync(path);
+  if (!fileExists) {
+    throw new Error(`The file: \n${path}\n was not found.`);
+  }
+  const fileContents = readFileSync(path, 'utf8');
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(fileContents);
+  } catch (e) {
+    throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
+  }
+  return validateManifest(parsedJson);
+};
+
+export const validateConfig = (config: object) => {
+  try {
+    return validateWithSchema(config, configSchema);
+  } catch (e) {
+    throw new Error(`Invalid config: \n${JSON.stringify(e, undefined, '  ')}`);
+  }
+};
+
+export const validateConfigFile = (path: PathLike) => {
+  const fileExists = existsSync(path);
+  if (!fileExists) {
+    throw new Error(`The file: \n${path}\n was not found.`);
+  }
+  const fileContents = readFileSync(path, 'utf8');
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(fileContents);
+  } catch (e) {
+    throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
+  }
+  return validateConfig(parsedJson);
 };
