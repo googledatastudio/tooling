@@ -117,6 +117,7 @@ describe('manifest validation', () => {
           },
         },
       ],
+      devMode: true,
       termsOfServiceUrl: '',
       privacyPolicyUrl: '',
       logoUrl: '',
