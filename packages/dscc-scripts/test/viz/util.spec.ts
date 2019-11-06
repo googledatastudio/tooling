@@ -101,3 +101,32 @@ test('invalid config', () => {
     expect(() => sut.validateConfig(configContents)).toThrow('Invalid config');
   });
 });
+
+describe('manifest validation', () => {
+  test('devMode is a boolean', () => {
+    const manifest = JSON.stringify({
+      packageUrl: '',
+      components: [
+        {
+          name: '',
+          description: '',
+          iconUrl: '',
+          resource: {
+            js: '',
+            config: '',
+          },
+        },
+      ],
+      devMode: true,
+      termsOfServiceUrl: '',
+      privacyPolicyUrl: '',
+      logoUrl: '',
+      description: '',
+      organization: '',
+      organizationUrl: '',
+      name: '',
+      supportUrl: '',
+    });
+    expect(sut.validateManifest(manifest)).toBe(true);
+  });
+});
