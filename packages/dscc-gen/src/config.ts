@@ -16,7 +16,7 @@ import {assertNever} from './util';
 import * as util from './util';
 import {
   addBucketPrefix,
-//  checkGsutilInstalled,
+  //  checkGsutilInstalled,
   hasBucketPermissions,
 } from './viz/validation';
 
@@ -249,7 +249,7 @@ const withMissing = async (
         connectorDefaults
       );
     case ProjectChoice.VIZ:
-      //await checkGsutilInstalled();
+      // await checkGsutilInstalled();
       const vizDefaults: VizConfigHasDefaults = {codelab: false};
       return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:

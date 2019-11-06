@@ -51,9 +51,7 @@ describe('For the file utility', () => {
       const actual = sut.cp([source], [destination]);
       expect(actual).toBe(true);
       expect(fs.existsSync(path.join(destination, filename))).toBeTruthy();
-      expect(
-        fs.existsSync(path.join(destination, sub, filename))
-      ).toBeTruthy();
+      expect(fs.existsSync(path.join(destination, sub, filename))).toBeTruthy();
 
       sut.remove(source);
       sut.remove(destination);

@@ -33,17 +33,22 @@ const fixFile = (templates: Template[]) => async (file: string) => {
   return util.writeFile(file, newContents, ENCODING);
 };
 
-export const recursiveReaddirSync = async (baseDirectory: string): Promise<string[]> => 
-{
+export const recursiveReaddirSync = async (
+  baseDirectory: string
+): Promise<string[]> => {
   const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
-  const files: string[][] =  await Promise.all(
+  const files: string[][] = await Promise.all(
     dirContents.map(async (item) => {
-      const itemPath: string  = path.resolve(baseDirectory, item.name);
-      return item.isDirectory() ? (await recursiveReaddirSync(itemPath)) : [itemPath]; 
+      const itemPath: string = path.resolve(baseDirectory, item.name);
+      return item.isDirectory()
+        ? await recursiveReaddirSync(itemPath)
+        : [itemPath];
     })
-  )
-  return files.reduce((acc, files) => {return acc.concat(files)}, []);
-}
+  );
+  return files.reduce((acc, fileNames) => {
+    return acc.concat(fileNames);
+  }, []);
+};
 export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
@@ -129,15 +134,14 @@ export const remove = (...directoryParts: string[]): boolean => {
   const directory = path.join(...directoryParts);
   try {
     const stats = fs.statSync(directory);
-    if (stats.isDirectory()){
+    if (stats.isDirectory()) {
       fs.rmdirSync(directory, {recursive: true});
     } else {
-      fs.unlinkSync(directory);      
+      fs.unlinkSync(directory);
     }
-  }
-  catch (err){
+  } catch (err) {
     throw new Error(`Unable to remove ${directory}`);
-  }  
+  }
   return true;
 };
 
@@ -148,17 +152,13 @@ export const mkdir = (...directoryParts: string[]): boolean => {
   const directory = path.join(...directoryParts);
   try {
     fs.mkdirSync(directory, {recursive: true});
-  }
-  catch (err){
+  } catch (err) {
     throw Error(err);
   }
   return true;
 };
 
-export const cp = (
-  fromParts: string[],
-  toParts: string[]
-): boolean => {
+export const cp = (fromParts: string[], toParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
   const result = shelljs.cp('-r', fromPath, toPath);
@@ -168,30 +168,24 @@ export const cp = (
   return true;
 };
 
-export const mv = (
-  fromParts: string[],
-  toDirParts: string[]
-): boolean => {
+export const mv = (fromParts: string[], toDirParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toDirParts);
   const result = shelljs.mv('', fromPath, toPath);
-  if (!fs.existsSync(toPath)){
-    if (result.stderr !== null){
+  if (!fs.existsSync(toPath)) {
+    if (result.stderr !== null) {
       throw new Error(result.stderr);
     }
   }
-  return true
+  return true;
 };
 
-export const rename = (
-  fromParts: string[],
-  toParts: string[]
-): boolean => {
+export const rename = (fromParts: string[], toParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
   try {
     fs.renameSync(fromPath, toPath);
-  } catch(err){
+  } catch (err) {
     throw new Error(err);
   }
   return true;

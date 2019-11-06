@@ -25,25 +25,22 @@ import {Answers} from 'inquirer';
 export const readDir = (path: string): Promise<string[]> => {
   return new Promise((resolve, _) => {
     const data = fs.readdirSync(path);
-    resolve(data)
-  });  
+    resolve(data);
+  });
 };
 
-export const readFile = (
-  filePath: string,
-  encoding: string
-): string => {
+export const readFile = (filePath: string, encoding: string): string => {
   return fs.readFileSync(filePath, encoding);
 };
 
 export const writeFile = (
-    filePath: string,
-    data: string,
-    encoding: string
-  ): boolean => {
-    fs.writeFileSync(filePath, data, encoding);
-    return true;
-  };
+  filePath: string,
+  data: string,
+  encoding: string
+): boolean => {
+  fs.writeFileSync(filePath, data, encoding);
+  return true;
+};
 
 export const fileExists = (filePath: string): Promise<boolean> => {
   return new Promise((resolve, _) => {
