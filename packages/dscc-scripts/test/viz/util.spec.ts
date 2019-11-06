@@ -88,16 +88,6 @@ test('invalid manifest', () => {
   });
 });
 
-test('valid config', () => {
-  const configPath = 'test/viz/files/valid_config.json';
-  expect(sut.validateConfigFile(configPath)).toBe(true);
-});
-
-test('invalid config', () => {
-  const configPath = './test/viz/files/config_extraStyleKey.json';
-  expect(() => sut.validateConfigFile(configPath)).toThrow('Invalid config');
-});
-
 describe('manifest validation', () => {
   test('devMode is a boolean', () => {
     const manifest = JSON.stringify({
@@ -128,6 +118,16 @@ describe('manifest validation', () => {
 });
 
 describe('config validation', () => {
+  test('throws when encountering extra key', () => {
+    const configPath = './test/viz/files/config_extraStyleKey.json';
+    expect(() => sut.validateConfigFile(configPath)).toThrow('Invalid config');
+  });
+
+  test('passes when all required fields provided', () => {
+    const configPath = 'test/viz/files/valid_config.json';
+    expect(sut.validateConfigFile(configPath)).toBe(true);
+  });
+
   test('allows default values for SELECT_SINGLE & SELECT_RADIO', () => {
     const config = {
       style: [
