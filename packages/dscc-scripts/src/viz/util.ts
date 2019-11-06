@@ -18,6 +18,7 @@ import * as Ajv from 'ajv';
 import {DeploymentChoices, VizArgs} from '../args';
 import {invalidVizConfig, invalidVizJSON} from '../util';
 import {configSchema, manifestSchema} from './schemas';
+import {PathLike, existsSync, readFileSync} from 'fs';
 
 export interface BuildValues {
   devBucket: string;
@@ -81,12 +82,37 @@ const validateJSON = (jsonStr: string, schema: any, fn: string) => {
   return isValid;
 };
 
-export const validateConfig = (configContents: string) => {
-  const filename = 'config';
-  return validateJSON(configContents, configSchema, filename);
-};
-
 export const validateManifest = (manifestContents: string) => {
   const filename = 'manifest';
   return validateJSON(manifestContents, manifestSchema, filename);
+};
+
+export const validateConfig = (configJson: any) => {
+  const ajv = new Ajv({allErrors: true});
+  const configValidator = ajv.compile(configSchema);
+  const isValidConfig = configValidator(configJson);
+  const friendlyMessage = JSON.stringify(
+    (configValidator.errors || []).map((error) => error.message),
+    undefined,
+    '  '
+  );
+  if (!isValidConfig) {
+    throw new Error(`Invalid config:\n  ${friendlyMessage}`);
+  }
+  return true;
+};
+
+export const validateConfigFile = (path: PathLike) => {
+  const fileExists = existsSync(path);
+  if (!fileExists) {
+    throw new Error(`The file: \n${path}\n was not found.`);
+  }
+  const fileContents = readFileSync(path, 'utf8');
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(fileContents);
+  } catch (e) {
+    throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
+  }
+  return validateConfig(parsedJson);
 };

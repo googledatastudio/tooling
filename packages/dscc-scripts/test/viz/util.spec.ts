@@ -89,17 +89,13 @@ test('invalid manifest', () => {
 });
 
 test('valid config', () => {
-  const validConfigFn = './test/viz/files/valid_config.json';
-  return readFile(validConfigFn).then((configContents) => {
-    expect(sut.validateConfig(configContents)).toBe(true);
-  });
+  const configPath = 'test/viz/files/valid_config.json';
+  expect(sut.validateConfigFile(configPath)).toBe(true);
 });
 
 test('invalid config', () => {
-  const validConfigFn = './test/viz/files/config_extraStyleKey.json';
-  return readFile(validConfigFn).then((configContents) => {
-    expect(() => sut.validateConfig(configContents)).toThrow('Invalid config');
-  });
+  const configPath = './test/viz/files/config_extraStyleKey.json';
+  expect(() => sut.validateConfigFile(configPath)).toThrow('Invalid config');
 });
 
 describe('manifest validation', () => {
