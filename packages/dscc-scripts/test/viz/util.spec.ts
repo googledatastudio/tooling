@@ -129,7 +129,7 @@ describe('manifest validation', () => {
 
 describe('config validation', () => {
   test('allows default values for SELECT_SINGLE & SELECT_RADIO', () => {
-    const config = JSON.stringify({
+    const config = {
       style: [
         {
           id: 'id',
@@ -158,7 +158,7 @@ describe('config validation', () => {
           ],
         },
       ],
-    });
+    };
     expect(sut.validateConfig(config)).toBe(true);
   });
 });
