@@ -152,3 +152,39 @@ describe('config validation', () => {
     expect(sut.validateConfig(config)).toBe(true);
   });
 });
+
+describe('config validation', () => {
+  test('allows default values for SELECT_SINGLE & SELECT_RADIO', () => {
+    const config = JSON.stringify({
+      style: [
+        {
+          id: 'id',
+          label: 'label',
+          elements: [
+            {
+              id: 'select-single',
+              label: 'My Select Single',
+              options: [
+                {value: 'first', label: 'First'},
+                {value: 'second', label: 'Second'},
+              ],
+              defaultValue: 'first',
+              type: 'SELECT_SINGLE',
+            },
+            {
+              id: 'select-radio',
+              label: 'My Select Radio',
+              options: [
+                {value: 'first', label: 'First'},
+                {value: 'second', label: 'Second'},
+              ],
+              defaultValue: 'second',
+              type: 'SELECT_RADIO',
+            },
+          ],
+        },
+      ],
+    });
+    expect(sut.validateConfig(config)).toBe(true);
+  });
+});
