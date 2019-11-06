@@ -38,7 +38,7 @@ const deploy = async (args: VizArgs): Promise<void> => {
 const validate = async (args: VizArgs): Promise<void> => {
   if (!args.configPath && !args.manifestPath) {
     throw new Error(
-      'At least one of --configPath or --manifestPast is required'
+      'At least one of --configPath or --manifestPath is required'
     );
   }
   if (args.configPath) {
