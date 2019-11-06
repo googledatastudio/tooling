@@ -16,7 +16,7 @@
  */
 import * as Ajv from 'ajv';
 import {DeploymentChoices, VizArgs} from '../args';
-import {invalidVizConfig, invalidVizJSON} from '../util';
+import {invalidVizConfig} from '../util';
 import {configSchema, manifestSchema} from './schemas';
 import {PathLike, existsSync, readFileSync} from 'fs';
 
@@ -70,27 +70,40 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   };
 };
 
-const validateJSON = (jsonStr: string, schema: any, fn: string) => {
+export const validateManifest = (manifest: object) => {
   const ajv = new Ajv({allErrors: true});
-  const jsonObject = JSON.parse(jsonStr);
-  const testJson = ajv.compile(schema);
-  const isValid = testJson(jsonObject);
-  // testJson.errors
-  if (isValid === false) {
-    throw invalidVizJSON(fn, testJson.errors);
+  const configValidator = ajv.compile(manifestSchema);
+  const isValidConfig = configValidator(manifest);
+  const friendlyMessage = JSON.stringify(
+    (configValidator.errors || []).map((error) => error),
+    undefined,
+    '  '
+  );
+  if (!isValidConfig) {
+    throw new Error(`Invalid manifest:\n  ${friendlyMessage}`);
   }
-  return isValid;
+  return true;
 };
 
-export const validateManifest = (manifestContents: string) => {
-  const filename = 'manifest';
-  return validateJSON(manifestContents, manifestSchema, filename);
+export const validateManifestFile = (path: PathLike) => {
+  const fileExists = existsSync(path);
+  if (!fileExists) {
+    throw new Error(`The file: \n${path}\n was not found.`);
+  }
+  const fileContents = readFileSync(path, 'utf8');
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(fileContents);
+  } catch (e) {
+    throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
+  }
+  return validateManifest(parsedJson);
 };
 
-export const validateConfig = (configJson: any) => {
+export const validateConfig = (config: object) => {
   const ajv = new Ajv({allErrors: true});
   const configValidator = ajv.compile(configSchema);
-  const isValidConfig = configValidator(configJson);
+  const isValidConfig = configValidator(config);
   const friendlyMessage = JSON.stringify(
     (configValidator.errors || []).map((error) => error.message),
     undefined,
