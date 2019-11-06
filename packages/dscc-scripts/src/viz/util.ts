@@ -70,19 +70,33 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   };
 };
 
-export const validateManifest = (manifest: object) => {
+const friendifyError = (error: Ajv.ErrorObject): string =>
+  `The value at: ${error.dataPath} is invalid. ${error.message}.`;
+
+const unique = <T>(ts: T[]): T[] => [...new Set(ts)];
+
+const validateWithSchema = (o: object, schema: object): boolean => {
   const ajv = new Ajv({allErrors: true});
-  const configValidator = ajv.compile(manifestSchema);
-  const isValidConfig = configValidator(manifest);
-  const friendlyMessage = JSON.stringify(
-    (configValidator.errors || []).map((error) => error),
-    undefined,
-    '  '
-  );
+  const configValidator = ajv.compile(schema);
+  const isValidConfig = configValidator(o);
   if (!isValidConfig) {
-    throw new Error(`Invalid manifest:\n  ${friendlyMessage}`);
+    const friendlyError = unique(
+      (configValidator.errors || [])
+        .map(friendifyError)
+        // The error messages talking about `anyOf` aren't useful to most developers.
+        .filter((s) => !s.includes('anyOf'))
+    );
+    throw friendlyError;
   }
   return true;
+};
+
+export const validateManifest = (manifest: object) => {
+  try {
+    return validateWithSchema(manifest, manifestSchema);
+  } catch (e) {
+    throw new Error(`Invalid manifest: ${JSON.stringify(e)}`);
+  }
 };
 
 export const validateManifestFile = (path: PathLike) => {
@@ -101,18 +115,11 @@ export const validateManifestFile = (path: PathLike) => {
 };
 
 export const validateConfig = (config: object) => {
-  const ajv = new Ajv({allErrors: true});
-  const configValidator = ajv.compile(configSchema);
-  const isValidConfig = configValidator(config);
-  const friendlyMessage = JSON.stringify(
-    (configValidator.errors || []).map((error) => error.message),
-    undefined,
-    '  '
-  );
-  if (!isValidConfig) {
-    throw new Error(`Invalid config:\n  ${friendlyMessage}`);
+  try {
+    return validateWithSchema(config, configSchema);
+  } catch (e) {
+    throw new Error(`Invalid config: \n${JSON.stringify(e, undefined, '  ')}`);
   }
-  return true;
 };
 
 export const validateConfigFile = (path: PathLike) => {

@@ -127,6 +127,7 @@ describe('config validation', () => {
           elements: [
             {
               id: 'select-single',
+              extra: 'read all about it',
               label: 'My Select Single',
               options: [
                 {value: 'first', label: 'First'},
