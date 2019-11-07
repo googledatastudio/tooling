@@ -109,6 +109,7 @@ export enum VizScripts {
   BUILD = 'build',
   PUSH = 'push',
   UPDATE_MESSAGE = 'update_message',
+  VALIDATE = 'validate',
 }
 
 export enum MessageFormat {
@@ -125,6 +126,8 @@ export interface VizArgs {
   script: VizScripts;
   deployment?: DeploymentChoices;
   format?: MessageFormat;
+  configPath?: string;
+  manifestPath?: string;
 }
 const addVizParserDetails = (subparsers: argparse.SubParser) => {
   const vizParser = subparsers.addParser(ScriptChoice.VIZ, {
@@ -140,6 +143,7 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
   let build: argparse.ArgumentParser;
   let push: argparse.ArgumentParser;
   let updateMessage: argparse.ArgumentParser;
+  let validate: argparse.ArgumentParser;
   Object.values(VizScripts).forEach((scriptName: VizScripts) => {
     switch (scriptName) {
       case VizScripts.START:
@@ -167,6 +171,12 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
             'Temporarily update your viz so you can copy example data from Data Studio.',
         });
         break;
+      case VizScripts.VALIDATE:
+        validate = vizSubparsers.addParser(scriptName, {
+          addHelp: true,
+          description: `Validate your viz's manifest & config files`,
+        });
+        break;
       default:
         return assertNever(scriptName);
     }
@@ -187,6 +197,18 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
     dest: 'format',
     help: 'The format for the data.',
     required: true,
+  });
+
+  validate!.addArgument(['--configPath'], {
+    dest: 'configPath',
+    help: 'The path to your config.json file.',
+    required: false,
+  });
+
+  validate!.addArgument(['--manifestPath'], {
+    dest: 'manifestPath',
+    help: 'The path to your manifest.json file.',
+    required: false,
   });
 };
 
