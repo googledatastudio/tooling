@@ -22,11 +22,9 @@ import {ExecaReturnValue, Options} from 'execa';
 import * as fs from 'fs';
 import {Answers} from 'inquirer';
 
-export const readDir = (path: string): Promise<string[]> => {
-  return new Promise((resolve, _) => {
-    const data = fs.readdirSync(path);
-    resolve(data);
-  });
+export const readDir = (path: string): string[] => {
+  const data = fs.readdirSync(path);
+  return data;
 };
 
 export const readFile = (filePath: string, encoding: string): string => {

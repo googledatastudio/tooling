@@ -33,18 +33,12 @@ const fixFile = (templates: Template[]) => async (file: string) => {
   return util.writeFile(file, newContents, ENCODING);
 };
 
-export const recursiveReaddirSync = async (
-  baseDirectory: string
-): Promise<string[]> => {
+export const recursiveReaddirSync = (baseDirectory: string): string[] => {
   const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
-  const files: string[][] = await Promise.all(
-    dirContents.map(async (item) => {
-      const itemPath: string = path.resolve(baseDirectory, item.name);
-      return item.isDirectory()
-        ? await recursiveReaddirSync(itemPath)
-        : [itemPath];
-    })
-  );
+  const files: string[][] = dirContents.map((item) => {
+    const itemPath: string = path.resolve(baseDirectory, item.name);
+    return item.isDirectory() ? recursiveReaddirSync(itemPath) : [itemPath];
+  });
   return files.reduce((acc, fileNames) => {
     return acc.concat(fileNames);
   }, []);
@@ -175,6 +169,8 @@ export const mv = (fromParts: string[], toDirParts: string[]): boolean => {
   if (!fs.existsSync(toPath)) {
     if (result.stderr !== null) {
       throw new Error(result.stderr);
+    } else {
+      throw new Error(`Moving ${fromPath} to ${toPath} failed`);
     }
   }
   return true;
@@ -183,10 +179,6 @@ export const mv = (fromParts: string[], toDirParts: string[]): boolean => {
 export const rename = (fromParts: string[], toParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
-  try {
-    fs.renameSync(fromPath, toPath);
-  } catch (err) {
-    throw new Error(err);
-  }
+  fs.renameSync(fromPath, toPath);
   return true;
 };
