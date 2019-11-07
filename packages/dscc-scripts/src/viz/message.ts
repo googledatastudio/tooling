@@ -78,12 +78,12 @@ export const buildMessage = async (args: VizArgs) => {
   // put everything together except the manifest
   // once build directory is created...
   const manifestSrc = path.resolve(
-    process.env.PWD!,
+    process.cwd()!,
     'src',
     buildValues.manifestFile
   );
   const manifestDest = path.resolve(
-    process.env.PWD!,
+    process.cwd()!,
     'build',
     buildValues.manifestFile
   );

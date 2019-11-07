@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 import * as Ajv from 'ajv';
+import {existsSync, PathLike, readFileSync} from 'fs';
 import {DeploymentChoices, VizArgs} from '../args';
 import {invalidVizConfig} from '../util';
 import {configSchema, manifestSchema} from './schemas';
-import {PathLike, existsSync, readFileSync} from 'fs';
 
 export interface BuildValues {
   devBucket: string;
@@ -56,7 +56,7 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   const devMode = args.deployment === DeploymentChoices.PROD ? false : true;
   const gcsBucket = devMode ? devBucket : prodBucket;
   const manifestFile = 'manifest.json';
-  const pwd = process.env.PWD!;
+  const pwd = process.cwd()!;
   return {
     devBucket,
     prodBucket,
