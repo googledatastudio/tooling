@@ -33,17 +33,19 @@ const fixFile = (templates: Template[]) => async (file: string) => {
   return util.writeFile(file, newContents, ENCODING);
 };
 
-export const listFiles = (baseDirectory: string, toIgnore: string | null): string[] => {
+export const listFiles = (
+  baseDirectory: string,
+  toIgnore: string | null
+): string[] => {
   const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
   const files: string[][] = dirContents.map((item) => {
     const itemPath: string = path.resolve(baseDirectory, item.name);
     return item.isDirectory() ? listFiles(itemPath, toIgnore) : [itemPath];
   });
   return files.reduce((acc, fileNames) => {
-    if (toIgnore){
+    if (toIgnore != null) {
       return acc.concat(fileNames).filter((el) => !el.includes(toIgnore));
-    }
-    else {
+    } else {
       return acc.concat(fileNames);
     }
   }, []);
@@ -126,24 +128,24 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 
-export const rmdirRecursive = (directory:string) => {
+export const rmdirRecursive = (directory: string) => {
   const files = listFiles(directory, null);
+  files.push(directory);
   files.forEach((file) => {
     const stats = fs.statSync(file);
-    if (stats.isDirectory()){
-      if (fs.readdirSync(file).length > 0){
+    if (stats.isDirectory()) {
+      if (fs.readdirSync(file).length > 0) {
         rmdirRecursive(file);
-      }
-      else {
+      } else {
         fs.rmdirSync(file);
       }
     }
-    if (stats.isFile()){
+    if (stats.isFile()) {
       fs.unlinkSync(file);
     }
-  })
-}
-  export const remove = (...directoryParts: string[]): boolean => {
+  });
+};
+export const remove = (...directoryParts: string[]): boolean => {
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');
   }

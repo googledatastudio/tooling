@@ -12,7 +12,6 @@ describe('For the file utility', () => {
     test('Works when directory exists', async () => {
       sut.mkdir(existingDirectory);
       expect(fs.existsSync(existingDirectory)).toBe(true);
-
       const actual = sut.remove(existingDirectory);
       expect(actual).toBe(true);
 
