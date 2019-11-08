@@ -6,7 +6,7 @@
   "main": "build/index.js",
   "bin": "build/index.js",
   "engines": {
-    "node": ">=12.12.0",
+    "node": ">=10.12.0",
     "npm": ">=5.2.0"
   },
   "author": "Matt Hamrick <matthewjhamrick@gmail.com>",
@@ -35,7 +35,7 @@
     "build": "tsc",
     "build:check": "tsc --noEmit",
     "build:watch": "tsc --watch",
-    "test": "jest",
+    "test": "jest files.spec.ts",
     "test:watch": "jest --watchAll --coverage",
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:base": "prettier \"src/**/*.ts\" \"templates/**/*.js\" \"templates/**/*.ts\" \"test/**/*.ts\"",

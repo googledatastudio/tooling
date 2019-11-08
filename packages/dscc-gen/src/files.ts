@@ -33,21 +33,26 @@ const fixFile = (templates: Template[]) => async (file: string) => {
   return util.writeFile(file, newContents, ENCODING);
 };
 
-export const recursiveReaddirSync = (baseDirectory: string): string[] => {
+export const listFiles = (baseDirectory: string, toIgnore: string | null): string[] => {
   const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
   const files: string[][] = dirContents.map((item) => {
     const itemPath: string = path.resolve(baseDirectory, item.name);
-    return item.isDirectory() ? recursiveReaddirSync(itemPath) : [itemPath];
+    return item.isDirectory() ? listFiles(itemPath, toIgnore) : [itemPath];
   });
   return files.reduce((acc, fileNames) => {
-    return acc.concat(fileNames);
+    if (toIgnore){
+      return acc.concat(fileNames).filter((el) => !el.includes(toIgnore));
+    }
+    else {
+      return acc.concat(fileNames);
+    }
   }, []);
 };
 export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
 ): Promise<boolean> => {
-  const filesToUpdate = await recursiveReaddirSync(baseDirectory);
+  const filesToUpdate = listFiles(baseDirectory, 'node_modules');
   await Promise.all(filesToUpdate.map(fixFile(templates)));
   return true;
 };
@@ -56,7 +61,7 @@ export const createDirectoryContents = async (
   templatePath: string,
   newProjectPath: string
 ) => {
-  const filesToCreate: string[] = await util.readDir(templatePath);
+  const filesToCreate: string[] = util.readDir(templatePath);
   return Promise.all(
     filesToCreate.map(async (file) => {
       const originalFilePath = path.join(templatePath, file);
@@ -121,7 +126,24 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 
-export const remove = (...directoryParts: string[]): boolean => {
+export const rmdirRecursive = (directory:string) => {
+  const files = listFiles(directory, null);
+  files.forEach((file) => {
+    const stats = fs.statSync(file);
+    if (stats.isDirectory()){
+      if (fs.readdirSync(file).length > 0){
+        rmdirRecursive(file);
+      }
+      else {
+        fs.rmdirSync(file);
+      }
+    }
+    if (stats.isFile()){
+      fs.unlinkSync(file);
+    }
+  })
+}
+  export const remove = (...directoryParts: string[]): boolean => {
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');
   }
@@ -129,7 +151,7 @@ export const remove = (...directoryParts: string[]): boolean => {
   try {
     const stats = fs.statSync(directory);
     if (stats.isDirectory()) {
-      fs.rmdirSync(directory, {recursive: true});
+      rmdirRecursive(directory);
     } else {
       fs.unlinkSync(directory);
     }
