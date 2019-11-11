@@ -29,39 +29,38 @@ export interface BuildValues {
   gcsBucket: string;
 }
 
-const friendifyError = (error: Ajv.ErrorObject): string =>
-  `The value at: ${error.dataPath} is invalid. ${error.message}.`;
+// Make the error more friendly than the default Ajv format.
+const friendifyError = (error: Ajv.ErrorObject): string => {
+  const pathPart = error.dataPath
+    ? `The value at: ${error.dataPath} is invalid.`
+    : "The value at the root is invalid.";
+  return `${pathPart}. ${error.message}.`;
+};
 
 const unique = <T>(ts: T[]): T[] => [...new Set(ts)];
 
-const validateWithSchema = (o: object, schema: object): boolean => {
+const validateWithSchema = (o: object, schema: object): string[] => {
   const ajv = new Ajv({ allErrors: true });
   const configValidator = ajv.compile(schema);
   const isValidConfig = configValidator(o);
   if (!isValidConfig) {
-    const friendlyError = unique(
+    const friendlyErrors = unique(
       (configValidator.errors || [])
         .map(friendifyError)
         // The error messages talking about `anyOf` aren't useful to most developers.
-        .filter(s => !s.includes("anyOf"))
+        .filter((s: string) => !s.includes("anyOf"))
     );
-    throw friendlyError;
+    return friendlyErrors;
   }
-  return true;
+  return [];
 };
 
-export const validateManifest = (manifest: object) => {
-  try {
-    return validateWithSchema(manifest, manifestSchema);
-  } catch (e) {
-    throw new Error(`Invalid manifest: ${JSON.stringify(e, undefined, "  ")}`);
-  }
+// Validates that the provided object is a valid manifest. Return will be empty if there are no errors.
+export const validateManifest = (manifest: object): string[] => {
+  return validateWithSchema(manifest, manifestSchema);
 };
 
-export const validateConfig = (config: object) => {
-  try {
-    return validateWithSchema(config, configSchema);
-  } catch (e) {
-    throw new Error(`Invalid config: \n${JSON.stringify(e, undefined, "  ")}`);
-  }
+// Validates that the provided object is a valid config. Return will be empty if there are no errors.
+export const validateConfig = (config: object): string[] => {
+  return validateWithSchema(config, configSchema);
 };
