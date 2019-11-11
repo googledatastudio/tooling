@@ -34,7 +34,7 @@ const friendifyError = (error: Ajv.ErrorObject): string => {
   const pathPart = error.dataPath
     ? `The value at: ${error.dataPath} is invalid.`
     : "The value at the root is invalid.";
-  return `${pathPart}. ${error.message}.`;
+  return `${pathPart} ${error.message}.`;
 };
 
 const unique = <T>(ts: T[]): T[] => [...new Set(ts)];
