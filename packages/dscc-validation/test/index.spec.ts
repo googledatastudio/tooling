@@ -1,4 +1,5 @@
 import * as sut from "../src/index";
+import { RequiredParams } from "ajv";
 
 describe("manifest validation", () => {
   test("passes when devMode is a boolean", () => {
@@ -25,7 +26,7 @@ describe("manifest validation", () => {
       name: "",
       supportUrl: ""
     };
-    expect(sut.validateManifest(manifest)).toBe(true);
+    expect(sut.validateManifest(manifest)).toHaveLength(0);
   });
 
   test("passes when all required fields provided", () => {
@@ -54,7 +55,7 @@ describe("manifest validation", () => {
         }
       ]
     };
-    expect(sut.validateManifest(validManifest)).toBe(true);
+    expect(sut.validateManifest(validManifest)).toHaveLength(0);
   });
 
   test("throws when missing privacyPolicy", () => {
@@ -80,9 +81,15 @@ describe("manifest validation", () => {
         }
       ]
     };
-    expect(() => sut.validateManifest(manifestNoPrivacyPolicy)).toThrow(
-      "Invalid manifest"
-    );
+    expect(sut.validateManifest(manifestNoPrivacyPolicy)).not.toHaveLength(0);
+    expect(
+      sut
+        .validateManifest(manifestNoPrivacyPolicy)
+        .filter(
+          a =>
+            (a.params as RequiredParams).missingProperty === "privacyPolicyUrl"
+        )
+    ).not.toHaveLength(0);
   });
 });
 
@@ -135,7 +142,8 @@ describe("config validation", () => {
         }
       ]
     };
-    expect(() => sut.validateConfig(configExtraKey)).toThrow("Invalid config");
+    // TODO - see if there's a better check to do here.
+    expect(sut.validateConfig(configExtraKey)).not.toHaveLength(0);
   });
 
   test("passes when all required fields provided", () => {
@@ -294,7 +302,7 @@ describe("config validation", () => {
         }
       ]
     };
-    expect(sut.validateConfig(configAllRequiredKeys)).toBe(true);
+    expect(sut.validateConfig(configAllRequiredKeys)).toHaveLength(0);
   });
 
   test("allows default values for SELECT_SINGLE & SELECT_RADIO", () => {
@@ -328,6 +336,6 @@ describe("config validation", () => {
         }
       ]
     };
-    expect(sut.validateConfig(config)).toBe(true);
+    expect(sut.validateConfig(config)).toHaveLength(0);
   });
 });
