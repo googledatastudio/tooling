@@ -65,7 +65,7 @@ describe('End-to-end-tests for connectors w/ mocked appsscript & validation', ()
     expect(await hasFile(connectorName)).toBeTruthy();
     expect(await hasFile(connectorName, 'src', 'main.js')).toBeTruthy();
 
-    await files.remove(connectorName);
+    files.remove(connectorName);
   });
 
   test('happy path for typescript', async () => {
@@ -87,6 +87,6 @@ describe('End-to-end-tests for connectors w/ mocked appsscript & validation', ()
     expect(await hasFile(connectorName)).toBeTruthy();
     expect(await hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
 
-    await files.remove(connectorName);
+    files.remove(connectorName);
   });
 });
