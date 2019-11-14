@@ -128,15 +128,15 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 export const rmdirRecursive = (directory: string) => {
-  const files = fs.readdirSync(directory).map((fn) => path.join(directory, fn));
-  files.push(directory);
-  files.forEach((file) => {
+  const files = fs.readdirSync(directory).map((fn:string) => path.join(directory, fn));
+  files.push(path.resolve(directory));
+  files.forEach((file:string) => {
     const stats = fs.statSync(file);
     if (stats.isFile()) {
       fs.unlinkSync(file);
     }
     if (stats.isDirectory()) {
-      if (listFiles(file, null).length > 0) {
+      if (fs.readdirSync(file).length > 0) {
         rmdirRecursive(file);
       } else {
         fs.rmdirSync(file);
@@ -189,7 +189,7 @@ export const cp = (fromParts: string[], toParts: string[]): boolean => {
 export const mv = (fromParts: string[], toDirParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toDirParts);
-  const result = shelljs.mv('', fromPath, toPath);
+  const result = shelljs.mv('-f', fromPath, toPath);
   if (!fs.existsSync(toPath)) {
     if (result.stderr !== null) {
       throw new Error(result.stderr);
