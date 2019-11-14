@@ -127,24 +127,24 @@ export const createAndCopyFiles = async (
     'Creating directories and copying template files...',
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
-
 export const rmdirRecursive = (directory: string) => {
-  const files = listFiles(directory, null);
+  const files = fs.readdirSync(directory).map((fn) => path.join(directory, fn));
   files.push(directory);
   files.forEach((file) => {
     const stats = fs.statSync(file);
+    if (stats.isFile()) {
+      fs.unlinkSync(file);
+    }
     if (stats.isDirectory()) {
-      if (fs.readdirSync(file).length > 0) {
+      if (listFiles(file, null).length > 0) {
         rmdirRecursive(file);
       } else {
         fs.rmdirSync(file);
       }
     }
-    if (stats.isFile()) {
-      fs.unlinkSync(file);
-    }
   });
 };
+
 export const remove = (...directoryParts: string[]): boolean => {
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');

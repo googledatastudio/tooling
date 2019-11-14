@@ -35,7 +35,7 @@
     "build": "tsc",
     "build:check": "tsc --noEmit",
     "build:watch": "tsc --watch",
-    "test": "jest files.spec.ts",
+    "test": "jest",
     "test:watch": "jest --watchAll --coverage",
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\" \"test/**/*.ts\"",
     "prettier:base": "prettier \"src/**/*.ts\" \"templates/**/*.js\" \"templates/**/*.ts\" \"test/**/*.ts\"",
