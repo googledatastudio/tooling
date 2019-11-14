@@ -67,33 +67,6 @@ test('validateBuildValues missing gcsProdBucket', () => {
 });
 
 describe('manifest validation', () => {
-  test('passes when devMode is a boolean', () => {
-    const manifest = {
-      packageUrl: '',
-      components: [
-        {
-          name: '',
-          description: '',
-          iconUrl: '',
-          resource: {
-            js: '',
-            config: '',
-          },
-        },
-      ],
-      devMode: true,
-      termsOfServiceUrl: '',
-      privacyPolicyUrl: '',
-      logoUrl: '',
-      description: '',
-      organization: '',
-      organizationUrl: '',
-      name: '',
-      supportUrl: '',
-    };
-    expect(sut.validateManifest(manifest)).toBe(true);
-  });
-
   test('passes when all required fields provided', () => {
     const validManifestFn = './test/viz/files/valid_manifest.json';
     expect(sut.validateManifestFile(validManifestFn)).toBe(true);
@@ -116,39 +89,5 @@ describe('config validation', () => {
   test('passes when all required fields provided', () => {
     const configPath = 'test/viz/files/valid_config.json';
     expect(sut.validateConfigFile(configPath)).toBe(true);
-  });
-
-  test('allows default values for SELECT_SINGLE & SELECT_RADIO', () => {
-    const config = {
-      style: [
-        {
-          id: 'id',
-          label: 'label',
-          elements: [
-            {
-              id: 'select-single',
-              label: 'My Select Single',
-              options: [
-                {value: 'first', label: 'First'},
-                {value: 'second', label: 'Second'},
-              ],
-              defaultValue: 'first',
-              type: 'SELECT_SINGLE',
-            },
-            {
-              id: 'select-radio',
-              label: 'My Select Radio',
-              options: [
-                {value: 'first', label: 'First'},
-                {value: 'second', label: 'Second'},
-              ],
-              defaultValue: 'second',
-              type: 'SELECT_RADIO',
-            },
-          ],
-        },
-      ],
-    };
-    expect(sut.validateConfig(config)).toBe(true);
   });
 });
