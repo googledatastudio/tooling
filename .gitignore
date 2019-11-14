@@ -1,4 +1,5 @@
 node_modules
 /coverage/
 build
+/packages/dscc-validation/lib/
 /packages/ds-component/lib/
