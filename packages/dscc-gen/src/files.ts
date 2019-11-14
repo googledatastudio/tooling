@@ -130,7 +130,7 @@ export const createAndCopyFiles = async (
 export const rmdirRecursive = (directory: string) => {
   const files = fs
     .readdirSync(directory)
-    .map((fn: string) => path.join(directory, fn));
+    .map((fn: string) => path.resolve(directory, fn));
   files.push(path.resolve(directory));
   files.forEach((file: string) => {
     const stats = fs.statSync(file);
