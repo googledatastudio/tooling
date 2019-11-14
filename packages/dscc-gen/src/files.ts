@@ -128,9 +128,11 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 export const rmdirRecursive = (directory: string) => {
-  const files = fs.readdirSync(directory).map((fn:string) => path.join(directory, fn));
+  const files = fs
+    .readdirSync(directory)
+    .map((fn: string) => path.join(directory, fn));
   files.push(path.resolve(directory));
-  files.forEach((file:string) => {
+  files.forEach((file: string) => {
     const stats = fs.statSync(file);
     if (stats.isFile()) {
       fs.unlinkSync(file);
