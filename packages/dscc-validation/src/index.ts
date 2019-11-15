@@ -16,6 +16,7 @@
  */
 import * as Ajv from "ajv";
 import { configSchema, manifestSchema } from "./schemas";
+export * from "./schemas";
 
 export interface BuildValues {
   devBucket: string;
@@ -29,8 +30,13 @@ export interface BuildValues {
   gcsBucket: string;
 }
 
-const validateWithSchema = (o: object, schema: object): Ajv.ErrorObject[] => {
-  const ajv = new Ajv({ allErrors: true });
+const validateWithSchema = (
+  o: object,
+  schema: object,
+  ajvOptions?: Ajv.Options
+): Ajv.ErrorObject[] => {
+  const options = ajvOptions || { allErrors: true };
+  const ajv = new Ajv(options);
   const configValidator = ajv.compile(schema);
   const isValidConfig = configValidator(o);
   if (!isValidConfig) {
@@ -40,11 +46,17 @@ const validateWithSchema = (o: object, schema: object): Ajv.ErrorObject[] => {
 };
 
 // Validates that the provided object is a valid manifest. Return will be empty if there are no errors.
-export const validateManifest = (manifest: object): Ajv.ErrorObject[] => {
-  return validateWithSchema(manifest, manifestSchema);
+export const validateManifest = (
+  manifest: object,
+  ajvOptions?: Ajv.Options
+): Ajv.ErrorObject[] => {
+  return validateWithSchema(manifest, manifestSchema, ajvOptions);
 };
 
 // Validates that the provided object is a valid config. Return will be empty if there are no errors.
-export const validateConfig = (config: object): Ajv.ErrorObject[] => {
-  return validateWithSchema(config, configSchema);
+export const validateConfig = (
+  config: object,
+  ajvOptions?: Ajv.Options
+): Ajv.ErrorObject[] => {
+  return validateWithSchema(config, configSchema, ajvOptions);
 };
