@@ -71,19 +71,20 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
 };
 
 const friendifyError = (error: Ajv.ErrorObject): string =>
-    `The value at: ${error.dataPath} is invalid. ${error.message}.`;
+  `The value at: ${error.dataPath} is invalid. ${error.message}.`;
 
 const unique = <T>(ts: T[]): T[] => [...new Set(ts)];
 
-const throwIfErrors =
-    (errors: Ajv.ErrorObject[], fileType: 'manifest'|'config'): void => {
-      const friendlyErrors = errors.map(friendifyError);
-      const uniqueErrors = unique(friendlyErrors);
-      if (uniqueErrors.length !== 0) {
-        throw new Error(
-            `Invalid ${fileType}: \n${JSON.stringify(uniqueErrors)}`);
-      }
-    };
+const throwIfErrors = (
+  errors: Ajv.ErrorObject[],
+  fileType: 'manifest' | 'config'
+): void => {
+  const friendlyErrors = errors.map(friendifyError);
+  const uniqueErrors = unique(friendlyErrors);
+  if (uniqueErrors.length !== 0) {
+    throw new Error(`Invalid ${fileType}: \n${JSON.stringify(uniqueErrors)}`);
+  }
+};
 
 export const validateManifestFile = (path: PathLike): boolean => {
   const fileExists = existsSync(path);
