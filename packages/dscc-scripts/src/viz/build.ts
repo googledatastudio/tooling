@@ -73,14 +73,20 @@ export const build = async (args: VizArgs) => {
 
   await compilerRun();
 
-  const manifestSrc =
-      path.resolve(process.cwd()!, 'src', buildValues.manifestFile);
-  const manifestDest =
-      path.resolve(process.cwd()!, 'build', buildValues.manifestFile);
+  const manifestSrc = path.resolve(
+    process.cwd()!,
+    'src',
+    buildValues.manifestFile
+  );
+  const manifestDest = path.resolve(
+    process.cwd()!,
+    'build',
+    buildValues.manifestFile
+  );
   const manifestContents = await fs.readFile(manifestSrc, encoding);
-  const newManifest =
-      manifestContents.replace(/YOUR_GCS_BUCKET/g, buildValues.gcsBucket)
-          .replace(/"DEVMODE_BOOL"/, `${buildValues.devMode}`);
+  const newManifest = manifestContents
+    .replace(/YOUR_GCS_BUCKET/g, buildValues.gcsBucket)
+    .replace(/"DEVMODE_BOOL"/, `${buildValues.devMode}`);
   util.validateManifest(JSON.parse(newManifest));
   return fs.writeFile(manifestDest, newManifest);
 };
