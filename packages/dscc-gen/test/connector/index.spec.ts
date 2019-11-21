@@ -68,25 +68,25 @@ describe('End-to-end-tests for connectors w/ mocked appsscript & validation', ()
     files.remove(connectorName);
   });
 
-  // test('happy path for typescript', async () => {
-  //   const connectorName = connectorNames.happyPathTs;
-  //   validationMock.claspAuthenticated.mockResolvedValue(true);
-  //   appsscriptMock.create.mockResolvedValue();
-  //   appsscriptMock.getDeploymentIdByName.mockResolvedValue('mydeploymentid');
+  test('happy path for typescript', async () => {
+    const connectorName = connectorNames.happyPathTs;
+    validationMock.claspAuthenticated.mockResolvedValue(true);
+    appsscriptMock.create.mockResolvedValue();
+    appsscriptMock.getDeploymentIdByName.mockResolvedValue('mydeploymentid');
 
-  //   const config: ConnectorConfig = {
-  //     ...configDefaults,
-  //     yarn: true,
-  //     ts: true,
-  //     projectName: connectorName,
-  //     projectChoice: ProjectChoice.CONNECTOR,
-  //     basePath: '.',
-  //   };
-  //   await sut.createFromTemplate(config);
+    const config: ConnectorConfig = {
+      ...configDefaults,
+      yarn: true,
+      ts: true,
+      projectName: connectorName,
+      projectChoice: ProjectChoice.CONNECTOR,
+      basePath: '.',
+    };
+    await sut.createFromTemplate(config);
 
-  //   expect(await hasFile(connectorName)).toBeTruthy();
-  //   expect(await hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
+    expect(await hasFile(connectorName)).toBeTruthy();
+    expect(await hasFile(connectorName, 'src', 'main.ts')).toBeTruthy();
 
-  //   files.remove(connectorName);
-  // });
+    files.remove(connectorName);
+  });
 });

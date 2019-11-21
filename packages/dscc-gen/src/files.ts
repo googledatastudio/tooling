@@ -17,10 +17,10 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as rimraf from 'rimraf';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
 import * as util from './util';
-import * as rimraf from 'rimraf';
 
 const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
@@ -51,27 +51,6 @@ export const listFiles = (
     }
   }, []);
 };
-
-// const listFolders = (dirName: string): (string)[] => {
-//   const contents = fs.readdirSync(dirName, {withFileTypes: true}).filter((el) => el.isDirectory());
-//   const folderNames = contents.map((dir) => path.resolve(dirName, dir.name));
-//   folderNames.unshift(dirName);
-//   return folderNames
-// }
-// const listFoldersRecursive = (baseDirectory: string): (string)[] => {
-//   const contents = listFolders(baseDirectory);
-//   const folders = contents.map((item) => {
-//     if (listFolders(item).length > 0) {
-//       return listFolders(item)
-//     }
-//     else {
-//       return [item]
-//     }
-//   })
-//   return folders.reduce((acc, folderPaths) => {
-//     return acc.concat(folderPaths);
-//   }, [])
-// }
 
 export const fixTemplates = async (
   baseDirectory: string,
@@ -150,33 +129,6 @@ export const createAndCopyFiles = async (
     'Creating directories and copying template files...',
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
-
-// export const rmdirRecursive = (directory: string) => {
-//   const files = listFiles(directory, null);
-//   for (let file of files) {
-//     fs.unlinkSync(file);
-//   }
-//   const folders = listFoldersRecursive(directory);
-//   folders.map((el) => path.normalize(el));
-//   folders.sort((a, b) => {
-//     if (a.split(path.sep).length > b.split(path.sep).length) {
-//       return 1
-//     }
-//     else if (a.split(path.sep).length < b.split(path.sep).length) {
-//       return -1
-//     }
-//     else {
-//       return 0
-//     }
-//   })
-//   for (let dir of folders) {
-//     try {
-//       fs.rmdirSync(dir);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   }
-// };
 
 export const remove = (...directoryParts: string[]): boolean => {
   if (directoryParts.length === 0) {
