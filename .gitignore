@@ -3,3 +3,4 @@ node_modules
 build
 /packages/dscc-validation/lib/
 /packages/ds-component/lib/
+.vscode/
