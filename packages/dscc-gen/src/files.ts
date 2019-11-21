@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 
-import * as fs from 'mz/fs';
+import * as fs from 'fs';
 import * as path from 'path';
-import * as listFiles from 'recursive-readdir';
 import * as rimraf from 'rimraf';
 import * as shelljs from 'shelljs';
 import {Template} from './types';
@@ -27,7 +26,7 @@ const ENCODING = 'utf8';
 const CURR_DIR = process.cwd();
 
 const fixFile = (templates: Template[]) => async (file: string) => {
-  const contents = await util.readFile(file, ENCODING);
+  const contents = util.readFile(file, ENCODING);
   const newContents = templates.reduce(
     (acc, {match, replace}) => acc.replace(match, replace),
     contents
@@ -35,11 +34,29 @@ const fixFile = (templates: Template[]) => async (file: string) => {
   return util.writeFile(file, newContents, ENCODING);
 };
 
+export const listFiles = (
+  baseDirectory: string,
+  toIgnore: string | null
+): string[] => {
+  const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
+  const files: string[][] = dirContents.map((item) => {
+    const itemPath: string = path.resolve(baseDirectory, item.name);
+    return item.isDirectory() ? listFiles(itemPath, toIgnore) : [itemPath];
+  });
+  return files.reduce((acc, fileNames) => {
+    if (toIgnore != null) {
+      return acc.concat(fileNames).filter((el) => !el.includes(toIgnore));
+    } else {
+      return acc.concat(fileNames);
+    }
+  }, []);
+};
+
 export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
 ): Promise<boolean> => {
-  const filesToUpdate = await listFiles(baseDirectory, ['node_modules']);
+  const filesToUpdate = listFiles(baseDirectory, 'node_modules');
   await Promise.all(filesToUpdate.map(fixFile(templates)));
   return true;
 };
@@ -48,24 +65,24 @@ export const createDirectoryContents = async (
   templatePath: string,
   newProjectPath: string
 ) => {
-  const filesToCreate: string[] = await util.readDir(templatePath);
+  const filesToCreate: string[] = util.readDir(templatePath);
   return Promise.all(
     filesToCreate.map(async (file) => {
       const originalFilePath = path.join(templatePath, file);
-      const stats = await util.statSync(originalFilePath);
+      const stats = fs.statSync(originalFilePath);
       if (stats.isFile()) {
-        const contents = await util.readFile(originalFilePath, ENCODING);
+        const contents = util.readFile(originalFilePath, ENCODING);
         // npm renames .gitignore to .npmignore so rename it back to .gitignore.
         if (file === '.npmignore') {
           file = '.gitignore';
         }
         const writePath = path.join(CURR_DIR, newProjectPath, file);
-        await util.writeFile(writePath, contents, ENCODING);
+        util.writeFile(writePath, contents, ENCODING);
       } else if (stats.isDirectory()) {
-        await mkdir(CURR_DIR, newProjectPath, file);
+        mkdir(CURR_DIR, newProjectPath, file);
         const newTemplatePath = path.join(templatePath, file);
         const newNewProjectPath = path.join(newProjectPath, file);
-        await createDirectoryContents(newTemplatePath, newNewProjectPath);
+        createDirectoryContents(newTemplatePath, newNewProjectPath);
       } else {
         throw new Error(`${originalFilePath} is not a file or directory.`);
       }
@@ -73,9 +90,9 @@ export const createDirectoryContents = async (
   );
 };
 
-export const parseJsonFile = async (filePath: string) => {
+export const parseJsonFile = (filePath: string) => {
   try {
-    const fileContents = await util.readFile(filePath, ENCODING);
+    const fileContents = util.readFile(filePath, ENCODING);
     return JSON.parse(fileContents);
   } catch (e) {
     throw new Error(`Could not read: ${filePath}`);
@@ -92,7 +109,7 @@ const createAndCopyFilesImpl = async (
   projectName: string
 ) => {
   try {
-    await mkdir(projectPath);
+    mkdir(projectName);
   } catch (e) {
     throw new Error(`Couldn't create directory: ${projectPath}`);
   }
@@ -113,37 +130,38 @@ export const createAndCopyFiles = async (
     () => createAndCopyFilesImpl(projectPath, templatePath, projectName)
   );
 
-export const remove = async (...directoryParts: string[]): Promise<boolean> => {
+export const remove = (...directoryParts: string[]): boolean => {
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');
   }
   const directory = path.join(...directoryParts);
-  const directoryExists = await fs.exists(directory);
-  if (!directoryExists) {
-    throw new Error(`Directory: ${directory} does not exist`);
+  try {
+    const stats = fs.statSync(directory);
+    if (stats.isDirectory()) {
+      rimraf.sync(directory);
+    } else {
+      fs.unlinkSync(directory);
+    }
+  } catch (err) {
+    throw new Error(`Unable to remove ${directory}`);
   }
-  return new Promise((resolve, reject) => {
-    rimraf(directory, (error) => {
-      if (error !== null) {
-        reject(error);
-      }
-      resolve(true);
-    });
-  });
+  return true;
 };
 
-export const mkdir = async (...directoryParts: string[]): Promise<boolean> => {
+export const mkdir = (...directoryParts: string[]): boolean => {
   if (directoryParts.length === 0) {
     throw new Error('You must pass directoryParts to this function');
   }
   const directory = path.join(...directoryParts);
-  return fs.mkdir(directory).then(() => true);
+  try {
+    fs.mkdirSync(directory, {recursive: true});
+  } catch (err) {
+    throw Error(err);
+  }
+  return true;
 };
 
-export const cp = async (
-  fromParts: string[],
-  toParts: string[]
-): Promise<boolean> => {
+export const cp = (fromParts: string[], toParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
   const result = shelljs.cp('-r', fromPath, toPath);
@@ -153,25 +171,23 @@ export const cp = async (
   return true;
 };
 
-export const mv = async (
-  fromParts: string[],
-  toDirParts: string[]
-): Promise<boolean> => {
+export const mv = (fromParts: string[], toDirParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toDirParts);
-  // const result =
-  shelljs.mv('', fromPath, toPath);
-  // if (result.stderr !== null) {
-  //   throw new Error(result.stderr);
-  // }
+  const result = shelljs.mv('-f', fromPath, toPath);
+  if (!fs.existsSync(toPath)) {
+    if (result.stderr !== null) {
+      throw new Error(result.stderr);
+    } else {
+      throw new Error(`Moving ${fromPath} to ${toPath} failed`);
+    }
+  }
   return true;
 };
 
-export const rename = async (
-  fromParts: string[],
-  toParts: string[]
-): Promise<boolean> => {
+export const rename = (fromParts: string[], toParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
-  return fs.rename(fromPath, toPath).then(() => true);
+  fs.renameSync(fromPath, toPath);
+  return true;
 };

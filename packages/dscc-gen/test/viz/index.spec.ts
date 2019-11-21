@@ -39,7 +39,7 @@ describe('End-to-end-tests for viz', () => {
     expect(await hasFile(vizName)).toBeTruthy();
     expect(await hasFile(vizName, 'src', 'index.js')).toBeTruthy();
 
-    await files.remove(vizName);
+    files.remove(vizName);
   });
 });
 
@@ -79,6 +79,6 @@ describe('End-to-end-tests for viz codelab', () => {
     expect(await hasFile(vizName, 'src', 'index.js')).toBeTruthy();
     expect(await fileContains(checkString, vizName, 'src', 'index.js'));
 
-    await files.remove(vizName);
+    files.remove(vizName);
   });
 });
