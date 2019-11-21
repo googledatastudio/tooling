@@ -16,7 +16,7 @@ import {assertNever} from './util';
 import * as util from './util';
 import {
   addBucketPrefix,
-  //  checkGsutilInstalled,
+  checkGsutilInstalled,
   hasBucketPermissions,
 } from './viz/validation';
 
