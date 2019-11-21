@@ -3,77 +3,65 @@ import {Question} from 'inquirer';
 import inquirer = require('inquirer');
 import * as path from 'path';
 import * as constants from './constants';
-import {
-  AuthType,
-  CommonConfig,
-  ConnectorConfig,
-  ConnectorConfigHasDefaults,
-  ProjectChoice,
-  VizConfig,
-  VizConfigHasDefaults,
-} from './types';
+import {AuthType, CommonConfig, ConnectorConfig, ConnectorConfigHasDefaults, ProjectChoice, VizConfig, VizConfigHasDefaults,} from './types';
 import {assertNever} from './util';
 import * as util from './util';
-import {
-  addBucketPrefix,
-  checkGsutilInstalled,
-  hasBucketPermissions,
-} from './viz/validation';
+import {addBucketPrefix,
+        //  checkGsutilInstalled,
+        hasBucketPermissions,} from './viz/validation';
 
-const addVizParser = (
-  subparser: argparse.SubParser
-): argparse.ArgumentParser => {
-  const vizParser = subparser.addParser(ProjectChoice.VIZ, {
-    addHelp: true,
-    description: 'Creates a project using a Community Viz template.',
-  });
+const addVizParser =
+    (subparser: argparse.SubParser): argparse.ArgumentParser => {
+      const vizParser = subparser.addParser(ProjectChoice.VIZ, {
+        addHelp: true,
+        description: 'Creates a project using a Community Viz template.',
+      });
 
-  vizParser.addArgument(['--devBucket', '-d'], {
-    dest: 'devBucket',
-    help: 'The dev bucket',
-  });
+      vizParser.addArgument(['--devBucket', '-d'], {
+        dest: 'devBucket',
+        help: 'The dev bucket',
+      });
 
-  vizParser.addArgument(['--prodBucket', '-p'], {
-    dest: 'prodBucket',
-    help: 'The dev bucket',
-  });
+      vizParser.addArgument(['--prodBucket', '-p'], {
+        dest: 'prodBucket',
+        help: 'The dev bucket',
+      });
 
-  vizParser.addArgument(['--codelab', '-c'], {
-    dest: 'codelab',
-    action: 'storeTrue',
-    help: 'Use the codelab template.',
-  });
+      vizParser.addArgument(['--codelab', '-c'], {
+        dest: 'codelab',
+        action: 'storeTrue',
+        help: 'Use the codelab template.',
+      });
 
-  return vizParser;
-};
+      return vizParser;
+    };
 
-const addConnectorParser = (
-  subparser: argparse.SubParser
-): argparse.ArgumentParser => {
-  const connectorParser = subparser.addParser(ProjectChoice.CONNECTOR, {
-    addHelp: true,
-    description: 'Creates a project using a Community Connector template.',
-  });
+const addConnectorParser =
+    (subparser: argparse.SubParser): argparse.ArgumentParser => {
+      const connectorParser = subparser.addParser(ProjectChoice.CONNECTOR, {
+        addHelp: true,
+        description: 'Creates a project using a Community Connector template.',
+      });
 
-  connectorParser.addArgument(['--script_id', '-s'], {
-    dest: 'scriptId',
-    help: 'The id of the script to clone.',
-  });
+      connectorParser.addArgument(['--script_id', '-s'], {
+        dest: 'scriptId',
+        help: 'The id of the script to clone.',
+      });
 
-  connectorParser.addArgument(['--auth_type'], {
-    dest: 'authType',
-    help: 'The authorization type for the connector.',
-    choices: Object.values(AuthType),
-  });
+      connectorParser.addArgument(['--auth_type'], {
+        dest: 'authType',
+        help: 'The authorization type for the connector.',
+        choices: Object.values(AuthType),
+      });
 
-  connectorParser.addArgument(['--ts', '--typescript'], {
-    dest: 'ts',
-    help: 'Use typescript for connector.',
-    action: 'storeTrue',
-  });
+      connectorParser.addArgument(['--ts', '--typescript'], {
+        dest: 'ts',
+        help: 'Use typescript for connector.',
+        action: 'storeTrue',
+      });
 
-  return connectorParser;
-};
+      return connectorParser;
+    };
 
 const projectNameRegEx = /^([-_A-Za-z\d])+$/;
 
@@ -132,24 +120,25 @@ const getAuthHelpText = (authType: AuthType): string => {
 };
 
 const longestAuthType = Object.values(AuthType)
-  .map((a: AuthType): number => a.length)
-  .reduce((a, b) => Math.max(a, b), 0);
+                            .map((a: AuthType): number => a.length)
+                            .reduce((a, b) => Math.max(a, b), 0);
 
-const connectorQuestions: Array<
-  Question<ConnectorConfig>
-> = (commonQuestions as Array<Question<ConnectorConfig>>).concat([
-  {
-    name: 'authType',
-    type: 'list',
-    when: (answers: ConnectorConfig) =>
-      answers.scriptId === undefined || answers.ts === true,
-    message: 'How will users authenticate to your service?',
-    choices: Object.values(AuthType).map((auth: AuthType) => ({
-      name: `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
-      value: auth,
-    })),
-  },
-]);
+const connectorQuestions: Array<Question<ConnectorConfig>> =
+    (commonQuestions as Array<Question<ConnectorConfig>>).concat([
+      {
+        name: 'authType',
+        type: 'list',
+        when: (answers: ConnectorConfig) =>
+            answers.scriptId === undefined || answers.ts === true,
+        message: 'How will users authenticate to your service?',
+        choices: Object.values(AuthType).map(
+            (auth: AuthType) => ({
+              name:
+                  `${auth.padEnd(longestAuthType)} - ${getAuthHelpText(auth)}`,
+              value: auth,
+            })),
+      },
+    ]);
 
 const getParser = (): argparse.ArgumentParser => {
   const parser = new argparse.ArgumentParser({
@@ -180,84 +169,75 @@ const getParser = (): argparse.ArgumentParser => {
   return parser;
 };
 
-const getMissing = async <T extends U, U>(
-  args: T,
-  questions: Array<Question<T>>,
-  defaults: U
-): Promise<T> => {
+const getMissing = async<T extends U, U>(
+    args: T, questions: Array<Question<T>>, defaults: U): Promise<T> => {
   // Since args is coming from argparse, they are null if not provided. Since
   // we're cheating a bit and saying that the type that argparse returns is T,
   // we need to remove null values so optional values are undefined instead of
   // null.
-  const nonNullArgs = (Object.keys(args) as Array<keyof T>).reduce(
-    (acc: T, a: keyof T) => {
-      if (acc[a] === null) {
-        delete acc[a];
-      }
-      return acc;
-    },
-    Object.assign({}, args) as T
-  );
+  const nonNullArgs =
+      (Object.keys(args) as Array<keyof T>).reduce((acc: T, a: keyof T) => {
+        if (acc[a] === null) {
+          delete acc[a];
+        }
+        return acc;
+      }, Object.assign({}, args) as T);
   const providedKeys = Object.keys(nonNullArgs);
-  const validations = (Object.keys(nonNullArgs) as Array<keyof T>).map(
-    async (a: keyof T) => {
-      const value = args[a];
-      if (value !== undefined) {
-        const question = questions.find((q) => q.name === a);
-        if (question !== undefined && question.type === 'input') {
-          const {validate} = question;
-          if (validate !== undefined) {
-            return validate((value as any) as string);
+  const validations =
+      (Object.keys(nonNullArgs) as Array<keyof T>).map(async (a: keyof T) => {
+        const value = args[a];
+        if (value !== undefined) {
+          const question = questions.find((q) => q.name === a);
+          if (question !== undefined && question.type === 'input') {
+            const {validate} = question;
+            if (validate !== undefined) {
+              return validate((value as any) as string);
+            }
           }
         }
-      }
-    }
-  );
+      });
   await Promise.all(validations);
 
-  const remainingQuestions = questions
-    .filter((q) => providedKeys.find((key) => q.name === key) === undefined)
-    .filter((q) =>
-      q.when !== undefined && typeof q.when !== 'boolean'
-        ? q.when(nonNullArgs)
-        : true
-    );
+  const remainingQuestions =
+      questions
+          .filter(
+              (q) => providedKeys.find((key) => q.name === key) === undefined)
+          .filter(
+              (q) => q.when !== undefined && typeof q.when !== 'boolean' ?
+                  q.when(nonNullArgs) :
+                  true);
 
   const answers = await inquirer.prompt(remainingQuestions);
   return Object.assign(defaults, args, answers);
 };
 
-const withMissing = async (
-  args: VizConfig | ConnectorConfig
-): Promise<VizConfig | ConnectorConfig> => {
-  const projectChoice = args.projectChoice;
-  switch (projectChoice) {
-    case ProjectChoice.CONNECTOR:
-      const connectorDefaults: ConnectorConfigHasDefaults = {
-        manifestLogoUrl: 'logoUrl',
-        manifestCompany: 'manifestCompany',
-        manifestCompanyUrl: 'companyUrl',
-        manifestAddonUrl: 'addonUrl',
-        manifestSupportUrl: 'supportUrl',
-        manifestDescription: 'description',
-        manifestSources: '',
-        authType: AuthType.NONE,
-      };
-      return getMissing(
-        args as ConnectorConfig,
-        connectorQuestions,
-        connectorDefaults
-      );
-    case ProjectChoice.VIZ:
-      checkGsutilInstalled();
-      const vizDefaults: VizConfigHasDefaults = {codelab: false};
-      return getMissing(args as VizConfig, vizQuestions, vizDefaults);
-    default:
-      return assertNever(projectChoice);
-  }
-};
+const withMissing = async(args: VizConfig|ConnectorConfig):
+    Promise<VizConfig|ConnectorConfig> => {
+      const projectChoice = args.projectChoice;
+      switch (projectChoice) {
+        case ProjectChoice.CONNECTOR:
+          const connectorDefaults: ConnectorConfigHasDefaults = {
+            manifestLogoUrl: 'logoUrl',
+            manifestCompany: 'manifestCompany',
+            manifestCompanyUrl: 'companyUrl',
+            manifestAddonUrl: 'addonUrl',
+            manifestSupportUrl: 'supportUrl',
+            manifestDescription: 'description',
+            manifestSources: '',
+            authType: AuthType.NONE,
+          };
+          return getMissing(
+              args as ConnectorConfig, connectorQuestions, connectorDefaults);
+        case ProjectChoice.VIZ:
+          checkGsutilInstalled();
+          const vizDefaults: VizConfigHasDefaults = {codelab: false};
+          return getMissing(args as VizConfig, vizQuestions, vizDefaults);
+        default:
+          return assertNever(projectChoice);
+      }
+    };
 
-export const getConfig = async (): Promise<VizConfig | ConnectorConfig> => {
+export const getConfig = async(): Promise<VizConfig|ConnectorConfig> => {
   const parser = getParser();
   const args = parser.parseArgs();
   const config = await withMissing(args);
