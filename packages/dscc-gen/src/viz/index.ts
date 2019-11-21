@@ -22,7 +22,9 @@ import {Template, VizConfig} from '../types';
 import {format, spinnify} from '../util';
 import {addBucketPrefix} from './validation';
 
-export const createFromTemplate = async(config: VizConfig): Promise<number> => {
+export const createFromTemplate = async (
+  config: VizConfig
+): Promise<number> => {
   config.devBucket = addBucketPrefix(config.devBucket);
   config.prodBucket = addBucketPrefix(config.prodBucket);
   const {devBucket, prodBucket, projectName, basePath} = config;

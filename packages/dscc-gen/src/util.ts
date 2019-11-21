@@ -31,11 +31,14 @@ export const readFile = (filePath: string, encoding: string): string => {
   return fs.readFileSync(filePath, encoding);
 };
 
-export const writeFile =
-    (filePath: string, data: string, encoding: string): boolean => {
-      fs.writeFileSync(filePath, data, encoding);
-      return true;
-    };
+export const writeFile = (
+  filePath: string,
+  data: string,
+  encoding: string
+): boolean => {
+  fs.writeFileSync(filePath, data, encoding);
+  return true;
+};
 
 export const fileExists = (filePath: string): Promise<boolean> => {
   return new Promise((resolve, _) => {
@@ -51,8 +54,10 @@ export interface Std {
   err: string;
 }
 
-export const npmInstall =
-    async(projectPath: string, answers: Answers): Promise<ExecaReturnValue> => {
+export const npmInstall = async (
+  projectPath: string,
+  answers: Answers
+): Promise<ExecaReturnValue> => {
   const execOptions: Options = {cwd: projectPath};
   if (answers.yarn) {
     return execa('yarn', [], execOptions);
@@ -61,7 +66,7 @@ export const npmInstall =
   }
 };
 
-export const pause = async(millis: number): Promise<void> => {
+export const pause = async (millis: number): Promise<void> => {
   return new Promise((resolve, _) => {
     setInterval(() => {
       resolve();
@@ -69,8 +74,10 @@ export const pause = async(millis: number): Promise<void> => {
   });
 };
 
-export const spinnify =
-    async<T>(spinnerText: string, fn: () => Promise<T>): Promise<T> => {
+export const spinnify = async <T>(
+  spinnerText: string,
+  fn: () => Promise<T>
+): Promise<T> => {
   const spinner = new Spinner(spinnerText);
   spinner.start();
   try {
