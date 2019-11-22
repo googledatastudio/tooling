@@ -45,18 +45,15 @@ export const createFromTemplate = async (
       await execa('npm', ['install'], {cwd: projectPath});
     }
   });
-
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
   const cdDirection = format.blue(`cd ${projectName}`);
   const runStart = format.green(`${runCmd} start`);
 
-  console.log(
-    `
+  console.log(`
 Created new community viz: ${projectName}
 \n\
 ${cdDirection} and ${runStart} to begin working on your viz!\n\
-    `
-  );
+    `);
   return 0;
 };

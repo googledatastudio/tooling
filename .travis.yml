@@ -7,7 +7,6 @@ os:
   - osx
 node_js:
   - 10
-  - "node"
 branches:
   only:
     - master

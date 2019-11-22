@@ -52,6 +52,23 @@ export const listFiles = (
   }, []);
 };
 
+export const recursiveReaddirSync = async (
+  baseDirectory: string
+): Promise<string[]> => {
+  const dirContents = fs.readdirSync(baseDirectory, {withFileTypes: true});
+  const files: string[][] = await Promise.all(
+    dirContents.map(async (item) => {
+      const itemPath: string = path.resolve(baseDirectory, item.name);
+      return item.isDirectory()
+        ? await recursiveReaddirSync(itemPath)
+        : [itemPath];
+    })
+  );
+  return files.reduce((acc, fileNames) => {
+    return acc.concat(fileNames);
+  }, []);
+};
+
 export const fixTemplates = async (
   baseDirectory: string,
   templates: Template[]
@@ -188,6 +205,10 @@ export const mv = (fromParts: string[], toDirParts: string[]): boolean => {
 export const rename = (fromParts: string[], toParts: string[]): boolean => {
   const fromPath = path.join(...fromParts);
   const toPath = path.join(...toParts);
-  fs.renameSync(fromPath, toPath);
+  try {
+    fs.renameSync(fromPath, toPath);
+  } catch (err) {
+    throw new Error(err);
+  }
   return true;
 };

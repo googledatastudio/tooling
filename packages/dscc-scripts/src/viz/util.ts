@@ -56,7 +56,7 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   const devMode = args.deployment === DeploymentChoices.PROD ? false : true;
   const gcsBucket = devMode ? devBucket : prodBucket;
   const manifestFile = 'manifest.json';
-  const pwd = process.env.PWD!;
+  const pwd = process.cwd()!;
   return {
     devBucket,
     prodBucket,

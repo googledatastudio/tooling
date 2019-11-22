@@ -1,8 +1,9 @@
 import * as fs from 'fs';
-import * as sut from '../src/files';
-import {PWD} from '../src/constants';
 import * as path from 'path';
 import * as shelljs from 'shelljs';
+
+import {PWD} from '../src/constants';
+import * as sut from '../src/files';
 
 describe('For the file utility', () => {
   describe('remove', () => {
