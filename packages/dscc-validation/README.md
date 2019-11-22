@@ -22,5 +22,19 @@ yarn add -D @google/dscc-validation
 
 This will make `dscc-validation` available to your npm scripts.
 
+Sample usage: (Typescript)
+
+```
+import * as validate from '@google/dscc-validation';
+
+// to validate a manifest JSON
+validate.validateManifest(JSON.parse(manifestString));
+
+// to validate a config
+validate.validateConfig(configString);
+
+
+```
+
 
 [dscc-scripts]: ../dscc-scripts
