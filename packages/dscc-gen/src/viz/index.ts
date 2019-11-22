@@ -19,8 +19,7 @@ import * as path from 'path';
 import {PWD} from '../constants';
 import * as files from '../files';
 import {Template, VizConfig} from '../types';
-import * as util from '../util';
-import {format} from '../util';
+import {format, spinnify} from '../util';
 import {addBucketPrefix} from './validation';
 
 export const createFromTemplate = async (
@@ -38,26 +37,23 @@ export const createFromTemplate = async (
     {match: /{{PROD_BUCKET}}/g, replace: prodBucket!},
   ];
   await files.fixTemplates(projectPath, templates);
-
-  await util.spinnify('Installing project dependencies...', async () => {
+  console.log('Installing dependencies...');
+  await spinnify('Installing dependencies...', async () => {
     if (config.yarn) {
       await execa('yarn', [], {cwd: projectPath});
     } else {
       await execa('npm', ['install'], {cwd: projectPath});
     }
   });
-
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
   const cdDirection = format.blue(`cd ${projectName}`);
   const runStart = format.green(`${runCmd} start`);
 
-  console.log(
-    `
+  console.log(`
 Created new community viz: ${projectName}
 \n\
 ${cdDirection} and ${runStart} to begin working on your viz!\n\
-    `
-  );
+    `);
   return 0;
 };

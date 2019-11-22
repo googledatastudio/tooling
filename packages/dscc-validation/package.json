@@ -1,0 +1,43 @@
+{
+  "name": "@google/dscc-validation",
+  "version": "1.0.1",
+  "main": "lib/index.js",
+  "license": "Apache-2.0",
+  "author": "Data Studio DevRel",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --no-cache",
+    "prettier": "prettier --write \"{src,__tests__}/**/*.ts\"",
+    "prettier:check": "prettier --check \"{src,__tests__}/**/*.ts\"",
+    "travis": "yarn prettier:check && yarn test && yarn build"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.22",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.2.1"
+  },
+  "dependencies": {
+    "ajv": "^6.10.2",
+    "typescript": "^3.7.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": "googledatastudio/tooling"
+}

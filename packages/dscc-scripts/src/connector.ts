@@ -86,7 +86,7 @@ const openScript = async (): Promise<void> => {
 };
 
 export const getAppsScriptManifest = async (): Promise<any> => {
-  const pwd = process.env.PWD!;
+  const pwd = process.cwd()!;
   const manifestPath = path.resolve(pwd, 'src', 'appsscript.json');
   const manifestExists = await fs.exists(manifestPath);
   if (!manifestExists) {

@@ -35,6 +35,22 @@ const deploy = async (args: VizArgs): Promise<void> => {
   console.log(`Viz deployed to: ${buildValues.gcsBucket}`);
 };
 
+const validate = async (args: VizArgs): Promise<void> => {
+  if (!args.configPath && !args.manifestPath) {
+    throw new Error(
+      'At least one of --configPath or --manifestPath is required'
+    );
+  }
+  if (args.configPath) {
+    util.validateConfigFile(args.configPath);
+    console.log(`File: ${args.configPath} is a valid config.`);
+  }
+  if (args.manifestPath) {
+    util.validateManifestFile(args.manifestPath);
+    console.log(`File: ${args.manifestPath} is a valid manifest.`);
+  }
+};
+
 export const main = async (args: VizArgs): Promise<void> => {
   switch (args.script) {
     case VizScripts.START:
@@ -47,6 +63,8 @@ export const main = async (args: VizArgs): Promise<void> => {
       await buildMessage(args);
       return deploy(args);
     }
+    case VizScripts.VALIDATE:
+      return validate(args);
     default:
       return assertNever(args.script);
   }

@@ -1,8 +1,9 @@
-import * as sut from '../src/files';
-import {PWD} from '../src/constants';
+import * as fs from 'fs';
 import * as path from 'path';
-import * as fs from 'mz/fs';
 import * as shelljs from 'shelljs';
+
+import {PWD} from '../src/constants';
+import * as sut from '../src/files';
 
 describe('For the file utility', () => {
   describe('remove', () => {
@@ -10,36 +11,30 @@ describe('For the file utility', () => {
     const nonExistingDirectory = path.join(PWD, 'non-existing-directory');
 
     test('Works when directory exists', async () => {
-      await sut.mkdir(existingDirectory);
-      expect(await fs.exists(existingDirectory)).toBe(true);
-
-      const actual = await sut.remove(existingDirectory);
+      sut.mkdir(existingDirectory);
+      expect(fs.existsSync(existingDirectory)).toBe(true);
+      const actual = sut.remove(existingDirectory);
       expect(actual).toBe(true);
 
-      expect(await fs.exists(existingDirectory)).toBe(false);
+      expect(fs.existsSync(existingDirectory)).toBe(false);
     });
 
     test('Throws when directory does not exist', async () => {
-      expect(await fs.exists(nonExistingDirectory)).toBe(false);
-      expect(sut.remove(nonExistingDirectory)).rejects.toThrow(
-        'does not exist'
-      );
+      expect(fs.existsSync(nonExistingDirectory)).toBe(false);
+      expect(() => sut.remove(nonExistingDirectory)).toThrow();
     });
   });
 
   describe('cp', () => {
     const filename = 'hi.fake.jpg';
-
     test('Copies individual file', async () => {
       const source = path.join(PWD, filename);
       const destination = path.join(PWD, filename + '.destination');
       shelljs.touch(source);
-
       sut.cp([source], [destination]);
-      expect(await fs.exists(destination)).toBeTruthy();
-
-      await sut.remove(source);
-      await sut.remove(destination);
+      expect(fs.existsSync(destination)).toBeTruthy();
+      sut.remove(source);
+      sut.remove(destination);
     });
 
     test('Copies folder recursively', async () => {
@@ -47,21 +42,19 @@ describe('For the file utility', () => {
       const destination = path.join(PWD, 'place-to-copy');
       const sub = 'sub-folder';
       // Make source folders
-      await sut.mkdir(source);
-      await sut.mkdir(path.join(source, sub));
+      sut.mkdir(source);
+      sut.mkdir(path.join(source, sub));
       // Make source files
       shelljs.touch(path.join(source, filename));
       shelljs.touch(path.join(source, sub, filename));
 
-      const actual = await sut.cp([source], [destination]);
+      const actual = sut.cp([source], [destination]);
       expect(actual).toBe(true);
-      expect(await fs.exists(path.join(destination, filename))).toBeTruthy();
-      expect(
-        await fs.exists(path.join(destination, sub, filename))
-      ).toBeTruthy();
+      expect(fs.existsSync(path.join(destination, filename))).toBeTruthy();
+      expect(fs.existsSync(path.join(destination, sub, filename))).toBeTruthy();
 
-      await sut.remove(source);
-      await sut.remove(destination);
+      sut.remove(source);
+      sut.remove(destination);
     });
   });
 
@@ -73,13 +66,11 @@ describe('For the file utility', () => {
       shelljs.touch(source);
       const destinationDir = PWD;
       const destination = path.join(destinationDir, 'my-file');
-      expect(await fs.exists(destination)).toBeFalsy();
-
-      await sut.mv([source], [destinationDir]);
-      expect(await fs.exists(destination)).toBeTruthy();
-
-      await sut.remove(sourceDir);
-      await sut.remove(destination);
+      expect(fs.existsSync(destination)).toBeFalsy();
+      sut.mv([source], [destinationDir]);
+      expect(fs.existsSync(destination)).toBeTruthy();
+      sut.remove(sourceDir);
+      sut.remove(destination);
     });
   });
 
@@ -88,14 +79,10 @@ describe('For the file utility', () => {
       const source = path.join(PWD, 'my-rename-file');
       const dest = path.join(PWD, 'my-new-name');
       shelljs.touch(source);
-
-      expect(await fs.exists(dest)).toBeFalsy();
-
-      await sut.rename([source], [dest]);
-
-      expect(await fs.exists(dest)).toBeTruthy();
-
-      await sut.remove(dest);
+      expect(fs.existsSync(dest)).toBeFalsy();
+      sut.rename([source], [dest]);
+      expect(fs.existsSync(dest)).toBeTruthy();
+      sut.remove(dest);
     });
   });
 });

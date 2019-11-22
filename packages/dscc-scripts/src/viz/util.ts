@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import * as validate from '@google/dscc-validation';
 import * as Ajv from 'ajv';
+import {existsSync, PathLike, readFileSync} from 'fs';
 import {DeploymentChoices, VizArgs} from '../args';
-import {invalidVizConfig, invalidVizJSON} from '../util';
-import {configSchema, manifestSchema} from './schemas';
+import {invalidVizConfig} from '../util';
 
 export interface BuildValues {
   devBucket: string;
@@ -55,7 +56,7 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   const devMode = args.deployment === DeploymentChoices.PROD ? false : true;
   const gcsBucket = devMode ? devBucket : prodBucket;
   const manifestFile = 'manifest.json';
-  const pwd = process.env.PWD!;
+  const pwd = process.cwd()!;
   return {
     devBucket,
     prodBucket,
@@ -69,24 +70,50 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   };
 };
 
-const validateJSON = (jsonStr: string, schema: any, fn: string) => {
-  const ajv = new Ajv({allErrors: true});
-  const jsonObject = JSON.parse(jsonStr);
-  const testJson = ajv.compile(schema);
-  const isValid = testJson(jsonObject);
-  // testJson.errors
-  if (isValid === false) {
-    throw invalidVizJSON(fn, testJson.errors);
+const friendifyError = (error: Ajv.ErrorObject): string =>
+  `The value at: ${error.dataPath} is invalid. ${error.message}.`;
+
+const unique = <T>(ts: T[]): T[] => [...new Set(ts)];
+
+const throwIfErrors = (
+  errors: Ajv.ErrorObject[],
+  fileType: 'manifest' | 'config'
+): void => {
+  const friendlyErrors = errors.map(friendifyError);
+  const uniqueErrors = unique(friendlyErrors);
+  if (uniqueErrors.length !== 0) {
+    throw new Error(`Invalid ${fileType}: \n${JSON.stringify(uniqueErrors)}`);
   }
-  return isValid;
 };
 
-export const validateConfig = (configContents: string) => {
-  const filename = 'config';
-  return validateJSON(configContents, configSchema, filename);
+export const validateManifestFile = (path: PathLike): boolean => {
+  const fileExists = existsSync(path);
+  if (!fileExists) {
+    throw new Error(`The file: \n${path}\n was not found.`);
+  }
+  const fileContents = readFileSync(path, 'utf8');
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(fileContents);
+  } catch (e) {
+    throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
+  }
+  throwIfErrors(validate.validateManifest(parsedJson), 'manifest');
+  return true;
 };
 
-export const validateManifest = (manifestContents: string) => {
-  const filename = 'manifest';
-  return validateJSON(manifestContents, manifestSchema, filename);
+export const validateConfigFile = (path: PathLike): boolean => {
+  const fileExists = existsSync(path);
+  if (!fileExists) {
+    throw new Error(`The file: \n${path}\n was not found.`);
+  }
+  const fileContents = readFileSync(path, 'utf8');
+  let parsedJson;
+  try {
+    parsedJson = JSON.parse(fileContents);
+  } catch (e) {
+    throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
+  }
+  throwIfErrors(validate.validateConfig(parsedJson), 'config');
+  return true;
 };
