@@ -72,4 +72,4 @@ The following scripts are available for connectors.
 +   `npm run dscc-scripts connector update_production -h`
 +   `npm run dscc-scripts connector open_template -h`
 
-[dscc-gen]: https://github.com/googledatastudio/dscc-gen
+[dscc-gen]: https://github.com/googledatastudio/tooling/packages/dscc-gen
