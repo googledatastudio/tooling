@@ -2,6 +2,7 @@ node_modules
 /coverage/
 build
 /packages/dscc-validation/lib/
+/packages/dscc-validation/lib-esm/
 /packages/ds-component/lib/
 *.vscode/
 jsconfig.json
