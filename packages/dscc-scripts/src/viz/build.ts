@@ -88,6 +88,6 @@ export const build = async (args: VizArgs) => {
   const newManifest = manifestContents
     .replace(/YOUR_GCS_BUCKET/g, buildValues.gcsBucket)
     .replace(/"DEVMODE_BOOL"/, `${buildValues.devMode}`);
-  validate.validateManifest(JSON.parse(newManifest));
-  return fs.writeFile(manifestDest, newManifest);
+  await fs.writeFile(manifestDest, newManifest);
+  validate.validateManifest(JSON.parse(manifestDest));
 };
