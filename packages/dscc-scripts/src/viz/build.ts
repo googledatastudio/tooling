@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as validate from '@google/dscc-validation';
 import * as bluebird from 'bluebird';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
 import * as fs from 'mz/fs';
