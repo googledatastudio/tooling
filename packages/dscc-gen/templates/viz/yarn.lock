@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@google/dscc-scripts@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.11.tgz#29bfad9d2beda3717d8f14d100cedd2f41467094"
-  integrity sha512-xhrA69YqrKbwrNzdBGZZdpdCeFT3pLx1xGtjsXZsG2nDFB/hhmiXYEa17VO6lclzvAEXfaVGzYfg+z7pLbWamQ==
+"@google/dscc-scripts@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.13.tgz#1ae74bfeef0ca96d50bbab4d2a8946edabe72574"
+  integrity sha512-Sqre2/2sbjXoN6it0y1sIpuPXphmmT1+b1vj2EyN1fOqRHc/E2CaruaoZKldmPtW3YSUQwkF0RsX3GXJvAKHdQ==
   dependencies:
     "@google/dscc-validation" "^1.0.0"
     argparse "^1.0.10"
@@ -60,9 +60,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "12.12.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.11.tgz#bec2961975888d964196bf0016a2f984d793d3ce"
-  integrity sha512-O+x6uIpa6oMNTkPuHDa9MhMMehlxLAd5QcOvKRjAFsBVpeFWTOPnXbDvILvFgFFZfQ1xh1EZi1FbXxUix+zpsQ==
+  version "12.12.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.14.tgz#1c1d6e3c75dba466e0326948d56e8bd72a1903d2"
+  integrity sha512-u/SJDyXwuihpwjXy7hOOghagLEV1KdAST6syfnOk6QZAMzZuWZqXy5aYYZbh8Jdpd4escVFP0MvftHNDb9pruA==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"

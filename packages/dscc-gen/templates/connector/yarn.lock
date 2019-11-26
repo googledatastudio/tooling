@@ -33,10 +33,10 @@
     typescript "^3.6.2"
     watch "^1.0.2"
 
-"@google/dscc-scripts@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.11.tgz#29bfad9d2beda3717d8f14d100cedd2f41467094"
-  integrity sha512-xhrA69YqrKbwrNzdBGZZdpdCeFT3pLx1xGtjsXZsG2nDFB/hhmiXYEa17VO6lclzvAEXfaVGzYfg+z7pLbWamQ==
+"@google/dscc-scripts@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.13.tgz#1ae74bfeef0ca96d50bbab4d2a8946edabe72574"
+  integrity sha512-Sqre2/2sbjXoN6it0y1sIpuPXphmmT1+b1vj2EyN1fOqRHc/E2CaruaoZKldmPtW3YSUQwkF0RsX3GXJvAKHdQ==
   dependencies:
     "@google/dscc-validation" "^1.0.0"
     argparse "^1.0.10"
