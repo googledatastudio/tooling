@@ -37,7 +37,6 @@ export const createFromTemplate = async (
     {match: /{{PROD_BUCKET}}/g, replace: prodBucket!},
   ];
   await files.fixTemplates(projectPath, templates);
-  console.log('Installing dependencies...');
   await spinnify('Installing dependencies...', async () => {
     if (config.yarn) {
       await execa('yarn', [], {cwd: projectPath});

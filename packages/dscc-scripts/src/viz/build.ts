@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as validate from '@google/dscc-validation';
 import * as bluebird from 'bluebird';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
 import * as fs from 'mz/fs';
@@ -88,6 +87,6 @@ export const build = async (args: VizArgs) => {
   const newManifest = manifestContents
     .replace(/YOUR_GCS_BUCKET/g, buildValues.gcsBucket)
     .replace(/"DEVMODE_BOOL"/, `${buildValues.devMode}`);
-  validate.validateManifest(JSON.parse(newManifest));
-  return fs.writeFile(manifestDest, newManifest);
+  await fs.writeFile(manifestDest, newManifest);
+  util.validateManifestFile(manifestDest);
 };
