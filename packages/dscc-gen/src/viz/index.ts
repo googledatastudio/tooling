@@ -19,7 +19,7 @@ import * as path from 'path';
 import {PWD} from '../constants';
 import * as files from '../files';
 import {Template, VizConfig} from '../types';
-import {format, spinnify} from '../util';
+import {format} from '../util';
 import {addBucketPrefix} from './validation';
 
 export const createFromTemplate = async (
@@ -37,13 +37,12 @@ export const createFromTemplate = async (
     {match: /{{PROD_BUCKET}}/g, replace: prodBucket!},
   ];
   await files.fixTemplates(projectPath, templates);
-  await spinnify('Installing dependencies...', async () => {
-    if (config.yarn) {
-      await execa('yarn', [], {cwd: projectPath});
-    } else {
-      await execa('npm', ['install'], {cwd: projectPath});
-    }
-  });
+  console.log('Installing dependencies...');
+  if (config.yarn) {
+    execa.sync('yarn', [], {cwd: projectPath});
+  } else {
+    execa.sync('npm', ['install'], {cwd: projectPath});
+  }
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
   const cdDirection = format.blue(`cd ${projectName}`);
