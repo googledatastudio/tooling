@@ -249,7 +249,7 @@ const withMissing = async (
         connectorDefaults
       );
     case ProjectChoice.VIZ:
-      await checkGsutilInstalled();
+      checkGsutilInstalled();
       const vizDefaults: VizConfigHasDefaults = {codelab: false};
       return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:

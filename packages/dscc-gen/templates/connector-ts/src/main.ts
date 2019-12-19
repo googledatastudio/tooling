@@ -1,11 +1,11 @@
 const cc = DataStudioApp.createCommunityConnector();
 
-// https://devsite.googleplex.com/datastudio/connector/reference#isadminuser
+// https://developers.google.com/datastudio/connector/reference#isadminuser
 const isAdminUser: IsAdminUser = () => {
   return false;
 };
 
-// https://devsite.googleplex.com/datastudio/connector/reference#getconfig
+// https://developers.google.com/datastudio/connector/reference#getconfig
 const getConfig: GetConfig = () => {
   const config = cc.getConfig();
 
@@ -59,12 +59,12 @@ const getFields = (): Fields => {
   return fields;
 };
 
-// https://devsite.googleplex.com/datastudio/connector/reference#getschema
+// https://developers.google.com/datastudio/connector/reference#getschema
 const getSchema: GetSchema = () => {
   return {schema: getFields().build()};
 };
 
-// https://devsite.googleplex.com/datastudio/connector/reference#getdata
+// https://developers.google.com/datastudio/connector/reference#getdata
 const getData: GetData = (request) => {
   // Calling `UrlFetchApp.fetch()` makes this connector require authentication.
   UrlFetchApp.fetch('https://google.com');

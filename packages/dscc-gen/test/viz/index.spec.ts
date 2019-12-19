@@ -39,46 +39,6 @@ describe('End-to-end-tests for viz', () => {
     expect(await hasFile(vizName)).toBeTruthy();
     expect(await hasFile(vizName, 'src', 'index.js')).toBeTruthy();
 
-    await files.remove(vizName);
-  });
-});
-
-describe('End-to-end-tests for viz codelab', () => {
-  const vizNames = {
-    happyPath: 'happy_path_viz',
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  const fileContains = async (
-    checkString: string,
-    ...paths: string[]
-  ): Promise<boolean> => {
-    const fileContents = fs.readFileSync(path.resolve(constants.PWD, ...paths));
-    return fileContents.includes(checkString);
-  };
-
-  test('happy path', async () => {
-    const vizName = vizNames.happyPath;
-    const config: VizConfig = {
-      devBucket: 'test/dscc-gen-test-dev',
-      prodBucket: 'test/dscc-gen-test-prod',
-      yarn: false,
-      codelab: true,
-      projectName: vizName,
-      projectChoice: ProjectChoice.VIZ,
-      basePath: '.',
-    };
-
-    const checkString = '<code>dscc-gen</code> codelab';
-
-    await sut.createFromTemplate(config);
-    expect(await hasFile(vizName)).toBeTruthy();
-    expect(await hasFile(vizName, 'src', 'index.js')).toBeTruthy();
-    expect(await fileContains(checkString, vizName, 'src', 'index.js'));
-
-    await files.remove(vizName);
+    files.remove(vizName);
   });
 });

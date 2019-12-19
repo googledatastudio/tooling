@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "outDir": "build",
+    "sourceMap": true,
     "rootDir": "src",
     "moduleResolution": "node",
     "module": "commonjs",

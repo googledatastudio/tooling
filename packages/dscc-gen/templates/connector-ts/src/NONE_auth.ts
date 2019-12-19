@@ -1,4 +1,4 @@
-// https://devsite.googleplex.com/datastudio/connector/reference#getauthtype
+// https://developers.google.com/datastudio/connector/reference#getauthtype
 const getAuthType: GetAuthType = () => {
   const AuthTypes = cc.AuthType;
   return cc
