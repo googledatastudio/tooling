@@ -1,5 +1,5 @@
 /*!
-  Copyright 2018 Google LLC
+  Copyright 2019 Google LLC
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,46 +14,7 @@
   limitations under the License.
 */
 import * as parse from 'url-parse';
-import {
-  ClearInteraction,
-  ConfigData,
-  ConfigDataElement,
-  ConfigDataElementType,
-  ConfigId,
-  ConfigStyle,
-  ConfigStyleElement,
-  DSInteractionData,
-  DSInteractionType,
-  DSRowValue,
-  Field,
-  FieldId,
-  FieldsByConfigId,
-  FieldsById,
-  Interaction,
-  InteractionMessage,
-  InteractionsById,
-  InteractionType,
-  Message,
-  MessageType,
-  ObjectRow,
-  ObjectTables,
-  ObjectTransform,
-  ParsedImage,
-  PostMessage,
-  Row,
-  RowHeading,
-  SendInteraction,
-  StyleById,
-  SubscriptionsOptions,
-  Table,
-  TableFormat,
-  Tables,
-  TableTransform,
-  TableType,
-  ThemeStyle,
-  ToDSMessageType,
-  VizReadyMessage,
-} from './types';
+import {ClearInteraction, ConfigData, ConfigDataElement, ConfigDataElementType, ConfigId, ConfigStyle, ConfigStyleElement, DSInteractionData, DSInteractionType, DSRowValue, Field, FieldId, FieldsByConfigId, FieldsById, Interaction, InteractionMessage, InteractionsById, InteractionType, Message, MessageType, ObjectRow, ObjectTables, ObjectTransform, ParsedImage, PostMessage, Row, RowHeading, SendInteraction, StyleById, SubscriptionsOptions, Table, TableFormat, Tables, TableTransform, TableType, ThemeStyle, ToDSMessageType, VizReadyMessage,} from './types';
 
 // Make all exported types available to external users.
 export * from './types';
@@ -96,10 +57,9 @@ export const getComponentId = (): string => {
     return query.dscId;
   } else {
     throw new Error(
-      'dscId must be in the query parameters. ' +
+        'dscId must be in the query parameters. ' +
         'This is a bug in ds-component, please file a bug: ' +
-        'https://github.com/googledatastudio/ds-component/issues/new'
-    );
+        'https://github.com/googledatastudio/ds-component/issues/new');
   }
 };
 
@@ -109,7 +69,8 @@ export const getComponentId = (): string => {
  *
  * Usage:
  * ```
- * const myImage = parseImage('originalurl.com\u00a0\u00a0proxiedurl.com\u00a0\u00a0alt text');
+ * const myImage =
+ * parseImage('originalurl.com\u00a0\u00a0proxiedurl.com\u00a0\u00a0alt text');
  *
  * expect(myImage).toEqual({
  *   originalUrl: 'originalurl.com',
@@ -131,10 +92,10 @@ export const parseImage = (value: string): ParsedImage => {
  * Returns the fields indexed by their Data Studio id.
  */
 const fieldsById = (message: Message): FieldsById =>
-  message.fields.reduce((acc: FieldsById, field: Field) => {
-    acc[field.id] = field;
-    return acc;
-  }, {});
+    message.fields.reduce((acc: FieldsById, field: Field) => {
+      acc[field.id] = field;
+      return acc;
+    }, {});
 
 /**
  * Zips two arrays together into a new array. Uses the length of the shortest
@@ -159,17 +120,16 @@ const zip2 = <T, U>(t: T[], u: U[]): Array<[T, U]> => {
 // `.sort` isn't stable, but if you compare items, and when they are equal use
 // the original index, it is then stable.
 const stableSort = <T>(arr: T[], compare: (a: T, b: T) => number): T[] =>
-  arr
-    .map((item, index) => ({item, index}))
-    .sort((a, b) => compare(a.item, b.item) || a.index - b.index)
-    .map(({item}) => item);
+    arr.map((item, index) => ({item, index}))
+        .sort((a, b) => compare(a.item, b.item) || a.index - b.index)
+        .map(({item}) => item);
 
 const dimensionOrMetric = (cde: ConfigDataElement): boolean =>
-  cde.type === ConfigDataElementType.DIMENSION ||
-  cde.type === ConfigDataElementType.METRIC;
+    cde.type === ConfigDataElementType.DIMENSION ||
+    cde.type === ConfigDataElementType.METRIC;
 
 const toNum = (cdet: ConfigDataElementType) =>
-  cdet === ConfigDataElementType.DIMENSION ? -1 : 1;
+    cdet === ConfigDataElementType.DIMENSION ? -1 : 1;
 
 /**
  * Flattens the configIds from a message into a single array. The config Ids
@@ -188,10 +148,8 @@ const flattenConfigIds = (message: Message): ConfigId[] => {
     });
   });
   const dimnsAndMets = configDataElements.filter(dimensionOrMetric);
-  const sorted = stableSort(
-    dimnsAndMets,
-    (a, b) => toNum(a.type) - toNum(b.type)
-  );
+  const sorted =
+      stableSort(dimnsAndMets, (a, b) => toNum(a.type) - toNum(b.type));
   const configIds: ConfigId[] = [];
   sorted.forEach((configDataElement: ConfigDataElement) => {
     configDataElement.value.forEach(() => configIds.push(configDataElement.id));
@@ -237,19 +195,18 @@ const tableFormatTable = (message: Message): Tables => {
   const fieldsBy: FieldsByConfigId = fieldsByConfigId(message);
   const configIds = flattenConfigIds(message);
   const configIdIdx = {};
-  const headers: RowHeading[] = configIds.map(
-    (configId: string): RowHeading => {
-      if (configIdIdx[configId] === undefined) {
-        configIdIdx[configId] = 0;
-      } else {
-        configIdIdx[configId]++;
-      }
-      const idx = configIdIdx[configId];
-      const field = fieldsBy[configId][idx];
-      const heading: RowHeading = {...field, configId};
-      return heading;
-    }
-  );
+  const headers: RowHeading[] =
+      configIds.map((configId: string): RowHeading => {
+        if (configIdIdx[configId] === undefined) {
+          configIdIdx[configId] = 0;
+        } else {
+          configIdIdx[configId]++;
+        }
+        const idx = configIdIdx[configId];
+        const field = fieldsBy[configId][idx];
+        const heading: RowHeading = {...field, configId};
+        return heading;
+      });
   const tableTables: Tables = {
     [TableType.DEFAULT]: {headers: [], rows: []},
   };
@@ -275,8 +232,7 @@ export const fieldsByConfigId = (message: Message): FieldsByConfigId => {
   message.config.data.forEach((configData: ConfigData) => {
     configData.elements.forEach((configDataElement: ConfigDataElement) => {
       fieldsBy[configDataElement.id] = configDataElement.value.map(
-        (dsId: FieldId): Field => fieldsByDSId[dsId]
-      );
+          (dsId: FieldId): Field => fieldsByDSId[dsId]);
     });
   });
 
@@ -291,11 +247,8 @@ const flattenStyle = (message: Message): StyleById => {
   (message.config.style || []).forEach((styleEntry: ConfigStyle) => {
     styleEntry.elements.forEach((configStyleElement: ConfigStyleElement) => {
       if (styleById[configStyleElement.id] !== undefined) {
-        throw new Error(
-          `styleIds must be unique. Your styleId: '${
-            configStyleElement.id
-          }' is used more than once.`
-        );
+        throw new Error(`styleIds must be unique. Your styleId: '${
+            configStyleElement.id}' is used more than once.`);
       }
       styleById[configStyleElement.id] = {
         value: configStyleElement.value,
@@ -311,14 +264,13 @@ const themeStyle = (message: Message): ThemeStyle => {
   return message.config.themeStyle;
 };
 
-const mapInteractionTypes = (
-  dsInteraction: DSInteractionType
-): InteractionType => {
-  switch (dsInteraction) {
-    case DSInteractionType.FILTER:
-      return InteractionType.FILTER;
-  }
-};
+const mapInteractionTypes =
+    (dsInteraction: DSInteractionType): InteractionType => {
+      switch (dsInteraction) {
+        case DSInteractionType.FILTER:
+          return InteractionType.FILTER;
+      }
+    };
 
 const transformDSInteraction = (message: Message): InteractionsById => {
   const dsInteractions: DSInteractionData[] = message.config.interactions;
@@ -327,39 +279,38 @@ const transformDSInteraction = (message: Message): InteractionsById => {
     return {};
   }
   return dsInteractions.reduce(
-    (acc: InteractionsById, dsInteraction: DSInteractionData) => {
-      const interactions = dsInteraction.supportedActions.map(
-        mapInteractionTypes
-      );
-      const value = {
-        type: mapInteractionTypes(dsInteraction.value.type),
-        data: dsInteraction.value.data,
-      };
-      acc[dsInteraction.id] = {
-        value,
-        supportedActions: interactions,
-      };
-      return acc;
-    },
-    {}
-  );
+      (acc: InteractionsById, dsInteraction: DSInteractionData) => {
+        const interactions =
+            dsInteraction.supportedActions.map(mapInteractionTypes);
+        const value = {
+          type: mapInteractionTypes(dsInteraction.value.type),
+          data: dsInteraction.value.data,
+        };
+        acc[dsInteraction.id] = {
+          value,
+          supportedActions: interactions,
+        };
+        return acc;
+      },
+      {});
 };
 
 /**
- * The transform to use for data in a Table format. i.e. `[[1, 2, 3], [4, 5, 6]]`
+ * The transform to use for data in a Table format. i.e. `[[1, 2, 3], [4, 5,
+ * 6]]`
  */
-export const tableTransform: TableTransform = (
-  message: Message
-): TableFormat => ({
-  tables: tableFormatTable(message),
-  fields: fieldsByConfigId(message),
-  style: flattenStyle(message),
-  theme: themeStyle(message),
-  interactions: transformDSInteraction(message),
-});
+export const tableTransform: TableTransform = (message: Message): TableFormat =>
+    ({
+      tables: tableFormatTable(message),
+      fields: fieldsByConfigId(message),
+      style: flattenStyle(message),
+      theme: themeStyle(message),
+      interactions: transformDSInteraction(message),
+    });
 
 /**
- * The transform to use for data in an object format. i.e. `[{name: 'john', views: 3}, {name: 'suzie', views: 5}]`
+ * The transform to use for data in an object format. i.e. `[{name: 'john',
+ * views: 3}, {name: 'suzie', views: 5}]`
  */
 export const objectTransform: ObjectTransform = (message: Message) => ({
   tables: objectFormatTable(message),
@@ -400,56 +351,48 @@ export const objectTransform: ObjectTransform = (message: Message) => ({
  * }, 3000)
  * ```
  */
-export const subscribeToData = <T>(
-  cb: (componentData: T) => void,
-  options: SubscriptionsOptions<T>
-): (() => void) => {
-  if (
-    (options.transform as any) === tableTransform ||
-    (options.transform as any) === objectTransform
-  ) {
-    const onMessage = (message: PostMessage) => {
-      if (message.data.type === MessageType.RENDER) {
-        cb(options.transform(message.data));
+export const subscribeToData =
+    <T>(cb: (componentData: T) => void,
+        options: SubscriptionsOptions<T>): (() => void) => {
+      if ((options.transform as any) === tableTransform ||
+          (options.transform as any) === objectTransform) {
+        const onMessage = (message: PostMessage) => {
+          if (message.data.type === MessageType.RENDER) {
+            cb(options.transform(message.data));
+          } else {
+            console.error(`MessageType: ${
+                message.data
+                    .type} is not supported by this version of the library.`);
+          }
+        };
+        window.addEventListener('message', onMessage);
+        const componentId = getComponentId();
+        // Tell DataStudio that the viz is ready to get events.
+        const vizReadyMessage: VizReadyMessage = {
+          componentId,
+          type: ToDSMessageType.VIZ_READY,
+        };
+        window.parent.postMessage(vizReadyMessage, '*');
+        return () => window.removeEventListener('message', onMessage);
       } else {
-        console.error(
-          `MessageType: ${
-            message.data.type
-          } is not supported by this version of the library.`
-        );
+        throw new Error(`Only the built in transform functions are supported.`);
       }
     };
-    window.addEventListener('message', onMessage);
-    const componentId = getComponentId();
-    // Tell DataStudio that the viz is ready to get events.
-    const vizReadyMessage: VizReadyMessage = {
-      componentId,
-      type: ToDSMessageType.VIZ_READY,
-    };
-    window.parent.postMessage(vizReadyMessage, '*');
-    return () => window.removeEventListener('message', onMessage);
-  } else {
-    throw new Error(`Only the built in transform functions are supported.`);
-  }
-};
 
 /*
  * Does the thing that interactions should do.
  */
-export const sendInteraction: SendInteraction = (
-  actionId,
-  interaction,
-  data
-) => {
-  const componentId = getComponentId();
-  const interactionMessage: InteractionMessage = {
-    type: ToDSMessageType.INTERACTION,
-    id: actionId,
-    data,
-    componentId,
-  };
-  window.parent.postMessage(interactionMessage, '*');
-};
+export const sendInteraction: SendInteraction =
+    (actionId, interaction, data) => {
+      const componentId = getComponentId();
+      const interactionMessage: InteractionMessage = {
+        type: ToDSMessageType.INTERACTION,
+        id: actionId,
+        data,
+        componentId,
+      };
+      window.parent.postMessage(interactionMessage, '*');
+    };
 
 /*
  * Clears an interaction

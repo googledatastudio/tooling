@@ -1,3 +1,18 @@
+/*!
+  Copyright 2019 Google LLC
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
 import {clearInteraction} from '.';
 
 export interface PostMessage extends MessageEvent {
@@ -107,77 +122,29 @@ export interface ConfigStyle {
 }
 
 export interface ConfigThemeStyle {
-  themeFillColor: {
-    color: string;
-    opacity: number;
-  };
-  themeFontColor: {
-    color: string;
-    opacity: number;
-  };
-  themeAccentFillColor: {
-    color: string;
-    opacity: number;
-  };
-  themeAccentFontColor: {
-    color: string;
-    opacity: number;
-  };
+  themeFillColor: {color: string; opacity: number;};
+  themeFontColor: {color: string; opacity: number;};
+  themeAccentFillColor: {color: string; opacity: number;};
+  themeAccentFontColor: {color: string; opacity: number;};
   themeFontFamily: string;
   themeAccentFontFamily: string;
-  themeIncreaseColor: {
-    color: string;
-    opacity: number;
-  };
-  themeDecreaseColor: {
-    color: string;
-    opacity: number;
-  };
-  themeGridColor: {
-    color: string;
-    opacity: number;
-  };
-  themeSeriesColor: Array<{
-    color: string;
-    opacity: number;
-  }>;
+  themeIncreaseColor: {color: string; opacity: number;};
+  themeDecreaseColor: {color: string; opacity: number;};
+  themeGridColor: {color: string; opacity: number;};
+  themeSeriesColor: Array<{color: string; opacity: number;}>;
 }
 
 export interface ThemeStyle {
-  themeFillColor: {
-    color: string;
-    opacity: number;
-  };
-  themeFontColor: {
-    color: string;
-    opacity: number;
-  };
-  themeAccentFillColor: {
-    color: string;
-    opacity: number;
-  };
-  themeAccentFontColor: {
-    color: string;
-    opacity: number;
-  };
+  themeFillColor: {color: string; opacity: number;};
+  themeFontColor: {color: string; opacity: number;};
+  themeAccentFillColor: {color: string; opacity: number;};
+  themeAccentFontColor: {color: string; opacity: number;};
   themeFontFamily: string;
   themeAccentFontFamily: string;
-  themeIncreaseColor: {
-    color: string;
-    opacity: number;
-  };
-  themeDecreaseColor: {
-    color: string;
-    opacity: number;
-  };
-  themeGridColor: {
-    color: string;
-    opacity: number;
-  };
-  themeSeriesColor: Array<{
-    color: string;
-    opacity: number;
-  }>;
+  themeIncreaseColor: {color: string; opacity: number;};
+  themeDecreaseColor: {color: string; opacity: number;};
+  themeGridColor: {color: string; opacity: number;};
+  themeSeriesColor: Array<{color: string; opacity: number;}>;
 }
 
 export enum FieldType {
@@ -297,14 +264,15 @@ export interface Table {
 /**
  * A row of values.
  *
- * The order of values corresponds to the order of the fields of all data element field objects.
+ * The order of values corresponds to the order of the fields of all data
+ * element field objects.
  */
 
 export type DSRow = DSRowValue[];
 /**
  * A value for an entry in a DSRow.
  */
-export type DSRowValue = string | number | boolean;
+export type DSRowValue = string|number|boolean;
 
 export interface ConfigDataElement {
   /**
@@ -330,7 +298,8 @@ export interface ConfigDataElement {
   /**
    * The list of [[FieldId]]s selected by the user.
    *
-   * This is only defined if the [[ConfigElementType]] is `DIMENSION` or `METRIC`.
+   * This is only defined if the [[ConfigElementType]] is `DIMENSION` or
+   * `METRIC`.
    */
   value: FieldId[];
 }
@@ -348,7 +317,8 @@ export interface ConfigStyleElement {
   /**
    * The tooltip or label for the style element.
    *
-   * This is the label text for a `CHECKBOX` element and the tooltip text for other elements.
+   * This is the label text for a `CHECKBOX` element and the tooltip text for
+   * other elements.
    */
   label: string;
   /**
@@ -390,10 +360,7 @@ export enum ConfigDataElementType {
 }
 
 export type DataElementOptions =
-  | MetricOptions
-  | DimensionOptions
-  | SortOptions
-  | MaxResultsOptions;
+    |MetricOptions|DimensionOptions|SortOptions|MaxResultsOptions;
 
 export enum ConfigStyleElementType {
   /**
@@ -465,7 +432,8 @@ export enum ConfigStyleElementType {
   /**
    * Renders a line style picker.
    *
-   * Acceptable default values: `"solid"`, `"dashed"`, `"dotted"`, or `"double"`.
+   * Acceptable default values: `"solid"`, `"dashed"`, `"dotted"`, or
+   * `"double"`.
    */
   LINE_STYLE = 'LINE_STYLE',
   /**
@@ -509,7 +477,7 @@ export interface SortOptions {
   /**
    * `"DESC"` for descending, `"ASC"` for ascending.
    */
-  defaultOrder: 'DESC' | 'ASC';
+  defaultOrder: 'DESC'|'ASC';
 }
 
 export interface MaxResultsOptions {
@@ -567,10 +535,10 @@ export interface TablesByType {
   [TableType.SUMMARY]: RowByConfigId[];
 }
 
-export type ParsedRowValue = string | number | boolean | ParsedImage;
+export type ParsedRowValue = string|number|boolean|ParsedImage;
 
-export type RowHeading = Field & {configId: string};
-export type RowEntry = string | number | boolean;
+export type RowHeading = Field&{configId: string};
+export type RowEntry = string|number|boolean;
 export type Row = RowEntry[];
 
 export interface FieldsByConfigId {
@@ -579,7 +547,7 @@ export interface FieldsByConfigId {
 
 export type StyleTheme = any;
 export type StyleEntry = any;
-export type StyleValue = StyleTheme | StyleEntry;
+export type StyleValue = StyleTheme|StyleEntry;
 
 export interface StyleById {
   [styleId: string]: StyleValue;
@@ -655,25 +623,20 @@ export interface InteractionMessage {
 export interface SendInteraction {
   // TODO - remove this once there is more than one interaction type.
   // tslint:disable-next-line callable-types
-  (
-    actionId: InteractionId,
-    interaction: InteractionType.FILTER,
-    data: FilterInteractionData
-  ): void;
-  // TODO - When there are more Interaction types, the new ones should be added here with their own signature.
+  (actionId: InteractionId, interaction: InteractionType.FILTER,
+   data: FilterInteractionData): void;
+  // TODO - When there are more Interaction types, the new ones should be added
+  // here with their own signature.
 }
 
 export interface ClearInteraction {
   // tslint:disable-next-line callable-types
-  (
-    actionId: InteractionId,
-    interaction: InteractionType.FILTER,
-    data: undefined
-  ): void;
+  (actionId: InteractionId, interaction: InteractionType.FILTER,
+   data: undefined): void;
 }
 
 export type ConceptId = string;
-export type FilterParamValue = string | number | boolean;
+export type FilterParamValue = string|number|boolean;
 
 export interface FilterInteractionData {
   concepts: ConceptId[];
@@ -695,7 +658,7 @@ export type InteractionId = string;
 
 export interface Interaction {
   supportedActions: InteractionType[];
-  value: InteractionValue | {};
+  value: InteractionValue|{};
 }
 
 export interface InteractionsById {
