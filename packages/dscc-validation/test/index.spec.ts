@@ -193,7 +193,7 @@ describe("config validation", () => {
               label: "style1",
               type: "FONT_COLOR",
               defaultValue: {
-                value: "#000000"
+                color: "#000000"
               }
             },
             {
@@ -250,7 +250,7 @@ describe("config validation", () => {
               id: "style8",
               label: "style1",
               type: "FILL_COLOR",
-              defaultValue: "#000000"
+              defaultValue: {color: "#000000"}
             },
             {
               id: "style9",

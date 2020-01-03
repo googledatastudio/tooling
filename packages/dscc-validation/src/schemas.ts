@@ -367,17 +367,12 @@ export const configSchema = {
           enum: ["FONT_COLOR"]
         },
         defaultValue: {
-          anyOf: [
-            { type: "string" },
-            {
-              type: "object",
-              additionalProperties: false,
-              required: ["value"],
-              properties: {
-                value: { type: "string" }
-              }
-            }
-          ]
+          type: "object",
+          additionalProperties: false,
+          required: ["color"],
+          properties: {
+            color: { type: "string" }
+          }
         }
       }
     },
@@ -393,17 +388,12 @@ export const configSchema = {
           enum: ["FILL_COLOR"]
         },
         defaultValue: {
-          anyOf: [
-            { type: "string" },
-            {
-              type: "object",
-              additionalProperties: false,
-              required: ["value"],
-              properties: {
-                value: { type: "string" }
-              }
-            }
-          ]
+          type: "object",
+          additionalProperties: false,
+          required: ["color"],
+          properties: {
+            color: { type: "string" }
+          }
         }
       }
     },
@@ -419,17 +409,12 @@ export const configSchema = {
           enum: ["BORDER_COLOR"]
         },
         defaultValue: {
-          anyOf: [
-            { type: "string" },
-            {
-              type: "object",
-              additionalProperties: false,
-              required: ["value"],
-              properties: {
-                value: { type: "string" }
-              }
-            }
-          ]
+          type: "object",
+          additionalProperties: false,
+          required: ["color"],
+          properties: {
+            color: { type: "string" }
+          }
         }
       }
     },
@@ -445,17 +430,12 @@ export const configSchema = {
           enum: ["AXIS_COLOR"]
         },
         defaultValue: {
-          anyOf: [
-            { type: "string" },
-            {
-              type: "object",
-              additionalProperties: false,
-              required: ["value"],
-              properties: {
-                value: { type: "string" }
-              }
-            }
-          ]
+          type: "object",
+          additionalProperties: false,
+          required: ["color"],
+          properties: {
+            color: { type: "string" }
+          }
         }
       }
     },
@@ -471,17 +451,12 @@ export const configSchema = {
           enum: ["GRID_COLOR"]
         },
         defaultValue: {
-          anyOf: [
-            { type: "string" },
-            {
-              type: "object",
-              additionalProperties: false,
-              required: ["value"],
-              properties: {
-                value: { type: "string" }
-              }
-            }
-          ]
+          type: "object",
+          additionalProperties: false,
+          required: ["color"],
+          properties: {
+            color: { type: "string" }
+          }
         }
       }
     },
