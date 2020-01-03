@@ -371,7 +371,8 @@ export const configSchema = {
           additionalProperties: false,
           required: ["color"],
           properties: {
-            color: { type: "string" }
+            color: { type: "string" },
+            opacity: { type: ["number", "null"] }
           }
         }
       }
@@ -392,7 +393,8 @@ export const configSchema = {
           additionalProperties: false,
           required: ["color"],
           properties: {
-            color: { type: "string" }
+            color: { type: "string" },
+            opacity: { type: ["number", "null"] }
           }
         }
       }
@@ -413,7 +415,8 @@ export const configSchema = {
           additionalProperties: false,
           required: ["color"],
           properties: {
-            color: { type: "string" }
+            color: { type: "string" },
+            opacity: { type: ["number", "null"] }
           }
         }
       }
@@ -434,7 +437,8 @@ export const configSchema = {
           additionalProperties: false,
           required: ["color"],
           properties: {
-            color: { type: "string" }
+            color: { type: "string" },
+            opacity: { type: ["number", "null"] }
           }
         }
       }
@@ -455,7 +459,8 @@ export const configSchema = {
           additionalProperties: false,
           required: ["color"],
           properties: {
-            color: { type: "string" }
+            color: { type: "string" },
+            opacity: { type: ["number", "null"] }
           }
         }
       }
