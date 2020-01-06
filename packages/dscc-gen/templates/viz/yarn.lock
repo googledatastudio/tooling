@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@google/dscc-scripts@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.13.tgz#1ae74bfeef0ca96d50bbab4d2a8946edabe72574"
-  integrity sha512-Sqre2/2sbjXoN6it0y1sIpuPXphmmT1+b1vj2EyN1fOqRHc/E2CaruaoZKldmPtW3YSUQwkF0RsX3GXJvAKHdQ==
+"@google/dscc-scripts@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.14.tgz#4dd3ac9a03946d6f3b727e0666fb75a8d2e44cd0"
+  integrity sha512-XGHkF/6YD0hgkBIBVA75UMqS68lbfnXKMX6fuKfNrg4WhJUOZRCxYm3hNNWlyvgliLAhL4bLJCN9Ed0WmjxIaQ==
   dependencies:
-    "@google/dscc-validation" "^1.0.0"
+    "@google/dscc-validation" "^1.0.2"
     argparse "^1.0.10"
     bluebird "^3.5.3"
     chalk "^2.4.2"
@@ -25,10 +25,10 @@
     webpack-merge "^4.2.1"
     webpack-plugin-replace "^1.1.1"
 
-"@google/dscc-validation@^1.0.0":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@google/dscc-validation/-/dscc-validation-1.0.1.tgz#e91cfa3d00e8d548e962d499e529893b287fbfce"
-  integrity sha512-nsuOUkBeQ5NyWnnxI7SsZNHUPJqKKrXlEV7ZB6hYzqy0DmqLTFOgu6EGmeSDpS/ZyrWnkB9zDDtbLxpOZmV2tg==
+"@google/dscc-validation@^1.0.2":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@google/dscc-validation/-/dscc-validation-1.0.3.tgz#62b4eb1f0a4049c6f1478b4429c08c1fb1cd4637"
+  integrity sha512-2gbV9XHH3WjcchU2WhjrD5fua1mFIUKWyOqh94N3XuQVOLmpX/KsW+hPkfbrfokjdB3O8osyyfnIZXJObzl+Jg==
   dependencies:
     ajv "^6.10.2"
     typescript "^3.7.2"
