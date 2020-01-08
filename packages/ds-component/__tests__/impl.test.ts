@@ -684,6 +684,14 @@ test('If elements are dim met dim dim, they have to be sorted specially.', () =>
           id: 'concepts',
           elements: [
             {
+              id: 'max_results',
+              label: 'Max Results',
+              type: sut.ConfigDataElementType.MAX_RESULTS,
+              options: {
+                max: 3,
+              },
+            },
+            {
               id: 'index',
               label: 'Index Dimension',
               type: sut.ConfigDataElementType.DIMENSION,

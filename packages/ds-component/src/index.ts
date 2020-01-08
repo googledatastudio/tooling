@@ -274,11 +274,17 @@ export const fieldsByConfigId = (message: Message): FieldsByConfigId => {
   const fieldsBy: FieldsByConfigId = {};
 
   message.config.data.forEach((configData: ConfigData) => {
-    configData.elements.forEach((configDataElement: ConfigDataElement) => {
-      fieldsBy[configDataElement.id] = configDataElement.value.map(
-        (dsId: FieldId): Field => fieldsByDSId[dsId]
-      );
-    });
+    configData.elements
+      .filter(
+        (element) =>
+          element.type === ConfigDataElementType.DIMENSION ||
+          element.type === ConfigDataElementType.METRIC
+      )
+      .forEach((configDataElement: ConfigDataElement) => {
+        fieldsBy[configDataElement.id] = configDataElement.value.map(
+          (dsId: FieldId): Field => fieldsByDSId[dsId]
+        );
+      });
   });
 
   return fieldsBy;
