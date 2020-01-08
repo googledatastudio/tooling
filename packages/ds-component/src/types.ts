@@ -348,7 +348,7 @@ export interface ConfigDataElement {
    *
    * This is only defined if the [[ConfigElementType]] is `DIMENSION` or `METRIC`.
    */
-  value: FieldId[];
+  value?: FieldId[];
 }
 export interface ConfigStyleElement {
   /**
