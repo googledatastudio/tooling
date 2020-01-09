@@ -344,11 +344,11 @@ export interface ConfigDataElementMetric {
     /**
      * The minimum number of metrics supported.
      */
-    min: number;
+    min?: number;
     /**
      * The maximum number of metrics supported.
      */
-    max: number;
+    max?: number;
   };
   /**
    * The list of [[FieldId]]s selected by the user.
@@ -378,11 +378,11 @@ export interface ConfigDataElementDimension {
     /**
      * The minimum number of dimensions supported.
      */
-    min: number;
+    min?: number;
     /**
      * The maximum number of dimensions supported.
      */
-    max: number;
+    max?: number;
     supportedTypes?: Array<'TIME' | 'GEO' | 'DEFAULT'>;
   };
   /**
