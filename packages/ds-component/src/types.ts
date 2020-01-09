@@ -558,36 +558,6 @@ export enum ConfigStyleElementType {
   SELECT_RADIO = 'SELECT_RADIO',
 }
 
-// export interface MetricOptions {
-//   /**
-//    * The minimum number of metrics supported.
-//    */
-//   min: number;
-//   /**
-//    * The maximum number of metrics supported.
-//    */
-//   max: number;
-// }
-
-// export interface DimensionOptions {
-//   /**
-//    * The minimum number of dimensions supported.
-//    */
-//   min: number;
-//   /**
-//    * The maximum number of dimensions supported.
-//    */
-//   max: number;
-//   supportedTypes: FieldType[];
-// }
-
-// export interface MaxResultsOptions {
-//   /**
-//    * The maximum number of rows.
-//    */
-//   max: number;
-// }
-
 export type DSInteractionData = DSInteractionFilterData;
 
 export interface DSInteractionFilterData {
