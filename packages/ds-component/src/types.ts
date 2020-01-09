@@ -322,34 +322,106 @@ export type DSRow = DSRowValue[];
  */
 export type DSRowValue = string | number | boolean;
 
-export interface ConfigDataElement {
+export interface ConfigDataElementMetric {
   /**
    * The data element type to render.
    */
-  type: ConfigDataElementType;
+  type: ConfigDataElementType.METRIC;
   /**
-   * The ID of the data element.
+   * The ID of the metric.
    *
    * This should be a non-empty string with no spaces.
    */
   id: ConfigDataElementId;
   /**
-   * The tooltip or label for the data element.
+   * The tooltip or label for the metric.
    */
   label: string;
   /**
-   * The data options for the element.
-   *
-   * This is dependent on the [[ConfigDataElementType]] of the element.
+   * The data options for a Metric.
    */
-  options: DataElementOptions;
+  options: {
+    /**
+     * The minimum number of metrics supported.
+     */
+    min?: number;
+    /**
+     * The maximum number of metrics supported.
+     */
+    max?: number;
+  };
   /**
    * The list of [[FieldId]]s selected by the user.
-   *
-   * This is only defined if the [[ConfigElementType]] is `DIMENSION` or `METRIC`.
    */
   value: FieldId[];
 }
+
+export interface ConfigDataElementDimension {
+  /**
+   * The data element type to render.
+   */
+  type: ConfigDataElementType.DIMENSION;
+  /**
+   * The ID of the dimension.
+   *
+   * This should be a non-empty string with no spaces.
+   */
+  id: ConfigDataElementId;
+  /**
+   * The tooltip or label for the dimension.
+   */
+  label: string;
+  /**
+   * The data options for a Dimension.
+   */
+  options: {
+    /**
+     * The minimum number of dimensions supported.
+     */
+    min?: number;
+    /**
+     * The maximum number of dimensions supported.
+     */
+    max?: number;
+    supportedTypes?: Array<'TIME' | 'GEO' | 'DEFAULT'>;
+  };
+  /**
+   * The list of [[FieldId]]s selected by the user.
+   */
+  value: FieldId[];
+}
+
+export interface ConfigDataElementMaxResults {
+  /**
+   * The data element type to render.
+   */
+  type: ConfigDataElementType.MAX_RESULTS;
+  /**
+   * The ID of the max results.
+   *
+   * This should be a non-empty string with no spaces.
+   */
+  id: ConfigDataElementId;
+  /**
+   * The tooltip or label for the max results.
+   */
+  label: string;
+  /**
+   * The data options for a Max Results.
+   */
+  options: {
+    /**
+     * The maximum number of rows.
+     */
+    max: number;
+  };
+}
+
+export type ConfigDataElement =
+  | ConfigDataElementMaxResults
+  | ConfigDataElementMetric
+  | ConfigDataElementDimension;
+
 export interface ConfigStyleElement {
   /**
    * The style element type to render.
@@ -394,22 +466,10 @@ export enum ConfigDataElementType {
    */
   DIMENSION = 'DIMENSION',
   /**
-   * Renders a sort field element.
-   *
-   * Sort has an order dropdown.
-   */
-  SORT = 'SORT',
-  /**
    * Renders a dropdown that affects the maximum number of results returned.
    */
   MAX_RESULTS = 'MAX_RESULTS',
 }
-
-export type DataElementOptions =
-  | MetricOptions
-  | DimensionOptions
-  | SortOptions
-  | MaxResultsOptions;
 
 export enum ConfigStyleElementType {
   /**
@@ -496,43 +556,6 @@ export enum ConfigStyleElementType {
    * Renders a radio select with pre-defined values.
    */
   SELECT_RADIO = 'SELECT_RADIO',
-}
-
-export interface MetricOptions {
-  /**
-   * The minimum number of metrics supported.
-   */
-  min: number;
-  /**
-   * The maximum number of metrics supported.
-   */
-  max: number;
-}
-
-export interface DimensionOptions {
-  /**
-   * The minimum number of dimensions supported.
-   */
-  min: number;
-  /**
-   * The maximum number of dimensions supported.
-   */
-  max: number;
-  supportedTypes: FieldType[];
-}
-
-export interface SortOptions {
-  /**
-   * `"DESC"` for descending, `"ASC"` for ascending.
-   */
-  defaultOrder: 'DESC' | 'ASC';
-}
-
-export interface MaxResultsOptions {
-  /**
-   * The maximum number of rows.
-   */
-  max: number;
 }
 
 export type DSInteractionData = DSInteractionFilterData;

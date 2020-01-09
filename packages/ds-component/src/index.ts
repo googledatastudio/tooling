@@ -20,6 +20,8 @@ import {
   ConfigData,
   ConfigDataElement,
   ConfigDataElementType,
+  ConfigDataElementMetric,
+  ConfigDataElementDimension,
   ConfigId,
   ConfigStyle,
   ConfigStyleElement,
@@ -181,20 +183,23 @@ const toNum = (cdet: ConfigDataElementType) =>
  * Note: this is relying on the fact that the postMessage from DataStudio has
  * the fields sorted to be dimensions, followed by metrics.
  */
+type ConfigDataConcept = ConfigDataElementMetric | ConfigDataElementDimension;
+
 const flattenConfigIds = (message: Message): ConfigId[] => {
-  const configDataElements: ConfigDataElement[] = [];
+  const dimnsAndMets: ConfigDataConcept[] = [];
   message.config.data.forEach((configData: ConfigData) => {
-    configData.elements.forEach((configDataElement: ConfigDataElement) => {
-      configDataElements.push(configDataElement);
-    });
+    configData.elements
+      .filter(dimensionOrMetric)
+      .forEach((configDataElement: ConfigDataConcept) => {
+        dimnsAndMets.push(configDataElement);
+      });
   });
-  const dimnsAndMets = configDataElements.filter(dimensionOrMetric);
   const sorted = stableSort(
     dimnsAndMets,
     (a, b) => toNum(a.type) - toNum(b.type)
   );
   const configIds: ConfigId[] = [];
-  sorted.forEach((configDataElement: ConfigDataElement) => {
+  sorted.forEach((configDataElement) => {
     configDataElement.value.forEach(() => configIds.push(configDataElement.id));
   });
   return configIds;
@@ -274,11 +279,13 @@ export const fieldsByConfigId = (message: Message): FieldsByConfigId => {
   const fieldsBy: FieldsByConfigId = {};
 
   message.config.data.forEach((configData: ConfigData) => {
-    configData.elements.forEach((configDataElement: ConfigDataElement) => {
-      fieldsBy[configDataElement.id] = configDataElement.value.map(
-        (dsId: FieldId): Field => fieldsByDSId[dsId]
-      );
-    });
+    configData.elements
+      .filter(dimensionOrMetric)
+      .forEach((configDataElement: ConfigDataConcept) => {
+        fieldsBy[configDataElement.id] = configDataElement.value.map(
+          (dsId: FieldId): Field => fieldsByDSId[dsId]
+        );
+      });
   });
 
   return fieldsBy;
