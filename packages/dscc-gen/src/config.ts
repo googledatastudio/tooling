@@ -101,14 +101,14 @@ const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
   {
     name: 'devDirectory',
     type: 'input',
-    message: 'What is your dev directory?',
+    message: 'What is your GCS dev directory?',
     transformer: addBucketPrefix,
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
   {
     name: 'prodDirectory',
     type: 'input',
-    message: 'What is your prod directory?',
+    message: 'What is your GCS prod directory?',
     transformer: addBucketPrefix,
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
