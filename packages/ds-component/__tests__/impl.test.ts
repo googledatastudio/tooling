@@ -18,7 +18,6 @@ import * as sut from '../src/index';
 import {
   DSInteractionData,
   DSInteractionType,
-  Interaction,
   InteractionsById,
   InteractionType,
   ThemeStyle,
@@ -292,7 +291,6 @@ const testMessage = (
               options: {
                 min: 1,
                 max: numMetrics,
-                supportedTypes: [],
               },
               value: metricFields.map((a) => a.id),
             },

@@ -28,14 +28,14 @@ const addVizParser = (
     description: 'Creates a project using a Community Viz template.',
   });
 
-  vizParser.addArgument(['--devBucket', '-d'], {
-    dest: 'devBucket',
-    help: 'The dev bucket',
+  vizParser.addArgument(['--devDirectory', '-d'], {
+    dest: 'devDirectory',
+    help: 'The dev directory',
   });
 
-  vizParser.addArgument(['--prodBucket', '-p'], {
-    dest: 'prodBucket',
-    help: 'The dev bucket',
+  vizParser.addArgument(['--prodDirectory', '-p'], {
+    dest: 'prodDirectory',
+    help: 'The prod directory',
   });
 
   vizParser.addArgument(['--codelab', '-c'], {
@@ -99,16 +99,16 @@ const commonQuestions: Array<Question<CommonConfig>> = [
 
 const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
   {
-    name: 'devBucket',
+    name: 'devDirectory',
     type: 'input',
-    message: 'What is your dev bucket?',
+    message: 'What is your GCS dev directory?',
     transformer: addBucketPrefix,
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
   {
-    name: 'prodBucket',
+    name: 'prodDirectory',
     type: 'input',
-    message: 'What is your prod bucket?',
+    message: 'What is your GCS prod directory?',
     transformer: addBucketPrefix,
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
