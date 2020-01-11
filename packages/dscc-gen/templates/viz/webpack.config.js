@@ -15,7 +15,12 @@ module.exports = [
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      new CopyWebpackPlugin([{from: path.join('src', CSS_FILE), to: '.'}]),
+      new CopyWebpackPlugin([
+        {from: path.join('src', CSS_FILE), to: '.'},
+        // We can actually just save localMessage.js to the dist directory. It
+        // doesn't need to be in src anymore since src doesn't use it.
+        {from: path.join('src', 'localMessage.js'), to: '.'},
+      ]),
     ],
   },
 ];

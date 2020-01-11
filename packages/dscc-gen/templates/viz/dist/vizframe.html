@@ -2,22 +2,24 @@
 <html>
 
 <head>
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <style>
-    body {
-      font-family: Roboto;
-    }
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        body {
+            font-family: Roboto;
+        }
 
-    code {
-      background-color: #fdf6e3;
-      color: #586e75;
-    }
-  </style>
+        code {
+            background-color: #fdf6e3;
+            color: #586e75;
+        }
+    </style>
 </head>
 
 <body>
-  <script src="main.js"></script>
-  <link rel="stylesheet" href="index.css">
+    <script src="main.js"></script>
+    <script src="localMessage.js"></script>
+    <script>window.postMessage(message, '*');</script>
+    <link rel="stylesheet" href="index.css">
 </body>
 
 </html>
