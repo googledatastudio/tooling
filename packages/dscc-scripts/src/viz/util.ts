@@ -24,7 +24,7 @@ export interface BuildValues {
   devBucket: string;
   prodBucket: string;
   manifestFile: 'manifest.json';
-  cssFile: string;
+  cssFile?: string;
   jsonFile: string;
   jsFile: string;
   devMode: boolean;
@@ -34,9 +34,6 @@ export interface BuildValues {
 
 export const validateBuildValues = (args: VizArgs): BuildValues => {
   const cssFile = process.env.npm_package_dsccViz_cssFile;
-  if (cssFile === undefined) {
-    throw invalidVizConfig('cssFile');
-  }
   const jsonFile = process.env.npm_package_dsccViz_jsonFile;
   if (jsonFile === undefined) {
     throw invalidVizConfig('jsonFile');
