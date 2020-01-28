@@ -218,6 +218,11 @@ describe("config validation", () => {
               type: "TEXTINPUT"
             },
             {
+              id: "style5ish",
+              label: "style1",
+              type: "TEXTAREA"
+            },
+            {
               id: "style6",
               label: "style1",
               type: "SELECT_SINGLE",
