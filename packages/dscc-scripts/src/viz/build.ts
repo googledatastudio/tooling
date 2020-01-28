@@ -24,6 +24,20 @@ import * as util from './util';
 import {BuildValues} from './util';
 
 const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
+  const plugins: webpack.Plugin[] = [
+    new CopyWebpackPlugin([
+      {from: path.join(buildValues.pwd, 'src', buildValues.jsonFile), to: '.'},
+    ]),
+  ];
+  // Only add in the copy plugin for the css if the user provides a css value in
+  // the manifest.
+  if (buildValues.cssFile !== undefined) {
+    plugins.push(
+      new CopyWebpackPlugin([
+        {from: path.join('src', buildValues.cssFile), to: '.'},
+      ])
+    );
+  }
   // common options
   const webpackOptions: webpack.Configuration = {
     entry: {
@@ -34,15 +48,7 @@ const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
       filename: buildValues.jsFile,
       path: path.resolve(buildValues.pwd, 'build'),
     },
-    plugins: [
-      new CopyWebpackPlugin([
-        {
-          from: path.resolve(buildValues.pwd, 'src', buildValues.jsonFile),
-          to: '.',
-        },
-        {from: path.join('src', buildValues.cssFile), to: '.'},
-      ]),
-    ],
+    plugins,
   };
 
   if (buildValues.devMode) {

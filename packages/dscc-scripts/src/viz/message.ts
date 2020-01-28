@@ -41,6 +41,24 @@ const buildOptions = (
       return assertNever(format);
   }
 
+  const plugins: webpack.Plugin[] = [
+    new CopyWebpackPlugin([
+      {from: path.join(buildValues.pwd, 'src', buildValues.jsonFile), to: '.'},
+    ]),
+    new webpack.DefinePlugin({
+      TRANSFORM_PARAM: `"${transformString}"`,
+    }),
+  ];
+  // Only add in the copy plugin for the css if the user provides a css value in
+  // the manifest.
+  if (buildValues.cssFile !== undefined) {
+    plugins.push(
+      new CopyWebpackPlugin([
+        {from: path.join('src', buildValues.cssFile), to: '.'},
+      ])
+    );
+  }
+
   return {
     mode: 'development',
     entry: {
@@ -51,18 +69,7 @@ const buildOptions = (
       filename: 'index.js',
       path: path.resolve(buildValues.pwd, 'build'),
     },
-    plugins: [
-      new CopyWebpackPlugin([
-        {
-          from: path.resolve(buildValues.pwd, 'src', buildValues.jsonFile),
-          to: '.',
-        },
-        {from: path.join('src', buildValues.cssFile), to: '.'},
-      ]),
-      new webpack.DefinePlugin({
-        TRANSFORM_PARAM: `"${transformString}"`,
-      }),
-    ],
+    plugins,
   };
 };
 

@@ -26,14 +26,6 @@ test('validateBuildValues happyPath', () => {
   });
 });
 
-test('validateBuildValues missing cssFile', () => {
-  delete process.env.npm_package_dsccViz_cssFile;
-
-  expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
-    'dsccViz.cssFile'
-  );
-});
-
 test('validateBuildValues missing jsonFile', () => {
   delete process.env.npm_package_dsccViz_jsonFile;
 
