@@ -29,12 +29,12 @@ const addVizParser = (
   });
 
   vizParser.addArgument(['--devDirectory', '-d'], {
-    dest: 'devDirectory',
+    dest: 'devBucket',
     help: 'The dev directory',
   });
 
   vizParser.addArgument(['--prodDirectory', '-p'], {
-    dest: 'prodDirectory',
+    dest: 'prodBucket',
     help: 'The prod directory',
   });
 
@@ -99,14 +99,14 @@ const commonQuestions: Array<Question<CommonConfig>> = [
 
 const vizQuestions: Array<Question<VizConfig>> = commonQuestions.concat([
   {
-    name: 'devDirectory',
+    name: 'devBucket',
     type: 'input',
     message: 'What is your GCS dev directory?',
     transformer: addBucketPrefix,
     validate: async (a) => hasBucketPermissions(addBucketPrefix(a)),
   },
   {
-    name: 'prodDirectory',
+    name: 'prodBucket',
     type: 'input',
     message: 'What is your GCS prod directory?',
     transformer: addBucketPrefix,
