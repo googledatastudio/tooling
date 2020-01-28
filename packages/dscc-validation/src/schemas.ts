@@ -212,6 +212,7 @@ export const configSchema = {
               { $ref: "#/definitions/fontFamily" },
               { $ref: "#/definitions/checkbox" },
               { $ref: "#/definitions/textInput" },
+              { $ref: "#/definitions/textArea" },
               { $ref: "#/definitions/opacity" },
               { $ref: "#/definitions/lineWeight" },
               { $ref: "#/definitions/lineStyle" },
@@ -281,6 +282,20 @@ export const configSchema = {
         type: {
           type: "string",
           enum: ["TEXTINPUT"]
+        },
+        defaultValue: { type: "string" }
+      }
+    },
+    textArea: {
+      type: "object",
+      additionalProperties: false,
+      required: ["id", "label", "type"],
+      properties: {
+        id: { type: "string" },
+        label: { type: "string" },
+        type: {
+          type: "string",
+          enum: ["TEXTAREA"]
         },
         defaultValue: { type: "string" }
       }
