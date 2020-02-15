@@ -125,19 +125,23 @@ export interface ConfigStyle {
 export interface ConfigThemeStyle {
   themeFillColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeFontColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeAccentFillColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeAccentFontColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeFontFamily: string;
   themeAccentFontFamily: string;
@@ -156,6 +160,8 @@ export interface ConfigThemeStyle {
   themeSeriesColor: Array<{
     color: string;
     opacity?: number;
+    themeRef?: themeRefIndex;
+    seriesRef: seriesRefIndex;
   }>;
 }
 
@@ -166,22 +172,22 @@ export interface ThemeStyle {
   themeFillColor: {
     color: string;
     opacity?: number;
-    themeRef: themeRefIndex;
+    themeRef?: themeRefIndex;
   };
   themeFontColor: {
     color: string;
     opacity?: number;
-    themeRef: themeRefIndex;
+    themeRef?: themeRefIndex;
   };
   themeAccentFillColor: {
     color: string;
     opacity?: number;
-    themeRef: themeRefIndex;
+    themeRef?: themeRefIndex;
   };
   themeAccentFontColor: {
     color: string;
     opacity?: number;
-    themeRef: themeRefIndex;
+    themeRef?: themeRefIndex;
   };
   themeFontFamily: string;
   themeAccentFontFamily: string;
@@ -200,8 +206,8 @@ export interface ThemeStyle {
   themeSeriesColor: Array<{
     color: string;
     opacity?: number;
+    themeRef?: themeRefIndex;
     seriesRef: seriesRefIndex;
-    themeRef: themeRefIndex;
   }>;
 }
 
@@ -751,395 +757,4 @@ export interface Interaction {
 
 export interface InteractionsById {
   [interactionId: string]: Interaction;
-}
-
-const postM: Message = {
-  "type": "RENDER",
-  "config": {
-    "data": [
-      {
-        "id": "concepts",
-        "label": "concepts",
-        "elements": [
-          {
-            "id": "dimension1",
-            "label": "first dimension",
-            "type": "DIMENSION",
-            "options": {
-              "min": 1,
-              "max": 3
-            },
-            "value": [
-              "qt_uapg3f8s5b"
-            ]
-          },
-          {
-            "id": "metric",
-            "label": "metric",
-            "type": "METRIC",
-            "options": {
-              "min": 1,
-              "max": 3
-            },
-            "value": [
-              "qt_vapg3f8s5b"
-            ]
-          }
-        ]
-      }
-    ],
-    "style": [
-      {
-        "id": "colors",
-        "label": "Highlight Colors",
-        "elements": [
-          {
-            "id": "accentColor",
-            "label": "Accent Color",
-            "type": "SELECT_SINGLE",
-            "defaultValue": "rain",
-            "options": [
-              {
-                "label": "Summer",
-                "value": "summer"
-              },
-              {
-                "label": "Fall",
-                "value": "fall"
-              }
-            ],
-            "value": "rain"
-          },
-          {
-            "id": "reverseColor",
-            "label": "Show reverse color",
-            "defaultValue": false,
-            "type": "CHECKBOX",
-            "value": false
-          },
-          {
-            "id": "textOpacity",
-            "label": "Text Opacity",
-            "defaultValue": 0.2,
-            "type": "OPACITY",
-            "value": 0.2
-          },
-          {
-            "id": "customText",
-            "label": "Custom Text",
-            "defaultValue": 0.2,
-            "type": "TEXTINPUT",
-            "value": 0.2
-          }
-        ]
-      },
-      {
-        "id": "text",
-        "label": "Highlight Text",
-        "elements": [
-          {
-            "id": "textFontSize",
-            "label": "Font size",
-            "defaultValue": 10,
-            "type": "FONT_SIZE",
-            "value": 10
-          },
-          {
-            "id": "fontColor",
-            "label": "Font color",
-            "type": "FONT_COLOR",
-            "defaultValue": {},
-            "value": {}
-          },
-          {
-            "id": "font",
-            "label": "Font family",
-            "defaultValue": "auto",
-            "type": "FONT_FAMILY",
-            "value": "auto"
-          }
-        ]
-      }
-    ],
-    "interactions": [
-      {
-        "id": "interactionsConfigId",
-        "supportedActions": [
-          "FILTER"
-        ],
-        "value": {
-          "type": "NONE"
-        }
-      }
-    ],
-    "themeStyle": {
-      "themeFillColor": {
-        "color": "#ffffff",
-        "themeRef": {
-          "index": 0
-        }
-      },
-      "themeFontColor": {
-        "color": "#000000",
-        "themeRef": {
-          "index": 1
-        }
-      },
-      "themeFontFamily": "Roboto",
-      "themeAccentFillColor": {
-        "color": "#e0e0e0",
-        "themeRef": {
-          "index": 2
-        }
-      },
-      "themeAccentFontColor": {
-        "color": "#000000",
-        "themeRef": {
-          "index": 3
-        }
-      },
-      "themeAccentFontFamily": "Roboto",
-      "themeSeriesColor": [
-        {
-          "color": "#0072f0",
-          "seriesRef": {
-            "index": 0
-          },
-          "themeRef": {
-            "index": 4
-          }
-        },
-        {
-          "color": "#00b6cb",
-          "seriesRef": {
-            "index": 1
-          },
-          "themeRef": {
-            "index": 5
-          }
-        },
-        {
-          "color": "#f10096",
-          "seriesRef": {
-            "index": 2
-          },
-          "themeRef": {
-            "index": 6
-          }
-        },
-        {
-          "color": "#f66d00",
-          "seriesRef": {
-            "index": 3
-          },
-          "themeRef": {
-            "index": 7
-          }
-        },
-        {
-          "color": "#ffa800",
-          "seriesRef": {
-            "index": 4
-          },
-          "themeRef": {
-            "index": 8
-          }
-        },
-        {
-          "color": "#7cb342",
-          "seriesRef": {
-            "index": 5
-          },
-          "themeRef": {
-            "index": 9
-          }
-        },
-        {
-          "color": "#5e35b1",
-          "seriesRef": {
-            "index": 6
-          }
-        },
-        {
-          "color": "#03a9f4",
-          "seriesRef": {
-            "index": 7
-          }
-        },
-        {
-          "color": "#ec407a",
-          "seriesRef": {
-            "index": 8
-          }
-        },
-        {
-          "color": "#ff7043",
-          "seriesRef": {
-            "index": 9
-          }
-        },
-        {
-          "color": "#737373",
-          "seriesRef": {
-            "index": 10
-          }
-        },
-        {
-          "color": "#f15a60",
-          "seriesRef": {
-            "index": 11
-          }
-        },
-        {
-          "color": "#7ac36a",
-          "seriesRef": {
-            "index": 12
-          }
-        },
-        {
-          "color": "#5a9bd4",
-          "seriesRef": {
-            "index": 13
-          }
-        },
-        {
-          "color": "#faa75a",
-          "seriesRef": {
-            "index": 14
-          }
-        },
-        {
-          "color": "#9e67ab",
-          "seriesRef": {
-            "index": 15
-          }
-        },
-        {
-          "color": "#ce7058",
-          "seriesRef": {
-            "index": 16
-          }
-        },
-        {
-          "color": "#d77fb3",
-          "seriesRef": {
-            "index": 17
-          }
-        },
-        {
-          "color": "#81d4fa",
-          "seriesRef": {
-            "index": 18
-          }
-        },
-        {
-          "color": "#f48fb1",
-          "seriesRef": {
-            "index": 19
-          }
-        }
-      ],
-      "themeIncreaseColor": {
-        "color": "#388e3c"
-      },
-      "themeDecreaseColor": {
-        "color": "#f44336"
-      },
-      "themeGridColor": {
-        "color": "#d1d1d1"
-      }
-    }
-  },
-  "fields": [
-    {
-      "id": "qt_uapg3f8s5b",
-      "name": "Medium",
-      "type": "TEXT",
-      "concept": "DIMENSION"
-    },
-    {
-      "id": "qt_vapg3f8s5b",
-      "name": "Sessions",
-      "type": "NUMBER",
-      "concept": "METRIC"
-    }
-  ],
-  "dataResponse": {
-    "tables": [
-      {
-        "id": "DEFAULT",
-        "fields": [
-          "qt_uapg3f8s5b",
-          "qt_vapg3f8s5b"
-        ],
-        "rows": [
-          [
-            "organic",
-            33489
-          ],
-          [
-            "referral",
-            10634
-          ],
-          [
-            "(none)",
-            9631
-          ],
-          [
-            "affiliate",
-            1661
-          ],
-          [
-            "(not set)",
-            1590
-          ],
-          [
-            "cpc",
-            900
-          ],
-          [
-            "cpm",
-            572
-          ]
-        ]
-      },
-      {
-        "id": "COMPARISON",
-        "fields": [
-          "qt_uapg3f8s5b",
-          "qt_vapg3f8s5b"
-        ],
-        "rows": [
-          [
-            "organic",
-            28035
-          ],
-          [
-            "referral",
-            9044
-          ],
-          [
-            "(none)",
-            8441
-          ],
-          [
-            "(not set)",
-            1202
-          ],
-          [
-            "affiliate",
-            1141
-          ],
-          [
-            "cpm",
-            784
-          ],
-          [
-            "cpc",
-            242
-          ]
-        ]
-      }
-    ]
-  }
 }

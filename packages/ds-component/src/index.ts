@@ -230,7 +230,7 @@ const objectFormatTable = (message: Message): ObjectTables => {
 
   message.dataResponse.tables.forEach((table: Table) => {
     const objectRows: ObjectRow[] = table.rows.map(joinObjectRow(configIds));
-    if (table.id === TableType.DEFAULT){
+    if (table.id === TableType.DEFAULT) {
       objectTables[table.id] = objectRows;
     } else {
       let current = objectTables[table.id];
