@@ -125,74 +125,89 @@ export interface ConfigStyle {
 export interface ConfigThemeStyle {
   themeFillColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeFontColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeAccentFillColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeAccentFontColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeFontFamily: string;
   themeAccentFontFamily: string;
   themeIncreaseColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
   };
   themeDecreaseColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
   };
   themeGridColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
   };
   themeSeriesColor: Array<{
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
+    seriesRef: seriesRefIndex;
   }>;
 }
+
+type themeRefIndex = {index: number};
+type seriesRefIndex = {index: number};
 
 export interface ThemeStyle {
   themeFillColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeFontColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeAccentFillColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeAccentFontColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
   };
   themeFontFamily: string;
   themeAccentFontFamily: string;
   themeIncreaseColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
   };
   themeDecreaseColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
   };
   themeGridColor: {
     color: string;
-    opacity: number;
+    opacity?: number;
   };
   themeSeriesColor: Array<{
     color: string;
-    opacity: number;
+    opacity?: number;
+    themeRef?: themeRefIndex;
+    seriesRef: seriesRefIndex;
   }>;
 }
 
@@ -422,6 +437,9 @@ export type ConfigDataElement =
   | ConfigDataElementMetric
   | ConfigDataElementDimension;
 
+// TODO: this should eventually always be a value
+export type ConfigStyleValue = string | {} | boolean | {color: string};
+
 export interface ConfigStyleElement {
   /**
    * The style element type to render.
@@ -444,11 +462,11 @@ export interface ConfigStyleElement {
    *
    * Invalid values will be ignored.
    */
-  defaultValue: string;
+  defaultValue: ConfigStyleValue;
   /**
    * The current value of the style element.
    */
-  value: string;
+  value: ConfigStyleValue;
 }
 export enum TableType {
   DEFAULT = 'DEFAULT',

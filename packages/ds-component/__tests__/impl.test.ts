@@ -61,116 +61,179 @@ const interactionsById: InteractionsById = {
 
 const theme: ThemeStyle = {
   themeFillColor: {
-    color: '#fff',
-    opacity: 1,
+    color: '#ffffff',
+    themeRef: {
+      index: 0,
+    },
   },
   themeFontColor: {
-    color: '#616161',
-    opacity: 1,
+    color: '#000000',
+    themeRef: {
+      index: 1,
+    },
   },
   themeFontFamily: 'Roboto',
   themeAccentFillColor: {
-    color: '#4285F4',
-    opacity: 1,
+    color: '#e0e0e0',
+    themeRef: {
+      index: 2,
+    },
   },
   themeAccentFontColor: {
-    color: '#EFEFEF',
-    opacity: 1,
+    color: '#000000',
+    themeRef: {
+      index: 3,
+    },
   },
   themeAccentFontFamily: 'Roboto',
   themeSeriesColor: [
     {
-      color: '#4285F4',
-      opacity: 1,
+      color: '#0072f0',
+      seriesRef: {
+        index: 0,
+      },
+      themeRef: {
+        index: 4,
+      },
     },
     {
-      color: '#DB4437',
-      opacity: 1,
+      color: '#00b6cb',
+      seriesRef: {
+        index: 1,
+      },
+      themeRef: {
+        index: 5,
+      },
     },
     {
-      color: '#F4B400',
-      opacity: 1,
+      color: '#f10096',
+      seriesRef: {
+        index: 2,
+      },
+      themeRef: {
+        index: 6,
+      },
     },
     {
-      color: '#0F9D58',
-      opacity: 1,
+      color: '#f66d00',
+      seriesRef: {
+        index: 3,
+      },
+      themeRef: {
+        index: 7,
+      },
     },
     {
-      color: '#AB47BC',
-      opacity: 1,
+      color: '#ffa800',
+      seriesRef: {
+        index: 4,
+      },
+      themeRef: {
+        index: 8,
+      },
     },
     {
-      color: '#00ACC1',
-      opacity: 1,
+      color: '#7cb342',
+      seriesRef: {
+        index: 5,
+      },
+      themeRef: {
+        index: 9,
+      },
     },
     {
-      color: '#FF7043',
-      opacity: 1,
-    },
-    {
-      color: '#9E9D24',
-      opacity: 1,
-    },
-    {
-      color: '#5C6BC0',
-      opacity: 1,
-    },
-    {
-      color: '#F06292',
-      opacity: 1,
-    },
-    {
-      color: '#00796b',
-      opacity: 1,
-    },
-    {
-      color: '#c2185b',
-      opacity: 1,
-    },
-    {
-      color: '#7e57c2',
-      opacity: 1,
+      color: '#5e35b1',
+      seriesRef: {
+        index: 6,
+      },
     },
     {
       color: '#03a9f4',
-      opacity: 1,
+      seriesRef: {
+        index: 7,
+      },
     },
     {
-      color: '#8bc34a',
-      opacity: 1,
+      color: '#ec407a',
+      seriesRef: {
+        index: 8,
+      },
     },
     {
-      color: '#fdd835',
-      opacity: 1,
+      color: '#ff7043',
+      seriesRef: {
+        index: 9,
+      },
     },
     {
-      color: '#fb8c00',
-      opacity: 1,
+      color: '#737373',
+      seriesRef: {
+        index: 10,
+      },
     },
     {
-      color: '#8d6e63',
-      opacity: 1,
+      color: '#f15a60',
+      seriesRef: {
+        index: 11,
+      },
     },
     {
-      color: '#9e9e9e',
-      opacity: 1,
+      color: '#7ac36a',
+      seriesRef: {
+        index: 12,
+      },
     },
     {
-      color: '#607d8b',
-      opacity: 1,
+      color: '#5a9bd4',
+      seriesRef: {
+        index: 13,
+      },
+    },
+    {
+      color: '#faa75a',
+      seriesRef: {
+        index: 14,
+      },
+    },
+    {
+      color: '#9e67ab',
+      seriesRef: {
+        index: 15,
+      },
+    },
+    {
+      color: '#ce7058',
+      seriesRef: {
+        index: 16,
+      },
+    },
+    {
+      color: '#d77fb3',
+      seriesRef: {
+        index: 17,
+      },
+    },
+    {
+      color: '#81d4fa',
+      seriesRef: {
+        index: 18,
+      },
+    },
+    {
+      color: '#f48fb1',
+      seriesRef: {
+        index: 19,
+      },
     },
   ],
   themeIncreaseColor: {
     color: '#388e3c',
-    opacity: 1,
   },
   themeDecreaseColor: {
     color: '#f44336',
-    opacity: 1,
   },
   themeGridColor: {
-    color: '#e9e9e9',
-    opacity: 1,
+    color: '#d1d1d1',
   },
 };
 
