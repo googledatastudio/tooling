@@ -126,22 +126,22 @@ export interface ConfigThemeStyle {
   themeFillColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeFontColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeAccentFillColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeAccentFontColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeFontFamily: string;
   themeAccentFontFamily: string;
@@ -160,34 +160,38 @@ export interface ConfigThemeStyle {
   themeSeriesColor: Array<{
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
-    seriesRef: seriesRefIndex;
+    themeRef?: ThemeRefIndex;
+    seriesRef: SeriesRefIndex;
   }>;
 }
 
-type themeRefIndex = {index: number};
-type seriesRefIndex = {index: number};
+interface ThemeRefIndex {
+  index: number;
+}
+interface SeriesRefIndex {
+  index: number;
+}
 
 export interface ThemeStyle {
   themeFillColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeFontColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeAccentFillColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeAccentFontColor: {
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
+    themeRef?: ThemeRefIndex;
   };
   themeFontFamily: string;
   themeAccentFontFamily: string;
@@ -206,8 +210,8 @@ export interface ThemeStyle {
   themeSeriesColor: Array<{
     color: string;
     opacity?: number;
-    themeRef?: themeRefIndex;
-    seriesRef: seriesRefIndex;
+    themeRef?: ThemeRefIndex;
+    seriesRef: SeriesRefIndex;
   }>;
 }
 
