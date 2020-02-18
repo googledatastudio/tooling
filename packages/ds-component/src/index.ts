@@ -233,7 +233,7 @@ const objectFormatTable = (message: Message): ObjectTables => {
     if (table.id === TableType.DEFAULT) {
       objectTables[table.id] = objectRows;
     } else {
-      let current = objectTables[table.id];
+      const current = objectTables[table.id];
       if (current === undefined) {
         objectTables[table.id] = [];
       }
