@@ -389,12 +389,12 @@ export const objectTransform: ObjectTransform = (message: Message) => ({
  * This is not a supported implementation path
  * Avoid this if at all possible - please use either objectTransform or tableTransform
  */
-const isIdentityFunction = (transform): boolean => {
+const isProbablyIdentityFunction = (transform): boolean => {
   let isIdentity: boolean = false;
   if (transform('identity') === 'identity') {
     isIdentity = true;
     console.warn(
-      'This is an unsupported data format. Please use one of the supported transforms. Learn more: https://developers.google.com/datastudio/visualization/library-reference'
+      'This is an unsupported data format. Please use one of the supported transforms; dscc.objectFormat or dscc.tableFormat.'
     );
   }
   return isIdentity;
@@ -407,7 +407,7 @@ const isValidTransform = (transform): boolean => {
     (transform as any) === objectTransform
   ) {
     isValid = true;
-  } else if (isIdentityFunction(transform)) {
+  } else if (isProbablyIdentityFunction(transform)) {
     isValid = true;
   }
   return isValid;

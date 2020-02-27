@@ -671,9 +671,10 @@ test('objectTransform works', () => {
 
 test('identity transform logs warning', () => {
   const message = testMessage(1, 1, 1);
-  global.console.warn = jest.fn((warn) => {
+  const mockWarn = jest.fn((warn) => {
     throw new Error(warn);
   });
+  global.console.warn = mockWarn;
 
   expect(() => {
     sut.subscribeToData(
@@ -682,7 +683,10 @@ test('identity transform logs warning', () => {
       },
       {transform: (thing) => thing}
     );
-  }).toThrowError('This is an unsupported data format.');
+  }).toThrow();
+  expect(mockWarn.mock.calls[0][0]).toMatch(
+    'This is an unsupported data format.'
+  );
 });
 
 test('custom transform not supported', () => {
