@@ -384,6 +384,34 @@ export const objectTransform: ObjectTransform = (message: Message) => ({
   interactions: transformDSInteraction(message),
 });
 
+/**
+ * Check if the transform is likely the identity function
+ * This is not a supported implementation path
+ * Avoid this if at all possible - please use either objectTransform or tableTransform
+ */
+const isProbablyIdentityFunction = (transform): boolean => {
+  let isIdentity: boolean = false;
+  if (transform('identity') === 'identity') {
+    isIdentity = true;
+    console.warn(
+      'This is an unsupported data format. Please use one of the supported transforms; dscc.objectFormat or dscc.tableFormat.'
+    );
+  }
+  return isIdentity;
+};
+
+const isValidTransform = (transform): boolean => {
+  let isValid = false;
+  if (
+    (transform as any) === tableTransform ||
+    (transform as any) === objectTransform
+  ) {
+    isValid = true;
+  } else if (isProbablyIdentityFunction(transform)) {
+    isValid = true;
+  }
+  return isValid;
+};
 /*
  * Subscribes to messages from Data Studio. Calls `cb` for every new
  * [[MessageType.RENDER]] message. Returns a function that will unsubscribe
@@ -419,10 +447,7 @@ export const subscribeToData = <T>(
   cb: (componentData: T) => void,
   options: SubscriptionsOptions<T>
 ): (() => void) => {
-  if (
-    (options.transform as any) === tableTransform ||
-    (options.transform as any) === objectTransform
-  ) {
+  if (isValidTransform(options.transform)) {
     const onMessage = (message: PostMessage) => {
       if (message.data.type === MessageType.RENDER) {
         cb(options.transform(message.data));
