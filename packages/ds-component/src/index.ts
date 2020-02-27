@@ -394,7 +394,8 @@ const isProbablyIdentityFunction = (transform): boolean => {
   if (transform('identity') === 'identity') {
     isIdentity = true;
     console.warn(
-      'This is an unsupported data format. Please use one of the supported transforms; dscc.objectFormat or dscc.tableFormat.'
+      `This is an unsupported data format. Please use one of the supported transforms:
+       dscc.objectFormat or dscc.tableFormat.`
     );
   }
   return isIdentity;
