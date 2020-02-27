@@ -669,6 +669,22 @@ test('objectTransform works', () => {
   expect(actual).toEqual(expected);
 });
 
+test('identity transform logs warning', () => {
+  const message = testMessage(1, 1, 1);
+  global.console.warn = jest.fn((warn) => {
+    throw new Error(warn);
+  });
+
+  expect(() => {
+    sut.subscribeToData(
+      (actual) => {
+        expect(actual).toEqual(sut.tableTransform(message));
+      },
+      {transform: (thing) => thing}
+    );
+  }).toThrowError('This is an unsupported data format.');
+});
+
 test('custom transform not supported', () => {
   const message = testMessage(1, 1, 1);
   const addEventListenerMock = jest.fn((event, cb) => {
@@ -691,7 +707,7 @@ test('custom transform not supported', () => {
       (actual) => {
         expect(actual).toEqual(sut.tableTransform(message));
       },
-      {transform: (thing) => thing}
+      {transform: (thing) => 245}
     );
   }).toThrowError('Only the built in transform functions are supported.');
 });
