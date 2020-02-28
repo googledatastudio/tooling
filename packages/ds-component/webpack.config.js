@@ -27,9 +27,7 @@ if (env === 'production') {
   plugins.push(new UglifyJsPlugin({
     sourceMap: false,
     uglifyOptions: {
-      output: {
-        comments: false
-      }
+      extractComments: /^\**!|@preserve|@license|@cc_on/i,
     }
   }));
 } else {
