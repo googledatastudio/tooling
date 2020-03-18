@@ -14,7 +14,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-import * as parse from 'url-parse';
 import {
   ClearInteraction,
   ConfigData,
@@ -94,9 +93,9 @@ export const getHeight = (): number => document.documentElement.clientHeight;
  * ```
  */
 export const getComponentId = (): string => {
-  const query = parse(window.location.href, true).query;
-  if (query.dscId) {
-    return query.dscId;
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('dscId') !== null) {
+    return params.get('dscId');
   } else {
     throw new Error(
       'dscId must be in the query parameters. ' +
