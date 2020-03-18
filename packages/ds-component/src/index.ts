@@ -94,7 +94,7 @@ export const getHeight = (): number => document.documentElement.clientHeight;
  */
 export const getComponentId = (): string => {
   const params = new URLSearchParams(window.location.search);
-  if (params.get('dscId')) {
+  if (params.get('dscId') !== null) {
     return params.get('dscId');
   } else {
     throw new Error(
