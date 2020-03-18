@@ -106,30 +106,6 @@ export const getComponentId = (): string => {
 };
 
 /**
- * Parses a `'\u00a0\u00a0'` delimited string into component parts. If any parts
- * are missing, they will be returned as undefined.
- *
- * Usage:
- * ```
- * const myImage = parseImage('originalurl.com\u00a0\u00a0proxiedurl.com\u00a0\u00a0alt text');
- *
- * expect(myImage).toEqual({
- *   originalUrl: 'originalurl.com',
- *   proxiedUrl: 'proxiedurl.com',
- *   altText: 'alt text',
- * });
- * ```
- */
-export const parseImage = (value: string): ParsedImage => {
-  const [originalUrl, proxiedUrl, altText] = value.split('\u00a0\u00a0');
-  return {
-    altText,
-    originalUrl,
-    proxiedUrl,
-  };
-};
-
-/**
  * Returns the fields indexed by their Data Studio id.
  */
 const fieldsById = (message: Message): FieldsById =>
