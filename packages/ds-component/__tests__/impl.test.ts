@@ -389,39 +389,6 @@ const testMessage = (
   };
 };
 
-test('parseImage all three fields present', () => {
-  const input = 'originalurl.com\u00a0\u00a0proxiedurl.com\u00a0\u00a0alt text';
-  const expected: sut.ParsedImage = {
-    originalUrl: 'originalurl.com',
-    proxiedUrl: 'proxiedurl.com',
-    altText: 'alt text',
-  };
-  const actual = sut.parseImage(input);
-  expect(actual).toEqual(expected);
-});
-
-test('parseImage two fields present', () => {
-  const input = 'originalurl.com\u00a0\u00a0proxiedurl.com';
-  const expected: sut.ParsedImage = {
-    originalUrl: 'originalurl.com',
-    proxiedUrl: 'proxiedurl.com',
-    altText: undefined,
-  };
-  const actual = sut.parseImage(input);
-  expect(actual).toEqual(expected);
-});
-
-test('parseImage one fields present', () => {
-  const input = 'originalurl.com';
-  const expected: sut.ParsedImage = {
-    originalUrl: 'originalurl.com',
-    proxiedUrl: undefined,
-    altText: undefined,
-  };
-  const actual = sut.parseImage(input);
-  expect(actual).toEqual(expected);
-});
-
 test('subscribeToData works', () => {
   window.history.replaceState({}, 'Test Title', '/test?dscId=my-id');
   const message = testMessage(1, 1, 1);
