@@ -1,7 +1,7 @@
 {
   "name": "@google/dscc",
   "libraryName": "dscc",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "author": "Matt Hamrick",
