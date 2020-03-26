@@ -384,6 +384,26 @@ const testMessage = (
             });
           }),
         },
+        {
+          id: sut.TableType.COMPARISON,
+          fields: fields.map((a) => a.id),
+          rows: [1, 2].map((num) => {
+            return fields.map((a) => {
+              switch (a.type) {
+                case sut.FieldType.TEXT:
+                  return '' + num;
+                case sut.FieldType.NUMBER:
+                  return num;
+                case sut.FieldType.BOOLEAN:
+                  return num % 2 === 0;
+                case sut.FieldType.PERCENT:
+                  return num / 100.0;
+                default:
+                  throw new Error(`${a.type} is not supported yet.`);
+              }
+            });
+          }),
+        },
       ],
     },
   };
@@ -483,6 +503,27 @@ test('tableTransform empty style', () => {
         ],
         rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
       },
+      [sut.TableType.COMPARISON]: {
+        headers: [
+          {
+            ...expectedFields.dimensions[0],
+            configId: 'dimensions',
+          },
+          {
+            ...expectedFields.dimensions[1],
+            configId: 'dimensions',
+          },
+          {
+            ...expectedFields.metrics[0],
+            configId: 'metrics',
+          },
+          {
+            ...expectedFields.metrics[1],
+            configId: 'metrics',
+          },
+        ],
+        rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
+      },
     },
     style: {},
     theme,
@@ -532,6 +573,27 @@ test('tableTransform works', () => {
     fields: expectedFields,
     tables: {
       [sut.TableType.DEFAULT]: {
+        headers: [
+          {
+            ...expectedFields.dimensions[0],
+            configId: 'dimensions',
+          },
+          {
+            ...expectedFields.dimensions[1],
+            configId: 'dimensions',
+          },
+          {
+            ...expectedFields.metrics[0],
+            configId: 'metrics',
+          },
+          {
+            ...expectedFields.metrics[1],
+            configId: 'metrics',
+          },
+        ],
+        rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
+      },
+      [sut.TableType.COMPARISON]: {
         headers: [
           {
             ...expectedFields.dimensions[0],
@@ -607,6 +669,16 @@ test('objectTransform works', () => {
     },
     tables: {
       [sut.TableType.DEFAULT]: [
+        {
+          dimensions: ['1', false],
+          metrics: [1, 0.01],
+        },
+        {
+          dimensions: ['2', true],
+          metrics: [2, 0.02],
+        },
+      ],
+      [sut.TableType.COMPARISON]: [
         {
           dimensions: ['1', false],
           metrics: [1, 0.01],
