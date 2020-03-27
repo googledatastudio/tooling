@@ -211,9 +211,8 @@ const objectFormatTable = (message: Message): ObjectTables => {
       const current = objectTables[table.id];
       if (current === undefined) {
         objectTables[table.id] = [];
-        objectTables[table.id] = objectRows;
       }
-      objectTables[table.id].concat(objectRows);
+      objectTables[table.id] = objectTables[table.id].concat(objectRows);
     }
   });
   return objectTables;
