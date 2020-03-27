@@ -41,8 +41,7 @@ export const createFromTemplate = async (
   if (config.yarn) {
     child_process.execSync('yarn', {cwd: projectPath});
   } else {
-    child_process.execSync('yarn', {cwd: projectPath});
-    // child_process.execSync('npm install', {cwd: projectPath});
+    child_process.execSync('npm install', {cwd: projectPath});
   }
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
