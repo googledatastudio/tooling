@@ -41,7 +41,8 @@ export const createFromTemplate = async (
   if (config.yarn) {
     execa.sync('yarn', [], {cwd: projectPath});
   } else {
-    execa.sync('npm', ['install'], {cwd: projectPath});
+    execa.sync('yarn', [], {cwd: projectPath});
+    // execa.sync('npm', ['install'], {cwd: projectPath});
   }
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
