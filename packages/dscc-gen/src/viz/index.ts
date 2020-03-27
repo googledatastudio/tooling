@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as execa from 'execa';
+import * as child_process from 'child_process';
 import * as path from 'path';
 import {PWD} from '../constants';
 import * as files from '../files';
@@ -39,10 +39,9 @@ export const createFromTemplate = async (
   await files.fixTemplates(projectPath, templates);
   console.log('Installing dependencies...');
   if (config.yarn) {
-    execa.sync('yarn', [], {cwd: projectPath});
+    child_process.execSync('yarn', [], {cwd: projectPath});
   } else {
-    execa.sync('yarn', [], {cwd: projectPath});
-    // execa.sync('npm', ['install'], {cwd: projectPath});
+    child_process.execSync('npm install');
   }
   const runCmd = config.yarn ? 'yarn' : 'npm run';
 
