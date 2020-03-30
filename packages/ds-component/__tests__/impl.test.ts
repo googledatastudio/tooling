@@ -501,7 +501,10 @@ test('tableTransform empty style', () => {
             configId: 'metrics',
           },
         ],
-        rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
+        rows: [
+          ['1', false, 1, 0.01],
+          ['2', true, 2, 0.02],
+        ],
       },
       [sut.TableType.COMPARISON]: {
         headers: [
@@ -522,7 +525,10 @@ test('tableTransform empty style', () => {
             configId: 'metrics',
           },
         ],
-        rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
+        rows: [
+          ['1', false, 1, 0.01],
+          ['2', true, 2, 0.02],
+        ],
       },
     },
     style: {},
@@ -591,7 +597,10 @@ test('tableTransform works', () => {
             configId: 'metrics',
           },
         ],
-        rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
+        rows: [
+          ['1', false, 1, 0.01],
+          ['2', true, 2, 0.02],
+        ],
       },
       [sut.TableType.COMPARISON]: {
         headers: [
@@ -612,7 +621,10 @@ test('tableTransform works', () => {
             configId: 'metrics',
           },
         ],
-        rows: [['1', false, 1, 0.01], ['2', true, 2, 0.02]],
+        rows: [
+          ['1', false, 1, 0.01],
+          ['2', true, 2, 0.02],
+        ],
       },
     },
     style: {
