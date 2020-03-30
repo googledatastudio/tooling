@@ -212,7 +212,7 @@ const objectFormatTable = (message: Message): ObjectTables => {
       if (current === undefined) {
         objectTables[table.id] = [];
       }
-      objectTables[table.id].concat(objectRows);
+      objectTables[table.id] = objectTables[table.id].concat(objectRows);
     }
   });
   return objectTables;
@@ -282,9 +282,7 @@ const flattenStyle = (message: Message): StyleById => {
     styleEntry.elements.forEach((configStyleElement: ConfigStyleElement) => {
       if (styleById[configStyleElement.id] !== undefined) {
         throw new Error(
-          `styleIds must be unique. Your styleId: '${
-            configStyleElement.id
-          }' is used more than once.`
+          `styleIds must be unique. Your styleId: '${configStyleElement.id}' is used more than once.`
         );
       }
       styleById[configStyleElement.id] = {
@@ -429,9 +427,7 @@ export const subscribeToData = <T>(
         cb(options.transform(message.data));
       } else {
         console.error(
-          `MessageType: ${
-            message.data.type
-          } is not supported by this version of the library.`
+          `MessageType: ${message.data.type} is not supported by this version of the library.`
         );
       }
     };

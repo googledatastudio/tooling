@@ -679,8 +679,8 @@ export interface ObjectRow {
 
 export interface ObjectTables {
   [TableType.DEFAULT]: ObjectRow[];
-  [TableType.COMPARISON]?: ObjectRow[][];
-  [TableType.SUMMARY]?: ObjectRow[][];
+  [TableType.COMPARISON]?: ObjectRow[];
+  [TableType.SUMMARY]?: ObjectRow[];
 }
 
 export interface ObjectFormat {
