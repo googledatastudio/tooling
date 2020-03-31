@@ -16,7 +16,7 @@
     "start": "dscc-scripts viz start"
   },
   "devDependencies": {
-    "@google/dscc": "^0.3.16",
+    "@google/dscc": "^0.3.17",
     "@google/dscc-scripts": "^1.0.15"
   }
 }
