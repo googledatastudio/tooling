@@ -92,7 +92,7 @@ export const getHeight = (): number => document.documentElement.clientHeight;
  * console.log('My componentId is: ', myComponentId);
  * ```
  */
-export const getComponentId = (): string => {
+export const getComponentId = (): string | null => {
   const params = new URLSearchParams(window.location.search);
   if (params.get('dscId') !== null) {
     return params.get('dscId');
