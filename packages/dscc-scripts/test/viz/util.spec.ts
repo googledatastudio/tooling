@@ -42,6 +42,15 @@ test('validateBuildValues missing jsFile', () => {
   );
 });
 
+test('validateBuildValues missing jsFile, but has tsFile', () => {
+  delete process.env.npm_package_dsccViz_jsFile;
+  process.env.npm_package_dsccViz_tsFile = 'tsFile';
+
+  expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).not.toThrow(
+    'dsccViz.jsFile'
+  );
+});
+
 test('validateBuildValues missing gcsDevBucket', () => {
   delete process.env.npm_package_dsccViz_gcsDevBucket;
 

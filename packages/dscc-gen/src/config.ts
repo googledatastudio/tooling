@@ -38,10 +38,10 @@ const addVizParser = (
     help: 'The prod directory',
   });
 
-  vizParser.addArgument(['--codelab', '-c'], {
-    dest: 'codelab',
+  vizParser.addArgument(['--ts', '--typescript'], {
+    dest: 'ts',
+    help: 'Use typescript for template.',
     action: 'storeTrue',
-    help: 'Use the codelab template.',
   });
 
   return vizParser;
@@ -250,7 +250,7 @@ const withMissing = async (
       );
     case ProjectChoice.VIZ:
       checkGsutilInstalled();
-      const vizDefaults: VizConfigHasDefaults = {codelab: false};
+      const vizDefaults: VizConfigHasDefaults = {ts: false};
       return getMissing(args as VizConfig, vizQuestions, vizDefaults);
     default:
       return assertNever(projectChoice);

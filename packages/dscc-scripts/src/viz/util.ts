@@ -26,7 +26,8 @@ export interface BuildValues {
   manifestFile: 'manifest.json';
   cssFile?: string;
   jsonFile: string;
-  jsFile: string;
+  jsFile?: string;
+  tsFile?: string;
   devMode: boolean;
   pwd: string;
   gcsBucket: string;
@@ -38,8 +39,10 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   if (jsonFile === undefined) {
     throw invalidVizConfig('jsonFile');
   }
+  // Require either jsFile or tsFile
   const jsFile = process.env.npm_package_dsccViz_jsFile;
-  if (jsFile === undefined) {
+  const tsFile = process.env.npm_package_dsccViz_tsFile;
+  if (jsFile === undefined && tsFile === undefined) {
     throw invalidVizConfig('jsFile');
   }
   const devBucket = process.env.npm_package_dsccViz_gcsDevBucket;
@@ -61,6 +64,7 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
     cssFile,
     jsonFile,
     jsFile,
+    tsFile,
     devMode,
     pwd,
     gcsBucket,

@@ -31,6 +31,7 @@
     "fix": "yarn lint --fix && yarn prettier"
   },
   "dependencies": {
+    "@google/dscc": "^0.3.17",
     "@google/dscc-validation": "^1.0.4",
     "argparse": "^1.0.10",
     "bluebird": "^3.5.3",
@@ -43,6 +44,8 @@
     "open": "^6.0.0",
     "postcss-loader": "^3.0.0",
     "terminal-link": "^1.2.0",
+    "ts-loader": "^7.0.4",
+    "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
@@ -68,8 +71,7 @@
     "jest": "^24.5.0",
     "prettier": "^1.11.1",
     "ts-jest": "^24.0.0",
-    "tslint": "^5.13.1",
-    "typescript": "^3.3.3333"
+    "tslint": "^5.13.1"
   },
   "jest": {
     "transform": {

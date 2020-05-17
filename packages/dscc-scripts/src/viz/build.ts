@@ -55,16 +55,49 @@ const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
   }
   // common options
   const webpackOptions: webpack.Configuration = {
-    entry: {
-      // this is the viz source code
-      main: path.resolve(buildValues.pwd, 'src', buildValues.jsFile),
-    },
-    output: {
-      filename: buildValues.jsFile,
-      path: path.resolve(buildValues.pwd, 'build'),
-    },
     plugins,
   };
+
+  // Add js options, if set
+  if (buildValues.jsFile) {
+    const jsOptions = {
+      output: {
+        filename: buildValues.jsFile,
+        path: path.resolve(buildValues.pwd, 'build'),
+      },
+      entry: {
+        // this is the viz source code
+        main: path.resolve(buildValues.pwd, 'src', buildValues.jsFile),
+      },
+    };
+    Object.assign(webpackOptions, jsOptions);
+  }
+  // Add ts options, if set
+  if (buildValues.tsFile) {
+    const tsOptions = {
+      output: {
+        filename: buildValues.tsFile.replace('.ts', '.js'),
+        path: path.resolve(buildValues.pwd, 'build'),
+      },
+      entry: {
+        // this is the viz source code
+        main: path.resolve(buildValues.pwd, 'src', buildValues.tsFile),
+      },
+      module: {
+        rules: [
+          {
+            test: /\.ts$/,
+            use: 'ts-loader',
+            exclude: /node_modules/,
+          },
+        ],
+      },
+      resolve: {
+        extensions: ['.ts', '.js'],
+      },
+    };
+    Object.assign(webpackOptions, tsOptions);
+  }
 
   if (buildValues.devMode) {
     const devOptions = {

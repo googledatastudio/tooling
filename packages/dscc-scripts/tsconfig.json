@@ -9,7 +9,8 @@
     "strict": true,
     "types": ["node", "jest"],
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "declaration": true
   },
   "include": [
     "./src/**/*"
