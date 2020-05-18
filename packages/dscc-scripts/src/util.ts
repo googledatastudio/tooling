@@ -32,7 +32,8 @@ interface VizConfig {
   dsccViz: {
     gcsDevBucket: string;
     gcsProdBucket: string;
-    jsFile: string;
+    jsFile?: string;
+    tsFile?: string;
     jsonFile: string;
     cssFile: string;
     print: string;
