@@ -135,9 +135,9 @@ const longestAuthType = Object.values(AuthType)
   .map((a: AuthType): number => a.length)
   .reduce((a, b) => Math.max(a, b), 0);
 
-const connectorQuestions: Array<
-  Question<ConnectorConfig>
-> = (commonQuestions as Array<Question<ConnectorConfig>>).concat([
+const connectorQuestions: Array<Question<
+  ConnectorConfig
+>> = (commonQuestions as Array<Question<ConnectorConfig>>).concat([
   {
     name: 'authType',
     type: 'list',
@@ -217,11 +217,13 @@ const getMissing = async <T extends U, U>(
 
   const remainingQuestions = questions
     .filter((q) => providedKeys.find((key) => q.name === key) === undefined)
-    .filter((q) =>
-      q.when !== undefined && typeof q.when !== 'boolean'
-        ? q.when(nonNullArgs)
-        : true
-    );
+    .filter((q) => {
+      if (q.when !== undefined && typeof q.when === 'function') {
+        return q.when(nonNullArgs);
+      } else {
+        return true;
+      }
+    });
 
   const answers = await inquirer.prompt(remainingQuestions);
   return Object.assign(defaults, args, answers);

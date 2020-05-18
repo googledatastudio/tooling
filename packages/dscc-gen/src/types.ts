@@ -43,7 +43,7 @@ export interface ConnectorConfig
 export interface VizConfig extends CommonConfig, VizConfigHasDefaults {
   devBucket: string;
   prodBucket: string;
-  ts?: boolean;
+  ts: boolean;
 }
 
 export interface Template {

@@ -2,7 +2,9 @@ import * as inquirer from 'inquirer';
 import * as analytics from './analytics';
 import * as util from './util';
 
-export const prompt = <T>(questions: inquirer.Questions<T>): Promise<T> => {
+export const prompt = <T>(
+  questions: inquirer.QuestionCollection<T>
+): Promise<T> => {
   const promptPromise: Promise<T> = inquirer.prompt(questions);
   // This is a hackey workaround until https://github.com/SBoudrias/Inquirer.js/issues/293 is fixed.
   const ui = (promptPromise as any).ui;
