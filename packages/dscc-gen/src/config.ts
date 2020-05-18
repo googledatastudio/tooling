@@ -135,9 +135,9 @@ const longestAuthType = Object.values(AuthType)
   .map((a: AuthType): number => a.length)
   .reduce((a, b) => Math.max(a, b), 0);
 
-const connectorQuestions: Array<Question<
-  ConnectorConfig
->> = (commonQuestions as Array<Question<ConnectorConfig>>).concat([
+const connectorQuestions: Array<
+  Question<ConnectorConfig>
+> = (commonQuestions as Array<Question<ConnectorConfig>>).concat([
   {
     name: 'authType',
     type: 'list',
