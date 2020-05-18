@@ -16,7 +16,6 @@
  */
 import * as bluebird from 'bluebird';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
-import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as webpack from 'webpack';
 import {MessageFormat, VizArgs} from '../args';
@@ -42,13 +41,30 @@ const buildOptions = (
   }
 
   const plugins: webpack.Plugin[] = [
+    // Add config
     new CopyWebpackPlugin([
       {from: path.join(buildValues.pwd, 'src', buildValues.jsonFile), to: '.'},
     ]),
+    // Add manifest
+    new CopyWebpackPlugin([
+      {
+        from: path.join('src', buildValues.manifestFile),
+        to: '.',
+        transform: (content: Buffer) => {
+          const manifestContents = content.toString();
+          const newManifest = manifestContents
+            .replace(/YOUR_GCS_BUCKET/g, buildValues.gcsBucket)
+            .replace(/"DEVMODE_BOOL"/, `${buildValues.devMode}`);
+          return newManifest;
+        },
+      },
+    ]),
+    // Add transform param definition
     new webpack.DefinePlugin({
       TRANSFORM_PARAM: `"${transformString}"`,
     }),
   ];
+
   // Only add in the copy plugin for the css if the user provides a css value in
   // the manifest.
   if (buildValues.cssFile !== undefined) {
@@ -75,30 +91,9 @@ const buildOptions = (
 
 export const buildMessage = async (args: VizArgs) => {
   const buildValues = util.validateBuildValues(args);
-  const encoding = 'utf-8';
   const webpackOptions = buildOptions(buildValues, args);
   const compiler = webpack(webpackOptions);
   const compilerRun = bluebird.promisify(compiler.run, {context: compiler});
 
   await compilerRun();
-
-  // put everything together except the manifest
-  // once build directory is created...
-  const manifestSrc = path.resolve(
-    process.cwd()!,
-    'src',
-    buildValues.manifestFile
-  );
-  const manifestDest = path.resolve(
-    process.cwd()!,
-    'build',
-    buildValues.manifestFile
-  );
-
-  const manifestContents = await fs.readFile(manifestSrc, encoding);
-  const newManifest = manifestContents
-    .replace(/YOUR_GCS_BUCKET/g, buildValues.gcsBucket)
-    .replace(/"DEVMODE_BOOL"/, `${buildValues.devMode}`);
-
-  return fs.writeFile(manifestDest, newManifest);
 };
