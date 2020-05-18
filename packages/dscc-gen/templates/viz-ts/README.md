@@ -10,6 +10,7 @@ This template provides
 1.  An opinionated workflow for developing community visualizations
 1.  A local development workflow with immediate feedback
 1.  Scripts to manage building and deploying your visualization
+1.  Includes a template with TypeScript support.
 
 ### Files included
 
@@ -28,7 +29,7 @@ CSS        | `src/index.css`     | [write css code]
 To create a new community visualization based on this template, run the command
 
 ```bash
-npx @google/dscc-gen viz
+npx @google/dscc-gen viz --typescript
 ```
 
 After running this command (and answering some prompts), you will have a minimal
