@@ -4,8 +4,7 @@
     "gcsProdBucket": "{{PROD_BUCKET}}",
     "tsFile": "index.ts",
     "jsonFile": "index.json",
-    "cssFile": "index.css",
-    "print": "printMessage.js"
+    "cssFile": "index.css"
   },
   "scripts": {
     "build:dev": "dscc-scripts viz build -d dev",

@@ -42,6 +42,10 @@ const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
         },
       },
     ]),
+    // Add transform DSCC_IS_LOCAL
+    new webpack.DefinePlugin({
+      DSCC_IS_LOCAL: 'false',
+    }),
   ];
 
   // Only add in the copy plugin for the css if the user provides a css value in

@@ -1,11 +1,17 @@
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const CSS_FILE_NAME = process.env.npm_package_dsccViz_cssFile;
 const cssFilePath = path.join('src', CSS_FILE_NAME);
 
-const plugins = [];
+const plugins = [
+  // Add DSCC_IS_LOCAL definition
+  new webpack.DefinePlugin({
+    DSCC_IS_LOCAL: 'true',
+  }),
+];
 
 let body = '<script src="main.js"></script>';
 if (fs.existsSync(cssFilePath)) {
