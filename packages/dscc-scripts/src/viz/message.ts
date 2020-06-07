@@ -25,10 +25,12 @@ import {BuildValues} from './util';
 
 const buildOptions = (
   buildValues: BuildValues,
-  args: VizArgs
+  args: VizArgs,
+  componentIndex: number
 ): webpack.Configuration => {
   let transformString;
   const format = args.format!;
+  const component = buildValues.components[componentIndex];
   switch (format) {
     case MessageFormat.OBJECT:
       transformString = 'objectTransform';
@@ -43,7 +45,7 @@ const buildOptions = (
   const plugins: webpack.Plugin[] = [
     // Add config
     new CopyWebpackPlugin([
-      {from: path.join(buildValues.pwd, 'src', buildValues.jsonFile), to: '.'},
+      {from: path.join(buildValues.pwd, 'src', component.jsonFile), to: '.'},
     ]),
     // Add manifest
     new CopyWebpackPlugin([
@@ -67,10 +69,10 @@ const buildOptions = (
 
   // Only add in the copy plugin for the css if the user provides a css value in
   // the manifest.
-  if (buildValues.cssFile !== undefined) {
+  if (component.cssFile !== undefined) {
     plugins.push(
       new CopyWebpackPlugin([
-        {from: path.join('src', buildValues.cssFile), to: '.'},
+        {from: path.join('src', component.cssFile), to: '.'},
       ])
     );
   }
@@ -91,9 +93,13 @@ const buildOptions = (
 
 export const buildMessage = async (args: VizArgs) => {
   const buildValues = util.validateBuildValues(args);
-  const webpackOptions = buildOptions(buildValues, args);
-  const compiler = webpack(webpackOptions);
-  const compilerRun = bluebird.promisify(compiler.run, {context: compiler});
 
-  await compilerRun();
+  for (let i = 0; i < buildValues.components.length; i ++) {
+    const webpackOptions = buildOptions(buildValues, args, i);
+    const compiler = webpack(webpackOptions);
+
+    const compilerRun = bluebird.promisify(compiler.run, {context: compiler});
+
+    await compilerRun();
+  }
 };
