@@ -36,7 +36,6 @@ interface VizConfig {
     tsFile?: string;
     jsonFile: string;
     cssFile: string;
-    print: string;
   };
 }
 
@@ -47,7 +46,6 @@ const exampleVizConfig: VizConfig = {
     jsFile: 'index.js',
     jsonFile: 'index.json',
     cssFile: 'index.css',
-    print: 'printMessage.js',
   },
 };
 
