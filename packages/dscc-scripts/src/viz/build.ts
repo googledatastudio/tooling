@@ -22,7 +22,10 @@ import {VizArgs} from '../args';
 import * as util from './util';
 import {BuildValues} from './util';
 
-const buildOptions = (buildValues: BuildValues, componentIndex: number): webpack.Configuration => {
+const buildOptions = (
+  buildValues: BuildValues,
+  componentIndex: number
+): webpack.Configuration => {
   const component = buildValues.components[componentIndex];
   const plugins: webpack.Plugin[] = [
     // Add config
@@ -123,17 +126,25 @@ export const build = async (args: VizArgs) => {
   const cwd = process.cwd()!;
   const buildValues = util.validateBuildValues(args);
 
-  for (let i = 0; i < buildValues.components.length; i ++) {
+  for (let i = 0; i < buildValues.components.length; i++) {
+    const component = buildValues.components[i];
+    console.log(`\n\nBuilding ${component.tsFile} (component ${i})...`);
     const webpackOptions = buildOptions(buildValues, i);
     const compiler = webpack(webpackOptions);
 
     const compilerRun = bluebird.promisify(compiler.run, {context: compiler});
 
     // Compile
-    await compilerRun();
+    const stats = await compilerRun();
+    console.log(
+      stats.toString({
+        chunks: false, // Makes the build much quieter
+        colors: true, // Shows colors in the console
+      })
+    );
 
     // Validate config output
-    const configDest = path.resolve(cwd, 'build', buildValues.components[i].jsonFile);
+    const configDest = path.resolve(cwd, 'build', component.jsonFile);
     util.validateConfigFile(configDest);
   }
 

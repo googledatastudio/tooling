@@ -77,6 +77,9 @@ const buildOptions = (
     );
   }
 
+  const outputFilename =
+    component.jsFile ?? component.tsFile!.replace('.ts', '.js');
+
   return {
     mode: 'development',
     entry: {
@@ -84,7 +87,7 @@ const buildOptions = (
       main: path.resolve(__dirname, '../../', 'viz', 'printMessage.js'),
     },
     output: {
-      filename: 'index.js',
+      filename: outputFilename,
       path: path.resolve(buildValues.pwd, 'build'),
     },
     plugins,
@@ -94,7 +97,7 @@ const buildOptions = (
 export const buildMessage = async (args: VizArgs) => {
   const buildValues = util.validateBuildValues(args);
 
-  for (let i = 0; i < buildValues.components.length; i ++) {
+  for (let i = 0; i < buildValues.components.length; i++) {
     const webpackOptions = buildOptions(buildValues, args, i);
     const compiler = webpack(webpackOptions);
 

@@ -28,24 +28,46 @@ export const format = {
   red: chalk.bold.rgb(219, 68, 55),
 };
 
+interface VizComponentConfig {
+  jsFile?: string;
+  tsFile?: string;
+  jsonFile: string;
+  cssFile: string;
+}
+
 interface VizConfig {
   dsccViz: {
     gcsDevBucket: string;
     gcsProdBucket: string;
+    components?: VizComponentConfig[];
     jsFile?: string;
     tsFile?: string;
-    jsonFile: string;
-    cssFile: string;
+    jsonFile?: string;
+    cssFile?: string;
   };
 }
 
-const exampleVizConfig: VizConfig = {
+const exampleLegacyVizConfig: VizConfig = {
   dsccViz: {
     gcsDevBucket: 'gs://validBucketPath',
     gcsProdBucket: 'gs://validBucketPath',
     jsFile: 'index.js',
     jsonFile: 'index.json',
     cssFile: 'index.css',
+  },
+};
+
+const exampleVizConfig: VizConfig = {
+  dsccViz: {
+    gcsDevBucket: 'gs://validBucketPath',
+    gcsProdBucket: 'gs://validBucketPath',
+    components: [
+      {
+        jsFile: 'index.js',
+        jsonFile: 'index.json',
+        cssFile: 'index.css',
+      },
+    ],
   },
 };
 
@@ -81,7 +103,24 @@ export const invalidConnectorConfig = (
   return invalidConfig(`dsccConnector.${path}`, exampleConnectorConfig);
 };
 
-export const invalidVizConfig = (path: keyof VizConfig['dsccViz']) => {
+export const invalidVizConfig = (
+  path: keyof VizConfig['dsccViz'],
+  componentPath?: keyof VizComponentConfig
+) => {
+  if (path === 'components') {
+    return invalidConfig(
+      `dsccViz.${path}[0].${componentPath}`,
+      exampleVizConfig
+    );
+  }
+  if (
+    path === 'jsFile' ||
+    path === 'tsFile' ||
+    path === 'cssFile' ||
+    path === 'jsonFile'
+  ) {
+    return invalidConfig(`dsccViz.${path}`, exampleLegacyVizConfig);
+  }
   return invalidConfig(`dsccViz.${path}`, exampleVizConfig);
 };
 

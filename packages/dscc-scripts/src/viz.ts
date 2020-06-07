@@ -21,7 +21,8 @@ import {build} from './viz/build';
 import {buildMessage} from './viz/message';
 import * as util from './viz/util';
 
-const start = async (): Promise<void> => {
+const start = async (args: VizArgs): Promise<void> => {
+  process.env.WORKING_COMPONENT_INDEX = args.componentIndex;
   await execa('webpack-dev-server', ['--open'], pipeStdIO);
 };
 
@@ -54,7 +55,7 @@ const validate = async (args: VizArgs): Promise<void> => {
 export const main = async (args: VizArgs): Promise<void> => {
   switch (args.script) {
     case VizScripts.START:
-      return start();
+      return start(args);
     case VizScripts.BUILD:
       return build(args);
     case VizScripts.PUSH:
