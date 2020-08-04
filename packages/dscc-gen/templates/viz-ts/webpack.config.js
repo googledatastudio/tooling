@@ -8,9 +8,7 @@ const components = getBuildableComponents();
 const componentIndexToBuild = Number(process.env.WORKING_COMPONENT_INDEX) || 0;
 const component = components[componentIndexToBuild];
 
-console.log(
-  `Building ${component.tsFile || component.jsFile}...`
-);
+console.log(`Building ${component.tsFile || component.jsFile}...`);
 
 const cssFilePath = path.resolve(__dirname, 'src', component.cssFile || '');
 const tsFilePath = path.resolve(__dirname, 'src', component.tsFile || '');
