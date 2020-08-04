@@ -215,13 +215,13 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
     required: false,
   });
 
-  start!.addArgument(['-c', '--componentIndex'], {
+  start!.addArgument(['--componentIndex'], {
     dest: 'componentIndex',
     help: 'The index of the component to start.',
     defaultValue: '0',
   });
 
-  start!.addArgument(['-n', '--componentName'], {
+  start!.addArgument(['--componentName'], {
     dest: 'componentName',
     help: 'The name of the component to start.',
   });
