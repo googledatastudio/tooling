@@ -22,7 +22,10 @@ import {buildMessage} from './viz/message';
 import * as util from './viz/util';
 
 const start = async (args: VizArgs): Promise<void> => {
-  process.env.WORKING_COMPONENT_INDEX = args.componentIndex;
+  process.env.WORKING_COMPONENT_INDEX = util.getComponentIndex(
+    args,
+    'manifest.json'
+  );
   await execa('webpack-dev-server', ['--open'], pipeStdIO);
 };
 

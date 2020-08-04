@@ -95,9 +95,7 @@ export const invalidConnectorConfig = (
   return invalidConfig(`dsccConnector.${path}`, exampleConnectorConfig);
 };
 
-export const invalidVizConfig = (
-  path: string,
-) => {
+export const invalidVizConfig = (path: string) => {
   return invalidConfig(`dsccViz.${path}`, exampleVizConfig);
 };
 

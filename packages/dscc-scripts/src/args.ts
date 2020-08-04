@@ -122,6 +122,7 @@ export enum DeploymentChoices {
   DEV = 'dev',
 }
 
+// TODO these should be special cased to the script they belong to.
 export interface VizArgs {
   script: VizScripts;
   deployment?: DeploymentChoices;
@@ -129,6 +130,7 @@ export interface VizArgs {
   configPath?: string;
   manifestPath?: string;
   componentIndex?: string;
+  componentName?: string;
 }
 const addVizParserDetails = (subparsers: argparse.SubParser) => {
   const vizParser = subparsers.addParser(ScriptChoice.VIZ, {
@@ -217,6 +219,11 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
     dest: 'componentIndex',
     help: 'The index of the component to start.',
     defaultValue: '0',
+  });
+
+  start!.addArgument(['-n', '--componentName'], {
+    dest: 'componentName',
+    help: 'The name of the component to start.',
   });
 };
 

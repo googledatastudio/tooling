@@ -100,10 +100,34 @@ test('validateBuildValues missing gcsProdBucket', () => {
   );
 });
 
+describe('start command', () => {
+  test('returns correct componentIndex when componentName is defined in the manifest', () => {
+    const manifestPath = './test/viz/files/valid_manifest.json';
+    const index = sut.getComponentIndex(
+      {componentIndex: '0', componentName: 'myViz2', script: VizScripts.START},
+      manifestPath
+    );
+    expect(index).toBe('1');
+  });
+  test('throws when componentName is not defined in the manifest', () => {
+    const manifestPath = './test/viz/files/valid_manifest.json';
+    expect(() =>
+      sut.getComponentIndex(
+        {
+          componentIndex: '0',
+          componentName: 'thisVizDoesNotExist',
+          script: VizScripts.START,
+        },
+        manifestPath
+      )
+    ).toThrow('thisVizDoesNotExist is not present in your manifest.json');
+  });
+});
+
 describe('manifest validation', () => {
   test('passes when all required fields provided', () => {
     const validManifestFn = './test/viz/files/valid_manifest.json';
-    expect(sut.validateManifestFile(validManifestFn)).toBe(true);
+    expect(() => sut.validateManifestFile(validManifestFn)).not.toThrow();
   });
 
   test('throws when missing privacyPolicy', () => {
