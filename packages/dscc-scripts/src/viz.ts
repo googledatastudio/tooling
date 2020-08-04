@@ -20,11 +20,14 @@ import {assertNever, pipeStdIO} from './util';
 import {build} from './viz/build';
 import {buildMessage} from './viz/message';
 import * as util from './viz/util';
+import * as path from 'path';
 
 const start = async (args: VizArgs): Promise<void> => {
   process.env.WORKING_COMPONENT_INDEX = util.getComponentIndex(
     args,
-    'manifest.json'
+    // TODO - This should be refactored later to be more flexible. Right now
+    // other code is hard-coded to this path so it's fine for now.
+    path.join('src', 'manifest.json')
   );
   await execa('webpack-dev-server', ['--open'], pipeStdIO);
 };
