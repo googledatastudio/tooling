@@ -47,16 +47,6 @@ interface VizConfig {
   };
 }
 
-const exampleLegacyVizConfig: VizConfig = {
-  dsccViz: {
-    gcsDevBucket: 'gs://validBucketPath',
-    gcsProdBucket: 'gs://validBucketPath',
-    jsFile: 'index.js',
-    jsonFile: 'index.json',
-    cssFile: 'index.css',
-  },
-};
-
 const exampleVizConfig: VizConfig = {
   dsccViz: {
     gcsDevBucket: 'gs://validBucketPath',
@@ -85,6 +75,8 @@ const exampleConnectorConfig: ConnectorConfig = {
   },
 };
 
+// TODO - This doesn't really work if you mess up a later idx in the viz
+// components than is defined.
 const invalidConfig = (path: string, config: VizConfig | ConnectorConfig) => {
   const colorizedPath = format.green(path);
   const packageJSON = format.blue.bold('package.json');
@@ -104,23 +96,8 @@ export const invalidConnectorConfig = (
 };
 
 export const invalidVizConfig = (
-  path: keyof VizConfig['dsccViz'],
-  componentPath?: keyof VizComponentConfig
+  path: string,
 ) => {
-  if (path === 'components') {
-    return invalidConfig(
-      `dsccViz.${path}[0].${componentPath}`,
-      exampleVizConfig
-    );
-  }
-  if (
-    path === 'jsFile' ||
-    path === 'tsFile' ||
-    path === 'cssFile' ||
-    path === 'jsonFile'
-  ) {
-    return invalidConfig(`dsccViz.${path}`, exampleLegacyVizConfig);
-  }
   return invalidConfig(`dsccViz.${path}`, exampleVizConfig);
 };
 

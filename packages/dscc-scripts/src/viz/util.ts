@@ -39,10 +39,7 @@ export interface BuildValues {
 
 export const validateBuildValues = (args: VizArgs): BuildValues => {
   const components = getBuildableComponents();
-  // Ensure at least one component is defined
-  if (components.length === 0) {
-    throw invalidVizConfig('components', 'jsonFile');
-  }
+
   const devBucket = process.env.npm_package_dsccViz_gcsDevBucket;
   if (devBucket === undefined) {
     throw invalidVizConfig('gcsDevBucket');
@@ -117,40 +114,35 @@ export const validateConfigFile = (path: PathLike): boolean => {
 export const getBuildableComponents = (): ComponentBuildValues[] => {
   const components: ComponentBuildValues[] = [];
 
-  // Check for vizpack configuration
-  let i = 0;
-  while (true) {
-    const jsonFile =
-      process.env[`npm_package_dsccViz_components_${i}_jsonFile`];
-    if (!jsonFile) {
-      break;
-    }
-    const cssFile = process.env[`npm_package_dsccViz_components_${i}_cssFile`];
-    // Require either jsFile or tsFile
-    const jsFile = process.env[`npm_package_dsccViz_components_${i}_jsFile`];
-    const tsFile = process.env[`npm_package_dsccViz_components_${i}_tsFile`];
-    if (jsFile === undefined && tsFile === undefined) {
-      throw invalidVizConfig('components', 'jsFile');
-    }
-    components.push({
-      jsonFile,
-      cssFile,
-      jsFile,
-      tsFile,
-    });
-    i++;
-  }
+  const lastComponentIdx = Object.keys(process.env)
+    .filter((key) => key.startsWith('npm_package_dsccViz_components_'))
+    .map((s) => s.replace('npm_package_dsccViz_components_', ''))
+    .map((a) => parseInt(a, 10))
+    .reduce((a, b) => (a > b ? a : b), 0);
 
-  // Check for classic configuration
-  if (process.env.npm_package_dsccViz_jsonFile) {
-    const jsonFile = process.env.npm_package_dsccViz_jsonFile;
-    const cssFile = process.env.npm_package_dsccViz_cssFile;
-    // Require either jsFile or tsFile
-    const jsFile = process.env.npm_package_dsccViz_jsFile;
-    const tsFile = process.env.npm_package_dsccViz_tsFile;
-    if (jsFile === undefined && tsFile === undefined) {
-      throw invalidVizConfig('jsFile');
+  // Check for vizpack configuration
+  for (let idx = 0; idx <= lastComponentIdx; idx++)  {
+    const jsonFile =
+      process.env[`npm_package_dsccViz_components_${idx}_jsonFile`];
+
+    if (!jsonFile) {
+      throw invalidVizConfig(`components[${idx}].jsonFile`);
     }
+
+    const cssFile = process.env[`npm_package_dsccViz_components_${idx}_cssFile`];
+    // Require either jsFile or tsFile
+    const jsFile = process.env[`npm_package_dsccViz_components_${idx}_jsFile`];
+    const tsFile = process.env[`npm_package_dsccViz_components_${idx}_tsFile`];
+
+    if (jsFile === undefined && tsFile === undefined) {
+      if (jsFile === undefined) {
+        throw invalidVizConfig(`components[${idx}].jsFile`);
+      }
+      if (tsFile === undefined) {
+        throw invalidVizConfig(`components[${idx}].tsFile`);
+      }
+    }
+
     components.push({
       jsonFile,
       cssFile,

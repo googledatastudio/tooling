@@ -43,7 +43,7 @@ test('validateBuildValues happyPath', () => {
   expect(actual).toEqual(expected);
 });
 
-test('validateBuildValues missing jsonFile', () => {
+test('validateBuildValues missing first jsonFile', () => {
   delete process.env.npm_package_dsccViz_components_0_jsonFile;
 
   expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
@@ -51,11 +51,27 @@ test('validateBuildValues missing jsonFile', () => {
   );
 });
 
-test('validateBuildValues missing jsFile', () => {
+test('validateBuildValues missing second jsonFile', () => {
+  delete process.env.npm_package_dsccViz_components_1_jsonFile;
+
+  expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
+    'dsccViz.components[1].jsonFile'
+  );
+});
+
+test('validateBuildValues missing first jsFile', () => {
   delete process.env.npm_package_dsccViz_components_0_jsFile;
 
   expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
     'dsccViz.components[0].jsFile'
+  );
+});
+
+test('validateBuildValues missing second jsFile', () => {
+  delete process.env.npm_package_dsccViz_components_1_jsFile;
+
+  expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
+    'dsccViz.components[1].jsFile'
   );
 });
 
