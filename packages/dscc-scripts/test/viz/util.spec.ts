@@ -1,12 +1,18 @@
 import {VizScripts} from '../../src/args';
 import * as sut from '../../src/viz/util';
 
+// Setup a confing that reflects 2 vizes.
 beforeEach(() => {
-  process.env.npm_package_dsccViz_cssFile = 'cssFile';
-  process.env.npm_package_dsccViz_jsonFile = 'jsonFile';
-  process.env.npm_package_dsccViz_jsFile = 'jsFile';
   process.env.npm_package_dsccViz_gcsDevBucket = 'gcsDevBucket';
   process.env.npm_package_dsccViz_gcsProdBucket = 'gcsProdBucket';
+
+  process.env.npm_package_dsccViz_components_0_cssFile = 'cssFile';
+  process.env.npm_package_dsccViz_components_0_jsonFile = 'jsonFile';
+  process.env.npm_package_dsccViz_components_0_jsFile = 'jsFile';
+
+  process.env.npm_package_dsccViz_components_1_cssFile = 'cssFile_1';
+  process.env.npm_package_dsccViz_components_1_jsonFile = 'jsonFile_1';
+  process.env.npm_package_dsccViz_components_1_jsFile = 'jsFile_1';
 });
 
 test('validateBuildValues happyPath', () => {
@@ -14,31 +20,42 @@ test('validateBuildValues happyPath', () => {
   // Don't care about pwd in tests.
   delete actual.pwd;
 
-  expect(actual).toEqual({
-    cssFile: 'cssFile',
+  const expected: Partial<sut.BuildValues> = {
+    components: [
+      {
+        cssFile: 'cssFile',
+        jsonFile: 'jsonFile',
+        jsFile: 'jsFile',
+      },
+      {
+        cssFile: 'cssFile_1',
+        jsonFile: 'jsonFile_1',
+        jsFile: 'jsFile_1',
+      },
+    ],
     devBucket: 'gcsDevBucket',
     devMode: true,
     gcsBucket: 'gcsDevBucket',
-    jsFile: 'jsFile',
-    jsonFile: 'jsonFile',
     manifestFile: 'manifest.json',
     prodBucket: 'gcsProdBucket',
-  });
+  };
+
+  expect(actual).toEqual(expected);
 });
 
 test('validateBuildValues missing jsonFile', () => {
-  delete process.env.npm_package_dsccViz_jsonFile;
+  delete process.env.npm_package_dsccViz_components_0_jsonFile;
 
   expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
-    'dsccViz.jsonFile'
+    'dsccViz.components[0].jsonFile'
   );
 });
 
 test('validateBuildValues missing jsFile', () => {
-  delete process.env.npm_package_dsccViz_jsFile;
+  delete process.env.npm_package_dsccViz_components_0_jsFile;
 
   expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
-    'dsccViz.jsFile'
+    'dsccViz.components[0].jsFile'
   );
 });
 

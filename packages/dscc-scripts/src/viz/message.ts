@@ -77,8 +77,10 @@ const buildOptions = (
     );
   }
 
-  const outputFilename =
-    component.jsFile ?? component.tsFile!.replace('.ts', '.js');
+  const outputFilename = (component.jsFile || component.tsFile)!.replace(
+    '.ts',
+    '.js'
+  );
 
   return {
     mode: 'development',

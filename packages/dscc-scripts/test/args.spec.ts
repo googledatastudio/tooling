@@ -17,6 +17,7 @@ describe('For viz args', () => {
     test('no additional args', () => {
       const actual = parser.parseArgs(['viz', 'start']);
       expect(actual).toEqual({
+        componentIndex: '0',
         script: 'start',
         scriptChoice: 'viz',
       });
