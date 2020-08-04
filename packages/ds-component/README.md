@@ -1,6 +1,6 @@
 # dscc - Google Data Studio Community Component Helper Library
 
-<a href="https://travis-ci.org/googledatastudio/ds-component"><img src="https://travis-ci.org/googledatastudio/ds-component.svg?branch=master" alt="Build Status"></a>
+<a href="https://travis-ci.org/googledatastudio/ds-component"><img src="https://travis-ci.org/googledatastudio/ds-component.svg?branch=main" alt="Build Status"></a>
 
 `dscc` (Data Studio Community Component) is a library to help with the building
 of community components for Google Data Studio. It can be used as a standalone
