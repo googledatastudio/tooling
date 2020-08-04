@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@google/dscc-scripts@^1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.16.tgz#994621620f25beb0c831288ccc9760ed79b91ce4"
-  integrity sha512-l0bm3O7zLdTdoKKrhkQQXd4JTglCg8rmjiVAKygb0WYYdR34uEo1zluOnN/zZpdqu4x31KuoT6WCmoVn+SxOkQ==
+"@google/dscc-scripts@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@google/dscc-scripts/-/dscc-scripts-1.0.17.tgz#c8c761ed81d00eca218f3919321175f49d1f678f"
+  integrity sha512-q0DDEfzRenwLIcHAMWHNMRxIK4ldtPN2CM+uWRCUZFJD6Gpylglucl5rnJ2r62z7Fv7M6XHkG74cu0w9AaF/gw==
   dependencies:
     "@google/dscc" "^0.3.17"
     "@google/dscc-validation" "^1.0.4"
@@ -4373,9 +4373,9 @@ websocket-driver@>=0.5.1:
     websocket-extensions ">=0.1.1"
 
 websocket-extensions@>=0.1.1:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
-  integrity sha512-nqHUnMXmBzT0w570r2JpJxfiSD1IzoI+HGVdd3aZ0yNi3ngvQ4jv1dtHt5VGxfI2yj5yqImPhOK4vmIh2xMbGg==
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
+  integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
 
 which-module@^2.0.0:
   version "2.0.0"
