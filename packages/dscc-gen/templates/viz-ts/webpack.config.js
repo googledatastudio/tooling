@@ -9,7 +9,7 @@ const componentIndexToBuild = Number(process.env.WORKING_COMPONENT_INDEX) || 0;
 const component = components[componentIndexToBuild];
 
 console.log(
-  `Building ${component.tsFile} (component ${componentIndexToBuild})...`
+  `Building ${component.tsFile || component.jsFile}...`
 );
 
 const cssFilePath = path.resolve(__dirname, 'src', component.cssFile || '');
