@@ -146,12 +146,7 @@ export const getBuildableComponents = (): ComponentBuildValues[] => {
     const tsFile = process.env[`npm_package_dsccViz_components_${idx}_tsFile`];
 
     if (jsFile === undefined && tsFile === undefined) {
-      if (jsFile === undefined) {
-        throw invalidVizConfig(`components[${idx}].jsFile`);
-      }
-      if (tsFile === undefined) {
-        throw invalidVizConfig(`components[${idx}].tsFile`);
-      }
+      throw invalidVizConfig(`components[${idx}].jsFile`);
     }
 
     components.push({
