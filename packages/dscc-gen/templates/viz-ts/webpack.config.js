@@ -1,11 +1,24 @@
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const {getBuildableComponents} = require('@google/dscc-scripts/build/viz/util');
 
-const CSS_FILE_NAME = process.env.npm_package_dsccViz_cssFile;
-const cssFilePath = path.join('src', CSS_FILE_NAME);
+const components = getBuildableComponents();
+const componentIndexToBuild = Number(process.env.WORKING_COMPONENT_INDEX) || 0;
+const component = components[componentIndexToBuild];
 
-const plugins = [];
+console.log(`Building ${component.tsFile || component.jsFile}...`);
+
+const cssFilePath = path.resolve(__dirname, 'src', component.cssFile || '');
+const tsFilePath = path.resolve(__dirname, 'src', component.tsFile || '');
+
+const plugins = [
+  // Add DSCC_IS_LOCAL definition
+  new webpack.DefinePlugin({
+    DSCC_IS_LOCAL: 'true',
+  }),
+];
 
 let body = '<script src="main.js"></script>';
 if (fs.existsSync(cssFilePath)) {
@@ -24,7 +37,7 @@ fs.writeFileSync(path.resolve(__dirname, 'dist', 'vizframe.html'), iframeHTML);
 module.exports = [
   {
     mode: 'development',
-    entry: './src/index.ts',
+    entry: tsFilePath,
     devServer: {
       contentBase: './dist',
     },

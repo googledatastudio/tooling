@@ -28,15 +28,22 @@ export const format = {
   red: chalk.bold.rgb(219, 68, 55),
 };
 
+interface VizComponentConfig {
+  jsFile?: string;
+  tsFile?: string;
+  jsonFile: string;
+  cssFile: string;
+}
+
 interface VizConfig {
   dsccViz: {
     gcsDevBucket: string;
     gcsProdBucket: string;
+    components?: VizComponentConfig[];
     jsFile?: string;
     tsFile?: string;
-    jsonFile: string;
-    cssFile: string;
-    print: string;
+    jsonFile?: string;
+    cssFile?: string;
   };
 }
 
@@ -44,10 +51,13 @@ const exampleVizConfig: VizConfig = {
   dsccViz: {
     gcsDevBucket: 'gs://validBucketPath',
     gcsProdBucket: 'gs://validBucketPath',
-    jsFile: 'index.js',
-    jsonFile: 'index.json',
-    cssFile: 'index.css',
-    print: 'printMessage.js',
+    components: [
+      {
+        jsFile: 'index.js',
+        jsonFile: 'index.json',
+        cssFile: 'index.css',
+      },
+    ],
   },
 };
 
@@ -65,6 +75,8 @@ const exampleConnectorConfig: ConnectorConfig = {
   },
 };
 
+// TODO - This doesn't really work if you mess up a later idx in the viz
+// components than is defined.
 const invalidConfig = (path: string, config: VizConfig | ConnectorConfig) => {
   const colorizedPath = format.green(path);
   const packageJSON = format.blue.bold('package.json');
@@ -83,7 +95,7 @@ export const invalidConnectorConfig = (
   return invalidConfig(`dsccConnector.${path}`, exampleConnectorConfig);
 };
 
-export const invalidVizConfig = (path: keyof VizConfig['dsccViz']) => {
+export const invalidVizConfig = (path: string) => {
   return invalidConfig(`dsccViz.${path}`, exampleVizConfig);
 };
 

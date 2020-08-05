@@ -20,31 +20,27 @@ import {existsSync, PathLike, readFileSync} from 'fs';
 import {DeploymentChoices, VizArgs} from '../args';
 import {invalidVizConfig} from '../util';
 
-export interface BuildValues {
-  devBucket: string;
-  prodBucket: string;
-  manifestFile: 'manifest.json';
+export interface ComponentBuildValues {
   cssFile?: string;
   jsonFile: string;
   jsFile?: string;
   tsFile?: string;
+}
+
+export interface BuildValues {
+  devBucket: string;
+  prodBucket: string;
+  // TODO - Why is this a constant?
+  manifestFile: 'manifest.json';
+  components: ComponentBuildValues[];
   devMode: boolean;
   pwd: string;
   gcsBucket: string;
 }
 
 export const validateBuildValues = (args: VizArgs): BuildValues => {
-  const cssFile = process.env.npm_package_dsccViz_cssFile;
-  const jsonFile = process.env.npm_package_dsccViz_jsonFile;
-  if (jsonFile === undefined) {
-    throw invalidVizConfig('jsonFile');
-  }
-  // Require either jsFile or tsFile
-  const jsFile = process.env.npm_package_dsccViz_jsFile;
-  const tsFile = process.env.npm_package_dsccViz_tsFile;
-  if (jsFile === undefined && tsFile === undefined) {
-    throw invalidVizConfig('jsFile');
-  }
+  const components = getBuildableComponents();
+
   const devBucket = process.env.npm_package_dsccViz_gcsDevBucket;
   if (devBucket === undefined) {
     throw invalidVizConfig('gcsDevBucket');
@@ -58,13 +54,10 @@ export const validateBuildValues = (args: VizArgs): BuildValues => {
   const manifestFile = 'manifest.json';
   const pwd = process.cwd()!;
   return {
+    components,
     devBucket,
     prodBucket,
     manifestFile,
-    cssFile,
-    jsonFile,
-    jsFile,
-    tsFile,
     devMode,
     pwd,
     gcsBucket,
@@ -87,7 +80,16 @@ const throwIfErrors = (
   }
 };
 
-export const validateManifestFile = (path: PathLike): boolean => {
+type VizComponent = {
+  name: string;
+};
+
+// TODO - Add in other values as needed.
+export type VizManifest = {
+  components: VizComponent[];
+};
+
+export const validateManifestFile = (path: PathLike): VizManifest => {
   const fileExists = existsSync(path);
   if (!fileExists) {
     throw new Error(`The file: \n${path}\n was not found.`);
@@ -100,7 +102,7 @@ export const validateManifestFile = (path: PathLike): boolean => {
     throw new Error(`The file:\n ${path}\n could not be parsed as JSON. `);
   }
   throwIfErrors(validate.validateManifest(parsedJson), 'manifest');
-  return true;
+  return parsedJson;
 };
 
 export const validateConfigFile = (path: PathLike): boolean => {
@@ -117,4 +119,62 @@ export const validateConfigFile = (path: PathLike): boolean => {
   }
   throwIfErrors(validate.validateConfig(parsedJson), 'config');
   return true;
+};
+
+export const getBuildableComponents = (): ComponentBuildValues[] => {
+  const components: ComponentBuildValues[] = [];
+
+  const lastComponentIdx = Object.keys(process.env)
+    .filter((key) => key.startsWith('npm_package_dsccViz_components_'))
+    .map((s) => s.replace('npm_package_dsccViz_components_', ''))
+    .map((a) => parseInt(a, 10))
+    .reduce((a, b) => (a > b ? a : b), 0);
+
+  // Check for vizpack configuration
+  for (let idx = 0; idx <= lastComponentIdx; idx++) {
+    const jsonFile =
+      process.env[`npm_package_dsccViz_components_${idx}_jsonFile`];
+
+    if (!jsonFile) {
+      throw invalidVizConfig(`components[${idx}].jsonFile`);
+    }
+
+    const cssFile =
+      process.env[`npm_package_dsccViz_components_${idx}_cssFile`];
+    // Require either jsFile or tsFile
+    const jsFile = process.env[`npm_package_dsccViz_components_${idx}_jsFile`];
+    const tsFile = process.env[`npm_package_dsccViz_components_${idx}_tsFile`];
+
+    if (jsFile === undefined && tsFile === undefined) {
+      throw invalidVizConfig(`components[${idx}].jsFile`);
+    }
+
+    components.push({
+      jsonFile,
+      cssFile,
+      jsFile,
+      tsFile,
+    });
+  }
+
+  return components;
+};
+
+export const getComponentIndex = (
+  args: VizArgs,
+  manifestPath: PathLike
+): string => {
+  if (args.componentName) {
+    const componentName = args.componentName;
+
+    const manifest: VizManifest = validateManifestFile(manifestPath);
+    const idx = manifest.components.findIndex(
+      (component) => component.name === componentName
+    );
+    if (idx === -1) {
+      throw new Error(`${componentName} is not present in your manifest.json`);
+    }
+    return idx.toString();
+  }
+  return '0';
 };

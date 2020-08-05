@@ -22,11 +22,15 @@ import {VizArgs} from '../args';
 import * as util from './util';
 import {BuildValues} from './util';
 
-const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
+const buildOptions = (
+  buildValues: BuildValues,
+  componentIndex: number
+): webpack.Configuration => {
+  const component = buildValues.components[componentIndex];
   const plugins: webpack.Plugin[] = [
     // Add config
     new CopyWebpackPlugin([
-      {from: path.join(buildValues.pwd, 'src', buildValues.jsonFile), to: '.'},
+      {from: path.join(buildValues.pwd, 'src', component.jsonFile), to: '.'},
     ]),
     // Add manifest
     new CopyWebpackPlugin([
@@ -42,14 +46,18 @@ const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
         },
       },
     ]),
+    // Add transform DSCC_IS_LOCAL
+    new webpack.DefinePlugin({
+      DSCC_IS_LOCAL: 'false',
+    }),
   ];
 
   // Only add in the copy plugin for the css if the user provides a css value in
   // the manifest.
-  if (buildValues.cssFile !== undefined) {
+  if (component.cssFile !== undefined) {
     plugins.push(
       new CopyWebpackPlugin([
-        {from: path.join('src', buildValues.cssFile), to: '.'},
+        {from: path.join('src', component.cssFile), to: '.'},
       ])
     );
   }
@@ -59,29 +67,29 @@ const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
   };
 
   // Add js options, if set
-  if (buildValues.jsFile) {
+  if (component.jsFile) {
     const jsOptions = {
       output: {
-        filename: buildValues.jsFile,
+        filename: component.jsFile,
         path: path.resolve(buildValues.pwd, 'build'),
       },
       entry: {
         // this is the viz source code
-        main: path.resolve(buildValues.pwd, 'src', buildValues.jsFile),
+        main: path.resolve(buildValues.pwd, 'src', component.jsFile),
       },
     };
     Object.assign(webpackOptions, jsOptions);
   }
   // Add ts options, if set
-  if (buildValues.tsFile) {
+  if (component.tsFile) {
     const tsOptions = {
       output: {
-        filename: buildValues.tsFile.replace('.ts', '.js'),
+        filename: component.tsFile.replace('.ts', '.js'),
         path: path.resolve(buildValues.pwd, 'build'),
       },
       entry: {
         // this is the viz source code
-        main: path.resolve(buildValues.pwd, 'src', buildValues.tsFile),
+        main: path.resolve(buildValues.pwd, 'src', component.tsFile),
       },
       module: {
         rules: [
@@ -115,20 +123,32 @@ const buildOptions = (buildValues: BuildValues): webpack.Configuration => {
 };
 
 export const build = async (args: VizArgs) => {
-  const buildValues = util.validateBuildValues(args);
-  const webpackOptions = buildOptions(buildValues);
-  const compiler = webpack(webpackOptions);
-
-  const compilerRun = bluebird.promisify(compiler.run, {context: compiler});
-
-  // Compile
-  await compilerRun();
-
-  // Validate output
   const cwd = process.cwd()!;
-  const configDest = path.resolve(cwd, 'build', buildValues.jsonFile);
-  util.validateConfigFile(configDest);
+  const buildValues = util.validateBuildValues(args);
 
+  for (let i = 0; i < buildValues.components.length; i++) {
+    const component = buildValues.components[i];
+    console.log(`\n\nBuilding ${component.tsFile} (component ${i})...`);
+    const webpackOptions = buildOptions(buildValues, i);
+    const compiler = webpack(webpackOptions);
+
+    const compilerRun = bluebird.promisify(compiler.run, {context: compiler});
+
+    // Compile
+    const stats = await compilerRun();
+    console.log(
+      stats.toString({
+        chunks: false, // Makes the build much quieter
+        colors: true, // Shows colors in the console
+      })
+    );
+
+    // Validate config output
+    const configDest = path.resolve(cwd, 'build', component.jsonFile);
+    util.validateConfigFile(configDest);
+  }
+
+  // Validate final manifest output
   const manifestDest = path.resolve(cwd, 'build', buildValues.manifestFile);
   util.validateManifestFile(manifestDest);
 };

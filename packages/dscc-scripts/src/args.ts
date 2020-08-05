@@ -122,12 +122,15 @@ export enum DeploymentChoices {
   DEV = 'dev',
 }
 
+// TODO these should be special cased to the script they belong to.
 export interface VizArgs {
   script: VizScripts;
   deployment?: DeploymentChoices;
   format?: MessageFormat;
   configPath?: string;
   manifestPath?: string;
+  componentIndex?: string;
+  componentName?: string;
 }
 const addVizParserDetails = (subparsers: argparse.SubParser) => {
   const vizParser = subparsers.addParser(ScriptChoice.VIZ, {
@@ -140,6 +143,7 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
     dest: 'script',
   });
 
+  let start: argparse.ArgumentParser;
   let build: argparse.ArgumentParser;
   let push: argparse.ArgumentParser;
   let updateMessage: argparse.ArgumentParser;
@@ -147,7 +151,7 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
   Object.values(VizScripts).forEach((scriptName: VizScripts) => {
     switch (scriptName) {
       case VizScripts.START:
-        vizSubparsers.addParser(scriptName, {
+        start = vizSubparsers.addParser(scriptName, {
           addHelp: true,
           description: 'Run your viz locally with live-code reloading.',
         });
@@ -209,6 +213,17 @@ const addVizParserDetails = (subparsers: argparse.SubParser) => {
     dest: 'manifestPath',
     help: 'The path to your manifest.json file.',
     required: false,
+  });
+
+  start!.addArgument(['--componentIndex'], {
+    dest: 'componentIndex',
+    help: 'The index of the component to start.',
+    defaultValue: '0',
+  });
+
+  start!.addArgument(['--componentName'], {
+    dest: 'componentName',
+    help: 'The name of the component to start.',
   });
 };
 

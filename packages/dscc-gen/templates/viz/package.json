@@ -2,10 +2,13 @@
   "dsccViz": {
     "gcsDevBucket": "{{DEV_BUCKET}}",
     "gcsProdBucket": "{{PROD_BUCKET}}",
-    "jsFile": "index.js",
-    "jsonFile": "index.json",
-    "cssFile": "index.css",
-    "print": "printMessage.js"
+    "components": [
+      {
+        "jsFile": "index.js",
+        "jsonFile": "index.json",
+        "cssFile": "index.css"
+      }
+    ]
   },
   "scripts": {
     "build:dev": "dscc-scripts viz build -d dev",

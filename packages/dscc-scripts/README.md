@@ -33,8 +33,7 @@ For viz, you need to add a `dsccViz` property.
         "gcsProdBucket": "{{PROD_BUCKET}}",
         "jsFile": "index.js",
         "jsonFile": "index.json",
-        "cssFile": "index.css",
-        "print": "printMessage.js"
+        "cssFile": "index.css"
     }
     ...
 }

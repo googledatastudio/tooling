@@ -1,12 +1,18 @@
 import {VizScripts} from '../../src/args';
 import * as sut from '../../src/viz/util';
 
+// Setup a confing that reflects 2 vizes.
 beforeEach(() => {
-  process.env.npm_package_dsccViz_cssFile = 'cssFile';
-  process.env.npm_package_dsccViz_jsonFile = 'jsonFile';
-  process.env.npm_package_dsccViz_jsFile = 'jsFile';
   process.env.npm_package_dsccViz_gcsDevBucket = 'gcsDevBucket';
   process.env.npm_package_dsccViz_gcsProdBucket = 'gcsProdBucket';
+
+  process.env.npm_package_dsccViz_components_0_cssFile = 'cssFile';
+  process.env.npm_package_dsccViz_components_0_jsonFile = 'jsonFile';
+  process.env.npm_package_dsccViz_components_0_jsFile = 'jsFile';
+
+  process.env.npm_package_dsccViz_components_1_cssFile = 'cssFile_1';
+  process.env.npm_package_dsccViz_components_1_jsonFile = 'jsonFile_1';
+  process.env.npm_package_dsccViz_components_1_jsFile = 'jsFile_1';
 });
 
 test('validateBuildValues happyPath', () => {
@@ -14,31 +20,58 @@ test('validateBuildValues happyPath', () => {
   // Don't care about pwd in tests.
   delete actual.pwd;
 
-  expect(actual).toEqual({
-    cssFile: 'cssFile',
+  const expected: Partial<sut.BuildValues> = {
+    components: [
+      {
+        cssFile: 'cssFile',
+        jsonFile: 'jsonFile',
+        jsFile: 'jsFile',
+      },
+      {
+        cssFile: 'cssFile_1',
+        jsonFile: 'jsonFile_1',
+        jsFile: 'jsFile_1',
+      },
+    ],
     devBucket: 'gcsDevBucket',
     devMode: true,
     gcsBucket: 'gcsDevBucket',
-    jsFile: 'jsFile',
-    jsonFile: 'jsonFile',
     manifestFile: 'manifest.json',
     prodBucket: 'gcsProdBucket',
-  });
+  };
+
+  expect(actual).toEqual(expected);
 });
 
-test('validateBuildValues missing jsonFile', () => {
-  delete process.env.npm_package_dsccViz_jsonFile;
+test('validateBuildValues missing first jsonFile', () => {
+  delete process.env.npm_package_dsccViz_components_0_jsonFile;
 
   expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
-    'dsccViz.jsonFile'
+    'dsccViz.components[0].jsonFile'
   );
 });
 
-test('validateBuildValues missing jsFile', () => {
-  delete process.env.npm_package_dsccViz_jsFile;
+test('validateBuildValues missing second jsonFile', () => {
+  delete process.env.npm_package_dsccViz_components_1_jsonFile;
 
   expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
-    'dsccViz.jsFile'
+    'dsccViz.components[1].jsonFile'
+  );
+});
+
+test('validateBuildValues missing first jsFile', () => {
+  delete process.env.npm_package_dsccViz_components_0_jsFile;
+
+  expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
+    'dsccViz.components[0].jsFile'
+  );
+});
+
+test('validateBuildValues missing second jsFile', () => {
+  delete process.env.npm_package_dsccViz_components_1_jsFile;
+
+  expect(() => sut.validateBuildValues({script: VizScripts.BUILD})).toThrow(
+    'dsccViz.components[1].jsFile'
   );
 });
 
@@ -67,10 +100,34 @@ test('validateBuildValues missing gcsProdBucket', () => {
   );
 });
 
+describe('start command', () => {
+  test('returns correct componentIndex when componentName is defined in the manifest', () => {
+    const manifestPath = './test/viz/files/valid_manifest.json';
+    const index = sut.getComponentIndex(
+      {componentIndex: '0', componentName: 'myViz2', script: VizScripts.START},
+      manifestPath
+    );
+    expect(index).toBe('1');
+  });
+  test('throws when componentName is not defined in the manifest', () => {
+    const manifestPath = './test/viz/files/valid_manifest.json';
+    expect(() =>
+      sut.getComponentIndex(
+        {
+          componentIndex: '0',
+          componentName: 'thisVizDoesNotExist',
+          script: VizScripts.START,
+        },
+        manifestPath
+      )
+    ).toThrow('thisVizDoesNotExist is not present in your manifest.json');
+  });
+});
+
 describe('manifest validation', () => {
   test('passes when all required fields provided', () => {
     const validManifestFn = './test/viz/files/valid_manifest.json';
-    expect(sut.validateManifestFile(validManifestFn)).toBe(true);
+    expect(() => sut.validateManifestFile(validManifestFn)).not.toThrow();
   });
 
   test('throws when missing privacyPolicy', () => {

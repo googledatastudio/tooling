@@ -20,6 +20,16 @@
         "config": "YOUR_GCS_BUCKET/index.json",
         "css": "YOUR_GCS_BUCKET/index.css"
       }
+    },
+    {
+      "name": "myViz2",
+      "description": "My second Community Visualization",
+      "iconUrl": "https://url2",
+      "resource": {
+        "js": "YOUR_GCS_BUCKET/2/index.js",
+        "config": "YOUR_GCS_BUCKET/2/index.json",
+        "css": "YOUR_GCS_BUCKET/2/index.css"
+      }
     }
   ]
 }

@@ -5,7 +5,6 @@
     "jsFile": "index.js",
     "jsonFile": "index.json",
     "cssFile": "index.css",
-    "print": "printMessage.js",
     "testReport": "https://datastudio.google.com/c/u/0/reporting/1lx0XNLBSZDCKH3T6_VaXztX5FlS540ho/page/h74q"
   },
   "scripts": {
