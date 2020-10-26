@@ -71,10 +71,19 @@ interface KeyCredentials {
   key: string;
 }
 
+interface PathUserPassCredentials {
+  pathUserPass: {
+    path: string;
+    username: string;
+    password: string;
+  };
+}
+
 type SetCredentialsRequest =
   | UserPassCredentials
   | UserTokenCredentials
-  | KeyCredentials;
+  | KeyCredentials
+  | PathUserPassCredentials;
 
 interface SetCredentialsResponse {
   errorCode: 'NONE' | 'INVALID_CREDENTIALS';

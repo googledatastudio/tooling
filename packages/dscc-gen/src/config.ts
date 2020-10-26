@@ -126,6 +126,8 @@ const getAuthHelpText = (authType: AuthType): string => {
       return 'Username & Password';
     case AuthType.USER_TOKEN:
       return 'Username & Token';
+    case AuthType.PATH_USER_PASS:
+      return 'Path & Username & Password';
     default:
       return assertNever(authType);
   }
