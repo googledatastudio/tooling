@@ -16,6 +16,7 @@ export enum AuthType {
   KEY = 'KEY',
   USER_PASS = 'USER_PASS',
   USER_TOKEN = 'USER_TOKEN',
+  PATH_USER_PASS = 'PATH_USER_PASS',
 }
 
 export interface VizConfigHasDefaults {
