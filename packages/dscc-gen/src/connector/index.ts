@@ -186,7 +186,7 @@ const authTypeToFile: AuthTypeFileMap = {
   [AuthType.USER_TOKEN]: 'USER_TOKEN_auth',
   [AuthType.OAUTH2]: 'OAUTH2_auth',
   [AuthType.KEY]: 'KEY_auth',
-  [AuthType.PATH_USER_PASS] : 'PATH_USER_PASS_auth',
+  [AuthType.PATH_USER_PASS]: 'PATH_USER_PASS_auth',
 };
 
 const removeExcessAuthFiles = async (

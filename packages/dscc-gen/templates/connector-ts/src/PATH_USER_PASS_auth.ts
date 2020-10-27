@@ -3,7 +3,11 @@ const USERNAME_PROPERTY_PATH = 'dscc.username';
 const PASSWORD_PROPERTY_PATH = 'dscc.password';
 
 // TODO - implement your credentials validation logic here.
-const validateCredentials = (path: string, username: string, password: string): boolean => {
+const validateCredentials = (
+  path: string,
+  username: string,
+  password: string
+): boolean => {
   cc.newDebugError()
     .setText('Implement the validateCredentials() function in ./src/auth.js')
     .throwException();
