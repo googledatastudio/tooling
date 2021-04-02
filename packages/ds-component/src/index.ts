@@ -55,6 +55,7 @@ import {
   ThemeStyle,
   ToDSMessageType,
   VizReadyMessage,
+  DateRange,
 } from './types';
 
 // Make all exported types available to external users.
@@ -334,12 +335,27 @@ const transformDSInteraction = (message: Message): InteractionsById => {
 };
 
 /**
+ * Transform for date ranges
+ */
+const toDateRanges = (message: Message): DateRange => {
+  const dateRanges = message.dataResponse.dateRanges || [];
+  const output: DateRange = {};
+  return dateRanges.reduce((inProgress, currentDSDateRange) => {
+    inProgress[currentDSDateRange.id] = {
+      start: currentDSDateRange.start,
+      end: currentDSDateRange.end,
+    };
+    return inProgress;
+  }, output);
+};
+/**
  * The transform to use for data in a Table format. i.e. `[[1, 2, 3], [4, 5, 6]]`
  */
 export const tableTransform: TableTransform = (
   message: Message
 ): TableFormat => ({
   tables: tableFormatTable(message),
+  dateRanges: toDateRanges(message),
   fields: fieldsByConfigId(message),
   style: flattenStyle(message),
   theme: themeStyle(message),
@@ -351,6 +367,7 @@ export const tableTransform: TableTransform = (
  */
 export const objectTransform: ObjectTransform = (message: Message) => ({
   tables: objectFormatTable(message),
+  dateRanges: toDateRanges(message),
   fields: fieldsByConfigId(message),
   style: flattenStyle(message),
   theme: themeStyle(message),

@@ -80,11 +80,22 @@ export enum ConceptType {
   DIMENSION = 'DIMENSION',
 }
 
+export interface DSDateRange {
+  /*
+   * TODO: Is ID an enum with values DEFAULT/COMPARISON or any string
+   */
+  id: string;
+  start: string;
+  end: string;
+}
+
 export interface DataResponse {
   /**
    * The list of tables for the current data configuration.
    */
   tables: Table[];
+  /* TODO: Is this always undefined */
+  dateRanges?: DSDateRange[];
 }
 
 export enum MessageType {
@@ -661,6 +672,8 @@ export interface TableFormat {
   fields: FieldsByConfigId;
   style: StyleById;
   tables: Tables;
+  /* TODO: Same as other todo, is it sometimes undefined or not */
+  dateRanges: DateRange;
   theme: ThemeStyle;
   interactions: InteractionsById;
 }
@@ -683,10 +696,20 @@ export interface ObjectTables {
   [TableType.SUMMARY]?: ObjectRow[];
 }
 
+/* TODO: Can you  have multiple date ranges with same ID? */
+export interface DateRange {
+  [id: string]: {
+    start: string;
+    end: string;
+  };
+}
+
 export interface ObjectFormat {
   fields: FieldsByConfigId;
   style: StyleById;
   tables: ObjectTables;
+  /* TODO: Same as other todo, is it sometimes undefined or not */
+  dateRanges: DateRange;
   theme: ThemeStyle;
   interactions: InteractionsById;
 }

@@ -405,6 +405,18 @@ const testMessage = (
           }),
         },
       ],
+      dateRanges: [
+        {
+          id: 'DEFAULT',
+          start: '20200130',
+          end: '20210130',
+        },
+        {
+          id: 'COMPARISON',
+          start: '20190130',
+          end: '20200130',
+        },
+      ],
     },
   };
 };
@@ -479,6 +491,16 @@ test('tableTransform empty style', () => {
     ],
   };
   const expected: sut.TableFormat = {
+    dateRanges: {
+      DEFAULT: {
+        start: '20200130',
+        end: '20210130',
+      },
+      COMPARISON: {
+        start: '20190130',
+        end: '20200130',
+      },
+    },
     interactions: interactionsById,
     fields: expectedFields,
     tables: {
@@ -576,6 +598,16 @@ test('tableTransform works', () => {
   const expected: sut.TableFormat = {
     interactions: interactionsById,
     theme,
+    dateRanges: {
+      DEFAULT: {
+        start: '20200130',
+        end: '20210130',
+      },
+      COMPARISON: {
+        start: '20190130',
+        end: '20200130',
+      },
+    },
     fields: expectedFields,
     tables: {
       [sut.TableType.DEFAULT]: {
@@ -645,6 +677,16 @@ test('tableTransform works', () => {
 test('objectTransform works', () => {
   const expected: sut.ObjectFormat = {
     interactions: interactionsById,
+    dateRanges: {
+      DEFAULT: {
+        start: '20200130',
+        end: '20210130',
+      },
+      COMPARISON: {
+        start: '20190130',
+        end: '20200130',
+      },
+    },
     fields: {
       dimensions: [
         {
@@ -800,7 +842,9 @@ test('Error thrown when styleIds are not unique', () => {
     sut.objectTransform(message);
   }).toThrowError('styleInnerId1');
 });
-
+/* Add a new test for DateRange that checks when there is no date range in the input
+ * that it returns the correct value
+ */
 test('If elements are dim met dim dim, they have to be sorted specially.', () => {
   const messageDimMetDimDim: sut.Message = {
     type: sut.MessageType.RENDER,
