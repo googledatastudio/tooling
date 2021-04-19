@@ -81,10 +81,7 @@ export enum ConceptType {
 }
 
 export interface DSDateRange {
-  /*
-   * TODO: Is ID an enum with values DEFAULT/COMPARISON or any string
-   */
-  id: string;
+  id: TableType;
   start: string;
   end: string;
 }
@@ -696,9 +693,12 @@ export interface ObjectTables {
   [TableType.SUMMARY]?: ObjectRow[];
 }
 
-/* TODO: Can you  have multiple date ranges with same ID? */
 export interface DateRange {
-  [id: string]: {
+  [TableType.DEFAULT]?: {
+    start: string;
+    end: string;
+  };
+  [TableType.COMPARISON]?: {
     start: string;
     end: string;
   };

@@ -407,12 +407,12 @@ const testMessage = (
       ],
       dateRanges: [
         {
-          id: 'DEFAULT',
+          id: sut.TableType.DEFAULT,
           start: '20200130',
           end: '20210130',
         },
         {
-          id: 'COMPARISON',
+          id: sut.TableType.COMPARISON,
           start: '20190130',
           end: '20200130',
         },
