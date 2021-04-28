@@ -335,7 +335,7 @@ const transformDSInteraction = (message: Message): InteractionsById => {
 };
 
 /**
- * Transform for date ranges to format consistent with community connector dates
+ * Transform for date ranges
  */
 const toDateRanges = (message: Message): DateRange => {
   const dateRanges = message.dataResponse.dateRanges || [];

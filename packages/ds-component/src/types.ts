@@ -91,7 +91,6 @@ export interface DataResponse {
    * The list of tables for the current data configuration.
    */
   tables: Table[];
-  /* TODO: Is this always undefined */
   dateRanges?: DSDateRange[];
 }
 
@@ -669,7 +668,6 @@ export interface TableFormat {
   fields: FieldsByConfigId;
   style: StyleById;
   tables: Tables;
-  /* TODO: Same as other todo, is it sometimes undefined or not */
   dateRanges: DateRange;
   theme: ThemeStyle;
   interactions: InteractionsById;
@@ -708,7 +706,6 @@ export interface ObjectFormat {
   fields: FieldsByConfigId;
   style: StyleById;
   tables: ObjectTables;
-  /* TODO: Same as other todo, is it sometimes undefined or not */
   dateRanges: DateRange;
   theme: ThemeStyle;
   interactions: InteractionsById;
