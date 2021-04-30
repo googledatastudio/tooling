@@ -281,6 +281,25 @@ const testMetricFields = (numRequested: number): sut.Field[] => {
   return fields.splice(0, numRequested);
 };
 
+const testDateRange = (numRequested: number): sut.DSDateRange[] => {
+  const dateRanges = [
+    {
+      id: sut.TableType.DEFAULT,
+      start: '20200130',
+      end: '20210130',
+    },
+    {
+      id: sut.TableType.COMPARISON,
+      start: '20190130',
+      end: '20200130',
+    },
+  ];
+  if (numRequested > dateRanges.length) {
+    throw new Error(`Can't support ${numRequested} fields yet.`);
+  }
+  return dateRanges.splice(0, numRequested);
+};
+
 const testStyle = (numRequested: number): sut.StyleEntry[] => {
   const styleElements: sut.ConfigStyle[] = [
     {
@@ -319,12 +338,14 @@ const testStyle = (numRequested: number): sut.StyleEntry[] => {
 const testMessage = (
   numDimensions: number,
   numMetrics: number,
-  numStyle: number
+  numStyle: number,
+  numDateRange: number
 ): sut.Message => {
   const dimensionFields = testDimensionFields(numDimensions);
   const metricFields = testMetricFields(numMetrics);
   const fields = dimensionFields.concat(metricFields);
   const style = testStyle(numStyle);
+  const dateRanges = testDateRange(numDateRange);
   return {
     type: sut.MessageType.RENDER,
     config: {
@@ -405,25 +426,14 @@ const testMessage = (
           }),
         },
       ],
-      dateRanges: [
-        {
-          id: sut.TableType.DEFAULT,
-          start: '20200130',
-          end: '20210130',
-        },
-        {
-          id: sut.TableType.COMPARISON,
-          start: '20190130',
-          end: '20200130',
-        },
-      ],
+      dateRanges
     },
   };
 };
 
 test('subscribeToData works', () => {
   window.history.replaceState({}, 'Test Title', '/test?dscId=my-id');
-  const message = testMessage(1, 1, 1);
+  const message = testMessage(1, 1, 1, 0);
   const addEventListenerMock = jest.fn((event, cb) => {
     if (event === 'message') {
       cb({data: message});
@@ -556,7 +566,7 @@ test('tableTransform empty style', () => {
     style: {},
     theme,
   };
-  const actual = sut.tableTransform(testMessage(2, 2, 0));
+  const actual = sut.tableTransform(testMessage(2, 2, 0, 0));
   expect(actual).toEqual(expected);
 });
 
@@ -670,7 +680,7 @@ test('tableTransform works', () => {
       },
     },
   };
-  const actual: sut.TableFormat = sut.tableTransform(testMessage(2, 2, 2));
+  const actual: sut.TableFormat = sut.tableTransform(testMessage(2, 2, 2, 0));
   expect(actual).toEqual(expected);
 });
 
@@ -755,12 +765,12 @@ test('objectTransform works', () => {
     },
     theme,
   };
-  const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2));
+  const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 2));
   expect(actual).toEqual(expected);
 });
 
 test('identity transform logs warning', () => {
-  const message = testMessage(1, 1, 1);
+  const message = testMessage(1, 1, 1, 2);
   const mockWarn = jest.fn((warn) => {
     throw new Error(warn);
   });
@@ -780,7 +790,7 @@ test('identity transform logs warning', () => {
 });
 
 test('custom transform not supported', () => {
-  const message = testMessage(1, 1, 1);
+  const message = testMessage(1, 1, 1, 2);
   const addEventListenerMock = jest.fn((event, cb) => {
     if (event === 'message') {
       cb({data: message});
@@ -836,15 +846,17 @@ test('Error thrown when styleIds are not unique', () => {
     },
   ];
 
-  const message: sut.Message = testMessage(1, 1, 1);
+  const message: sut.Message = testMessage(1, 1, 1, 2);
   message.config.style = styleWithReusedIds;
   expect(() => {
     sut.objectTransform(message);
   }).toThrowError('styleInnerId1');
 });
-/* Add a new test for DateRange that checks when there is no date range in the input
- * that it returns the correct value
- */
+
+//TODO RIGHTNOW
+test('If there is no date range in the input, it returns the correct value', () => {
+
+});
 test('If elements are dim met dim dim, they have to be sorted specially.', () => {
   const messageDimMetDimDim: sut.Message = {
     type: sut.MessageType.RENDER,
