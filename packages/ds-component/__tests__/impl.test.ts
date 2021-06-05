@@ -433,7 +433,7 @@ const testMessage = (
 
 test('subscribeToData works', () => {
   window.history.replaceState({}, 'Test Title', '/test?dscId=my-id');
-  const message = testMessage(1, 1, 1, 1);
+  const message = testMessage(1, 1, 1, 0);
   const addEventListenerMock = jest.fn((event, cb) => {
     if (event === 'message') {
       cb({data: message});
@@ -501,16 +501,7 @@ test('tableTransform empty style', () => {
     ],
   };
   const expected: sut.TableFormat = {
-    dateRanges: {
-      DEFAULT: {
-        start: '20200130',
-        end: '20210130',
-      },
-      COMPARISON: {
-        start: '20190130',
-        end: '20200130',
-      },
-    },
+    dateRanges: {},
     interactions: interactionsById,
     fields: expectedFields,
     tables: {
@@ -566,7 +557,7 @@ test('tableTransform empty style', () => {
     style: {},
     theme,
   };
-  const actual = sut.tableTransform(testMessage(2, 2, 0, 2));
+  const actual = sut.tableTransform(testMessage(2, 2, 0, 0));
   expect(actual).toEqual(expected);
 });
 
@@ -840,6 +831,17 @@ test('If there is no date range in the input, it returns the correct value', () 
   expect(actual.dateRanges).toEqual({});
 });
 
+test('If there is one date range in the input, it returns the correct value', () => {
+  const expectedDateRanges = {
+    [sut.DateRangeType.DEFAULT]: {
+      "end": "20210130",
+      "start": "20200130"
+    }
+  }
+  const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 1));
+  expect(actual.dateRanges).toEqual(expectedDateRanges);
+});
+
 test('If there is both date ranges in the input, it returns the correct value', () => {
   const expectedDateRanges = {
     [sut.DateRangeType.DEFAULT]: {
@@ -855,16 +857,6 @@ test('If there is both date ranges in the input, it returns the correct value', 
   expect(actual.dateRanges).toEqual(expectedDateRanges);
 });
 
-test('If there is one date range in the input, it returns the correct value', () => {
-  const expectedDateRanges = {
-    [sut.DateRangeType.DEFAULT]: {
-      "end": "20210130",
-      "start": "20200130"
-    }
-  }
-  const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 1));
-  expect(actual.dateRanges).toEqual(expectedDateRanges);
-});
 test('If elements are dim met dim dim, they have to be sorted specially.', () => {
   const messageDimMetDimDim: sut.Message = {
     type: sut.MessageType.RENDER,
