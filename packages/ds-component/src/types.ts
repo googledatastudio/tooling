@@ -80,11 +80,18 @@ export enum ConceptType {
   DIMENSION = 'DIMENSION',
 }
 
+export interface DSDateRange {
+  id: DateRangeType;
+  start: string;
+  end: string;
+}
+
 export interface DataResponse {
   /**
    * The list of tables for the current data configuration.
    */
   tables: Table[];
+  dateRanges?: DSDateRange[];
 }
 
 export enum MessageType {
@@ -478,6 +485,11 @@ export enum TableType {
   SUMMARY = 'SUMMARY',
 }
 
+export enum DateRangeType {
+  DEFAULT = 'DEFAULT',
+  COMPARISON = 'COMPARISON',
+}
+
 export enum ConfigDataElementType {
   /**
    * Renders a metric field element.
@@ -661,6 +673,7 @@ export interface TableFormat {
   fields: FieldsByConfigId;
   style: StyleById;
   tables: Tables;
+  dateRanges: DateRangesById;
   theme: ThemeStyle;
   interactions: InteractionsById;
 }
@@ -683,10 +696,22 @@ export interface ObjectTables {
   [TableType.SUMMARY]?: ObjectRow[];
 }
 
+export interface DateRangesById {
+  [DateRangeType.DEFAULT]?: {
+    start: string;
+    end: string;
+  };
+  [DateRangeType.COMPARISON]?: {
+    start: string;
+    end: string;
+  };
+}
+
 export interface ObjectFormat {
   fields: FieldsByConfigId;
   style: StyleById;
   tables: ObjectTables;
+  dateRanges: DateRangesById;
   theme: ThemeStyle;
   interactions: InteractionsById;
 }
