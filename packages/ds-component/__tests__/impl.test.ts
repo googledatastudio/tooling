@@ -678,16 +678,7 @@ test('tableTransform works', () => {
 test('objectTransform works', () => {
   const expected: sut.ObjectFormat = {
     interactions: interactionsById,
-    dateRanges: {
-      DEFAULT: {
-        start: '20200130',
-        end: '20210130',
-      },
-      COMPARISON: {
-        start: '20190130',
-        end: '20200130',
-      },
-    },
+    dateRanges: {},
     fields: {
       dimensions: [
         {
@@ -756,7 +747,7 @@ test('objectTransform works', () => {
     },
     theme,
   };
-  const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 2));
+  const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 0));
   expect(actual).toEqual(expected);
 });
 
