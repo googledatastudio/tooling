@@ -24,6 +24,7 @@ import {
   ConfigId,
   ConfigStyle,
   ConfigStyleElement,
+  DateRangesById,
   DSInteractionData,
   DSInteractionType,
   DSRowValue,
@@ -55,7 +56,6 @@ import {
   ThemeStyle,
   ToDSMessageType,
   VizReadyMessage,
-  DateRangesById,
 } from './types';
 
 // Make all exported types available to external users.

@@ -834,10 +834,10 @@ test('If there is no date range in the input, it returns the correct value', () 
 test('If there is one date range in the input, it returns the correct value', () => {
   const expectedDateRanges = {
     [sut.DateRangeType.DEFAULT]: {
-      "end": "20210130",
-      "start": "20200130"
-    }
-  }
+      end: '20210130',
+      start: '20200130',
+    },
+  };
   const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 1));
   expect(actual.dateRanges).toEqual(expectedDateRanges);
 });
@@ -845,14 +845,14 @@ test('If there is one date range in the input, it returns the correct value', ()
 test('If there is both date ranges in the input, it returns the correct value', () => {
   const expectedDateRanges = {
     [sut.DateRangeType.DEFAULT]: {
-      "end": "20210130",
-      "start": "20200130"
+      end: '20210130',
+      start: '20200130',
     },
     [sut.DateRangeType.COMPARISON]: {
-      "end": "20200130",
-      "start": "20190130"
-    }
-  }
+      end: '20200130',
+      start: '20190130',
+    },
+  };
   const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 2));
   expect(actual.dateRanges).toEqual(expectedDateRanges);
 });
