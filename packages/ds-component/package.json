@@ -56,7 +56,7 @@
   "directories": {
     "lib": "lib"
   },
-  "repository": "googledatastudio/ds-component",
+  "repository": "googledatastudio/tooling",
   "keywords": [
     "datastudio",
     "visualization",
