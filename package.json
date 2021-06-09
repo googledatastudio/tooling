@@ -2,10 +2,7 @@
   "name": "ds-tooling",
   "version": "0.1.0",
   "description": "Developer tooling for Google Data Studio",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/googledatastudio/dscc-gen.git"
-  },
+  "repository": "googledatastudio/tooling",
   "author": "Yulan Lin",
   "bugs": {
     "url": "https://github.com/googledatastudio/dscc-gen/issues"
