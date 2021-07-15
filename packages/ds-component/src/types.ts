@@ -44,6 +44,7 @@ export interface Config {
    * The data config defined for the component.
    */
   data: ConfigData[];
+  colorMap: ColorMap[];
   /**
    * The style elements required and supported by the component.
    */
