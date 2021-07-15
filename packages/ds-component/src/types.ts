@@ -80,6 +80,15 @@ export enum ConceptType {
   DIMENSION = 'DIMENSION',
 }
 
+export interface ColorInfo {
+  id: string;
+  color: string;
+}
+
+export interface ColorMap {
+ colors: ColorInfo[];
+}
+
 export interface DSDateRange {
   id: DateRangeType;
   start: string;
