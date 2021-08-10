@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 import * as execa from 'execa';
+import * as path from 'path';
+
 import {VizArgs, VizScripts} from './args';
 import {assertNever, pipeStdIO} from './util';
 import {build} from './viz/build';
 import {buildMessage} from './viz/message';
 import * as util from './viz/util';
-import * as path from 'path';
 
 const start = async (args: VizArgs): Promise<void> => {
   process.env.WORKING_COMPONENT_INDEX = util.getComponentIndex(

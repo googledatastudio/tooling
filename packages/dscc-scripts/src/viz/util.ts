@@ -80,14 +80,14 @@ const throwIfErrors = (
   }
 };
 
-type VizComponent = {
+interface VizComponent {
   name: string;
-};
+}
 
 // TODO - Add in other values as needed.
-export type VizManifest = {
+export interface VizManifest {
   components: VizComponent[];
-};
+}
 
 export const validateManifestFile = (path: PathLike): VizManifest => {
   const fileExists = existsSync(path);
