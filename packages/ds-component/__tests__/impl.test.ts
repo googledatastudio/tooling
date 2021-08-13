@@ -339,13 +339,17 @@ const testMessage = (
   numDimensions: number,
   numMetrics: number,
   numStyle: number,
-  numDateRange: number
+  numDateRange: number,
+  hasColorMap?: boolean
 ): sut.Message => {
   const dimensionFields = testDimensionFields(numDimensions);
   const metricFields = testMetricFields(numMetrics);
   const fields = dimensionFields.concat(metricFields);
   const style = testStyle(numStyle);
   const dateRanges = testDateRange(numDateRange);
+  const colorMap = hasColorMap
+    ? {California: '#6bcfdc', Seattle: '#beafc2'}
+    : undefined;
   return {
     type: sut.MessageType.RENDER,
     config: {
@@ -427,43 +431,10 @@ const testMessage = (
         },
       ],
       dateRanges,
+      colorMap,
     },
   };
 };
-
-test('subscribeToData works with colorMap', () => {
-  window.history.replaceState({}, 'Test Title', '/test?dscId=my-id');
-  const message = testMessage(1, 1, 1, 0);
-  const addEventListenerMock = jest.fn((event, cb) => {
-    if (event === 'message') {
-      cb({data: message});
-    } else {
-      throw new Error('unsupported event type for testing');
-    }
-  });
-
-  const postMessageMock = jest.fn();
-  const removeEventListenerMock = jest.fn();
-
-  window.addEventListener = addEventListenerMock;
-  window.parent.postMessage = postMessageMock;
-  window.removeEventListener = removeEventListenerMock;
-  // This is a hack since we can't do `window.frameElement = {...}`
-  Object.defineProperty(window, 'frameElement', {
-    get: () => ({
-      getAttribute: () => '123',
-    }),
-  });
-
-  const unSub = sut.subscribeToData(
-    (actual: sut.TableFormat) => {
-      expect(actual).toEqual(sut.tableTransform(message));
-    },
-    {transform: sut.tableTransform}
-  );
-  unSub();
-  expect(removeEventListenerMock.mock.calls.length).toBeGreaterThan(0);
-});
 
 test('subscribeToData works', () => {
   window.history.replaceState({}, 'Test Title', '/test?dscId=my-id');
@@ -590,6 +561,7 @@ test('tableTransform empty style', () => {
     },
     style: {},
     theme,
+    colorMap: {},
   };
   const actual = sut.tableTransform(testMessage(2, 2, 0, 0));
   expect(actual).toEqual(expected);
@@ -633,6 +605,7 @@ test('tableTransform works', () => {
   const expected: sut.TableFormat = {
     interactions: interactionsById,
     theme,
+    colorMap: {},
     dateRanges: {},
     fields: expectedFields,
     tables: {
@@ -704,6 +677,7 @@ test('objectTransform works', () => {
   const expected: sut.ObjectFormat = {
     interactions: interactionsById,
     dateRanges: {},
+    colorMap: {},
     fields: {
       dimensions: [
         {
@@ -889,6 +863,21 @@ test('If there is both date ranges in the input, it returns the correct value', 
   };
   const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 2));
   expect(actual.dateRanges).toEqual(expectedDateRanges);
+});
+
+test('If there is no color map in the input, it returns the correct value', () => {
+  const actual: sut.ObjectFormat = sut.objectTransform(
+    testMessage(2, 2, 2, 0, false)
+  );
+  expect(actual.colorMap).toEqual({});
+});
+
+test('If there is a color map in the input, it returns the correct value', () => {
+  const expectedColorMap = {California: '#6bcfdc', Seattle: '#beafc2'};
+  const actual: sut.ObjectFormat = sut.objectTransform(
+    testMessage(2, 2, 2, 1, true)
+  );
+  expect(actual.colorMap).toEqual(expectedColorMap);
 });
 
 test('If elements are dim met dim dim, they have to be sorted specially.', () => {
