@@ -44,7 +44,6 @@ export interface Config {
    * The data config defined for the component.
    */
   data: ConfigData[];
-  colorMap: ColorMap[];
   /**
    * The style elements required and supported by the component.
    */
@@ -81,15 +80,14 @@ export enum ConceptType {
   DIMENSION = 'DIMENSION',
 }
 
-export interface ColorInfo {
-  id: string;
-  color: string;
-}
-
 export interface DSDateRange {
   id: DateRangeType;
   start: string;
   end: string;
+}
+
+export type DSColorMap = {
+  [dimension: string]: string
 }
 
 export interface DataResponse {
@@ -98,6 +96,7 @@ export interface DataResponse {
    */
   tables: Table[];
   dateRanges?: DSDateRange[];
+  colorMap?: DSColorMap;
 }
 
 export enum MessageType {
@@ -682,6 +681,7 @@ export interface TableFormat {
   dateRanges: DateRangesById;
   theme: ThemeStyle;
   interactions: InteractionsById;
+  colorMap: ColorsByDimension;
 }
 
 export type TableTransform = (message: Message) => TableFormat;
@@ -713,6 +713,11 @@ export interface DateRangesById {
   };
 }
 
+/* A map of dimension values to hex string colors */
+export type ColorsByDimension = {
+[dimension: string]: string
+}
+
 export interface ObjectFormat {
   fields: FieldsByConfigId;
   style: StyleById;
@@ -720,6 +725,7 @@ export interface ObjectFormat {
   dateRanges: DateRangesById;
   theme: ThemeStyle;
   interactions: InteractionsById;
+  colorMap: ColorsByDimension;
 }
 
 export type ComponentId = string;
