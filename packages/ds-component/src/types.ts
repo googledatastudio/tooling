@@ -86,10 +86,6 @@ export interface ColorInfo {
   color: string;
 }
 
-export interface ColorMap {
- colors: ColorInfo[];
-}
-
 export interface DSDateRange {
   id: DateRangeType;
   start: string;

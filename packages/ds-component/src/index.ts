@@ -334,20 +334,6 @@ const transformDSInteraction = (message: Message): InteractionsById => {
   );
 };
 
-/**
- * Transform for color map
- */
-const toColorMap = (message: Message): ColorMapById => {
-  const colorMap = message.config.colorMap || [];
-  const output: ColorMapById = {};
-  return colorMap.reduce((inProgress, currentColor) => {
-    inProgress[currentColor.id] = {
-      id: currentColor.id,
-      value: currentColor.value,
-    };
-    return inProgress;
-  }, output);
-};
 
 /**
  * Transform for date ranges
