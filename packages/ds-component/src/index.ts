@@ -24,6 +24,7 @@ import {
   ConfigId,
   ConfigStyle,
   ConfigStyleElement,
+  ColorsByDimension,
   DateRangesById,
   DSInteractionData,
   DSInteractionType,
@@ -348,6 +349,12 @@ const toDateRanges = (message: Message): DateRangesById => {
     return inProgress;
   }, output);
 };
+
+/* Transform for color maps */
+const toColorsByDimension = (message: Message): ColorsByDimension => {
+  const colors = message.dataResponse.colorMap || {};
+  return {...colors};
+};
 /**
  * The transform to use for data in a Table format. i.e. `[[1, 2, 3], [4, 5, 6]]`
  */
@@ -360,6 +367,7 @@ export const tableTransform: TableTransform = (
   style: flattenStyle(message),
   theme: themeStyle(message),
   interactions: transformDSInteraction(message),
+  colorMap: toColorsByDimension(message),
 });
 
 /**
@@ -372,6 +380,7 @@ export const objectTransform: ObjectTransform = (message: Message) => ({
   style: flattenStyle(message),
   theme: themeStyle(message),
   interactions: transformDSInteraction(message),
+  colorMap: toColorsByDimension(message),
 });
 
 /**
