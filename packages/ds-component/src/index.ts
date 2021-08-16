@@ -16,6 +16,7 @@
 */
 import {
   ClearInteraction,
+  ColorsByDimension,
   ConfigData,
   ConfigDataElement,
   ConfigDataElementDimension,
@@ -24,7 +25,6 @@ import {
   ConfigId,
   ConfigStyle,
   ConfigStyleElement,
-  ColorsByDimension,
   DateRangesById,
   DSInteractionData,
   DSInteractionType,
@@ -33,7 +33,6 @@ import {
   FieldId,
   FieldsByConfigId,
   FieldsById,
-  Interaction,
   InteractionMessage,
   InteractionsById,
   InteractionType,
@@ -42,7 +41,6 @@ import {
   ObjectRow,
   ObjectTables,
   ObjectTransform,
-  ParsedImage,
   PostMessage,
   Row,
   RowHeading,
@@ -388,9 +386,9 @@ export const objectTransform: ObjectTransform = (message: Message) => ({
  * This is not a supported implementation path
  * Avoid this if at all possible - please use either objectTransform or tableTransform
  */
-const isProbablyIdentityFunction = (transform): boolean => {
+const isProbablyIdentityFunction = <T, U>(transform: (t: T) => U): boolean => {
   let isIdentity: boolean = false;
-  if (transform('identity') === 'identity') {
+  if ((transform as any)('identity') === 'identity') {
     isIdentity = true;
     console.warn(
       `This is an unsupported data format. Please use one of the supported transforms:
@@ -400,7 +398,7 @@ const isProbablyIdentityFunction = (transform): boolean => {
   return isIdentity;
 };
 
-const isValidTransform = (transform): boolean => {
+const isValidTransform = <T, U>(transform: (t: T) => U): boolean => {
   let isValid = false;
   if (
     (transform as any) === tableTransform ||

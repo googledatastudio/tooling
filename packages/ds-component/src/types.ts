@@ -86,9 +86,9 @@ export interface DSDateRange {
   end: string;
 }
 
-export type DSColorMap = {
+export interface DSColorMap {
   [dimension: string]: string;
-};
+}
 
 export interface DataResponse {
   /**
@@ -714,9 +714,9 @@ export interface DateRangesById {
 }
 
 /* A map of dimension values to hex string colors */
-export type ColorsByDimension = {
+export interface ColorsByDimension {
   [dimension: string]: string;
-};
+}
 
 export interface ObjectFormat {
   fields: FieldsByConfigId;
