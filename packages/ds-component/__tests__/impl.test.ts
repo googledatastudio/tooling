@@ -339,13 +339,17 @@ const testMessage = (
   numDimensions: number,
   numMetrics: number,
   numStyle: number,
-  numDateRange: number
+  numDateRange: number,
+  hasColorMap?: boolean
 ): sut.Message => {
   const dimensionFields = testDimensionFields(numDimensions);
   const metricFields = testMetricFields(numMetrics);
   const fields = dimensionFields.concat(metricFields);
   const style = testStyle(numStyle);
   const dateRanges = testDateRange(numDateRange);
+  const colorMap = hasColorMap
+    ? {California: '#6bcfdc', Seattle: '#beafc2'}
+    : undefined;
   return {
     type: sut.MessageType.RENDER,
     config: {
@@ -427,6 +431,7 @@ const testMessage = (
         },
       ],
       dateRanges,
+      colorMap,
     },
   };
 };
@@ -556,6 +561,7 @@ test('tableTransform empty style', () => {
     },
     style: {},
     theme,
+    colorMap: {},
   };
   const actual = sut.tableTransform(testMessage(2, 2, 0, 0));
   expect(actual).toEqual(expected);
@@ -599,6 +605,7 @@ test('tableTransform works', () => {
   const expected: sut.TableFormat = {
     interactions: interactionsById,
     theme,
+    colorMap: {},
     dateRanges: {},
     fields: expectedFields,
     tables: {
@@ -670,6 +677,7 @@ test('objectTransform works', () => {
   const expected: sut.ObjectFormat = {
     interactions: interactionsById,
     dateRanges: {},
+    colorMap: {},
     fields: {
       dimensions: [
         {
@@ -855,6 +863,21 @@ test('If there is both date ranges in the input, it returns the correct value', 
   };
   const actual: sut.ObjectFormat = sut.objectTransform(testMessage(2, 2, 2, 2));
   expect(actual.dateRanges).toEqual(expectedDateRanges);
+});
+
+test('If there is no color map in the input, it returns the correct value', () => {
+  const actual: sut.ObjectFormat = sut.objectTransform(
+    testMessage(2, 2, 2, 0, false)
+  );
+  expect(actual.colorMap).toEqual({});
+});
+
+test('If there is a color map in the input, it returns the correct value', () => {
+  const expectedColorMap = {California: '#6bcfdc', Seattle: '#beafc2'};
+  const actual: sut.ObjectFormat = sut.objectTransform(
+    testMessage(2, 2, 2, 1, true)
+  );
+  expect(actual.colorMap).toEqual(expectedColorMap);
 });
 
 test('If elements are dim met dim dim, they have to be sorted specially.', () => {

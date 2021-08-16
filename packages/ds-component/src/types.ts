@@ -86,12 +86,17 @@ export interface DSDateRange {
   end: string;
 }
 
+export type DSColorMap = {
+  [dimension: string]: string;
+};
+
 export interface DataResponse {
   /**
    * The list of tables for the current data configuration.
    */
   tables: Table[];
   dateRanges?: DSDateRange[];
+  colorMap?: DSColorMap;
 }
 
 export enum MessageType {
@@ -676,6 +681,7 @@ export interface TableFormat {
   dateRanges: DateRangesById;
   theme: ThemeStyle;
   interactions: InteractionsById;
+  colorMap: ColorsByDimension;
 }
 
 export type TableTransform = (message: Message) => TableFormat;
@@ -707,6 +713,11 @@ export interface DateRangesById {
   };
 }
 
+/* A map of dimension values to hex string colors */
+export type ColorsByDimension = {
+  [dimension: string]: string;
+};
+
 export interface ObjectFormat {
   fields: FieldsByConfigId;
   style: StyleById;
@@ -714,6 +725,7 @@ export interface ObjectFormat {
   dateRanges: DateRangesById;
   theme: ThemeStyle;
   interactions: InteractionsById;
+  colorMap: ColorsByDimension;
 }
 
 export type ComponentId = string;
