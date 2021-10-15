@@ -350,7 +350,7 @@ const toDateRanges = (message: Message): DateRangesById => {
 
 /* Transform for color maps */
 const toColorsByDimension = (message: Message): ColorsByDimension => {
-  const colors = message.dataResponse.colorMap || {};
+  const colors = message.config.colorMap || {};
   return {...colors};
 };
 /**
