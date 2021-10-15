@@ -39,21 +39,6 @@ export interface Message {
   dataResponse: DataResponse;
 }
 
-export interface DSConfig {
-  /**
-   * The data config defined for the component.
-   */
-  data: ConfigData[];
-  /**
-   * The style elements required and supported by the component.
-   */
-  style: ConfigStyle[];
-  themeStyle?: ConfigThemeStyle;
-  interactions: DSInteractionData[];
-  colorMap?: DSColorMap;
-
-}
-
 export interface Config {
   /**
    * The data config defined for the component.
@@ -65,6 +50,7 @@ export interface Config {
   style: ConfigStyle[];
   themeStyle?: ConfigThemeStyle;
   interactions: DSInteractionData[];
+  colorMap?: DSColorMap;
 }
 
 export interface Field {
@@ -111,7 +97,6 @@ export interface DataResponse {
    */
   tables: Table[];
   dateRanges?: DSDateRange[];
-  colorMap?: DSColorMap;
 }
 
 export enum MessageType {
