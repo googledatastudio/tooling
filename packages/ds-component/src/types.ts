@@ -50,6 +50,7 @@ export interface Config {
   style: ConfigStyle[];
   themeStyle?: ConfigThemeStyle;
   interactions: DSInteractionData[];
+  colorMap?: DSColorMap;
 }
 
 export interface Field {
@@ -96,7 +97,6 @@ export interface DataResponse {
    */
   tables: Table[];
   dateRanges?: DSDateRange[];
-  colorMap?: DSColorMap;
 }
 
 export enum MessageType {

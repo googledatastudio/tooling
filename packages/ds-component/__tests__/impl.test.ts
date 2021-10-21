@@ -354,6 +354,7 @@ const testMessage = (
     type: sut.MessageType.RENDER,
     config: {
       interactions: dsInteractions,
+      colorMap,
       data: [
         {
           id: 'configId',
@@ -431,7 +432,6 @@ const testMessage = (
         },
       ],
       dateRanges,
-      colorMap,
     },
   };
 };
