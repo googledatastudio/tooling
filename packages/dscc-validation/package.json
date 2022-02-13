@@ -19,7 +19,7 @@
     "ts-loader": "^6.2.1"
   },
   "dependencies": {
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "typescript": "^3.7.2"
   },
   "jest": {
