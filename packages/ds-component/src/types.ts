@@ -756,7 +756,7 @@ export interface SendInteraction {
   (
     actionId: InteractionId,
     interaction: InteractionType.FILTER,
-    data: FilterInteractionData | undefined,
+    data: FilterInteractionData | undefined
   ): void;
   // TODO - When there are more Interaction types, the new ones should be added here with their own signature.
 }
