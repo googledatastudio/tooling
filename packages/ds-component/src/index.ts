@@ -94,8 +94,9 @@ export const getHeight = (): number => document.documentElement.clientHeight;
  */
 export const getComponentId = (): string => {
   const params = new URLSearchParams(window.location.search);
-  if (params.get('dscId') !== null) {
-    return params.get('dscId');
+  const componentId = params.get('dscId');
+  if (componentId !== null) {
+    return componentId;
   } else {
     throw new Error(
       'dscId must be in the query parameters. ' +
@@ -210,9 +211,10 @@ const objectFormatTable = (message: Message): ObjectTables => {
     } else {
       const current = objectTables[table.id];
       if (current === undefined) {
-        objectTables[table.id] = [];
+        objectTables[table.id] = objectRows;
+      } else {
+        objectTables[table.id] = current.concat(objectRows);
       }
-      objectTables[table.id] = objectTables[table.id].concat(objectRows);
     }
   });
   return objectTables;
@@ -296,7 +298,7 @@ const flattenStyle = (message: Message): StyleById => {
 };
 
 const themeStyle = (message: Message): ThemeStyle => {
-  return message.config.themeStyle;
+  return message.config.themeStyle!;
 };
 
 const mapInteractionTypes = (
