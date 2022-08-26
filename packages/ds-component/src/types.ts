@@ -746,7 +746,7 @@ export interface VizReadyMessage {
 export interface InteractionMessage {
   type: ToDSMessageType.INTERACTION;
   id: InteractionId;
-  data: InteractionData;
+  data: InteractionData | undefined;
   componentId: ComponentId;
 }
 
@@ -756,7 +756,7 @@ export interface SendInteraction {
   (
     actionId: InteractionId,
     interaction: InteractionType.FILTER,
-    data: FilterInteractionData
+    data: FilterInteractionData | undefined
   ): void;
   // TODO - When there are more Interaction types, the new ones should be added here with their own signature.
 }
