@@ -226,7 +226,6 @@ const objectFormatTable = (message: Message): ObjectTables => {
 const tableFormatTable = (message: Message): Tables => {
   const fieldsBy: FieldsByConfigId = fieldsByConfigId(message);
   const configIds = flattenConfigIds(message);
-
   const configIdIdx: {[configId: string]: number} = {};
   const headers: RowHeading[] = configIds.map(
     (configId: string): RowHeading => {
