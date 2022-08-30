@@ -143,10 +143,6 @@ const stableSort = <T>(arr: T[], compare: (a: T, b: T) => number): T[] =>
     .sort((a, b) => compare(a.item, b.item) || a.index - b.index)
     .map(({item}) => item);
 
-const dimensionOrMetric = (cde: ConfigDataElement): boolean =>
-  cde.type === ConfigDataElementType.DIMENSION ||
-  cde.type === ConfigDataElementType.METRIC;
-
 const toNum = (cdet: ConfigDataElementType) =>
   cdet === ConfigDataElementType.DIMENSION ? -1 : 1;
 
@@ -160,6 +156,10 @@ const toNum = (cdet: ConfigDataElementType) =>
  * the fields sorted to be dimensions, followed by metrics.
  */
 type ConfigDataConcept = ConfigDataElementMetric | ConfigDataElementDimension;
+
+const dimensionOrMetric = (cde: ConfigDataElement): cde is ConfigDataConcept =>
+  cde.type === ConfigDataElementType.DIMENSION ||
+  cde.type === ConfigDataElementType.METRIC;
 
 const flattenConfigIds = (message: Message): ConfigId[] => {
   const dimnsAndMets: ConfigDataConcept[] = [];
@@ -226,7 +226,8 @@ const objectFormatTable = (message: Message): ObjectTables => {
 const tableFormatTable = (message: Message): Tables => {
   const fieldsBy: FieldsByConfigId = fieldsByConfigId(message);
   const configIds = flattenConfigIds(message);
-  const configIdIdx = {};
+
+  const configIdIdx: {[configId: string]: number} = {};
   const headers: RowHeading[] = configIds.map(
     (configId: string): RowHeading => {
       if (configIdIdx[configId] === undefined) {
