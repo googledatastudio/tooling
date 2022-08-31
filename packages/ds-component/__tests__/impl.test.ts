@@ -831,7 +831,7 @@ test('Error thrown when styleIds are not unique', () => {
   message.config.style = styleWithReusedIds;
   expect(() => {
     sut.objectTransform(message);
-  }).toThrowError('styleInnerId1');
+  }).toThrowError(/styleInnerId1/);
 });
 
 test('If there is no date range in the input, it returns the correct value', () => {
@@ -981,9 +981,9 @@ test('If elements are dim met dim dim, they have to be sorted specially.', () =>
 
   const headers = actual.tables[sut.TableType.DEFAULT].headers;
   expect(headers[0].configId === 'index');
-  expect(headers[0].configId === 'dateDimension');
-  expect(headers[0].configId === 'label');
-  expect(headers[0].configId === 'arbitraryMetric');
+  expect(headers[1].configId === 'dateDimension');
+  expect(headers[2].configId === 'label');
+  expect(headers[3].configId === 'arbitraryMetric');
 
   const rows = actual.tables[sut.TableType.DEFAULT].rows;
   expect(rows[0][0]).toEqual('google');
@@ -998,8 +998,8 @@ describe('when window.location mocked', () => {
 
   test('throws with componentId is not defined', () => {
     window.history.replaceState({}, 'Test Title', '/test?id=1');
-    expect(() => sut.getComponentId()).toThrow(
-      'dscId must be in the query parameters'
+    expect(() => sut.getComponentId()).toThrowError(
+      /dscId must be in the query parameters/
     );
   });
 });
