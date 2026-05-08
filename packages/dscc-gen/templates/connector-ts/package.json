@@ -14,7 +14,7 @@
     "update_production": "dscc-scripts connector update_production"
   },
   "devDependencies": {
-    "@google/clasp": "^2.2.1",
+    "@google/clasp": "^3.2.0",
     "@google/dscc-scripts": "^1.0.17",
     "@types/google-apps-script": "^0.0.54",
     "@types/google-apps-script-oauth2": "^24.0.1",
