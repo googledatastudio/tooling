@@ -21,6 +21,7 @@ import * as path from 'path';
 import terminalLink from 'terminal-link';
 import {ConnectorArgs, ConnectorScripts} from './args';
 import {assertNever, format, invalidConnectorConfig, pipeStdIO} from './util';
+const pack = JSON.parse(fs.readFileSync(process.env.npm_package_json as string, { encoding: 'utf-8' }));
 
 const openDeployment = async (
   deploymentId: string,
@@ -35,7 +36,7 @@ const openDeployment = async (
 };
 
 const tryProduction = async (): Promise<void> => {
-  const prodDeploymentId = process.env.npm_package_dsccConnector_production;
+  const prodDeploymentId = pack.dsccConnector?.production;
   if (prodDeploymentId === undefined) {
     throw invalidConnectorConfig('production');
   }
@@ -43,7 +44,7 @@ const tryProduction = async (): Promise<void> => {
 };
 
 const tryLatest = async (): Promise<void> => {
-  const latestDeploymentId = process.env.npm_package_dsccConnector_latest;
+  const latestDeploymentId = pack.dsccConnector?.latest;
   if (latestDeploymentId === undefined) {
     throw invalidConnectorConfig('latest');
   }
@@ -51,7 +52,7 @@ const tryLatest = async (): Promise<void> => {
 };
 
 const updateProduction = async () => {
-  const prodDeploymentId = process.env.npm_package_dsccConnector_production;
+  const prodDeploymentId = pack.dsccConnector?.production;
   if (prodDeploymentId === undefined) {
     throw invalidConnectorConfig('production');
   }
