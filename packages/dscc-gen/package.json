@@ -47,7 +47,7 @@
     "go:fast": "node build/index.js"
   },
   "dependencies": {
-    "@google/clasp": "2.2.1",
+    "@google/clasp": "3.2.0",
     "@types/mz": "^0.0.32",
     "@types/node": "^12.12.6",
     "@types/shelljs": "^0.8.5",
